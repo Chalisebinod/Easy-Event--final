@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.animated-stroke {
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  background-color: #f3f4f6; /* bg-gray-200 */
+  color: #1f2937; /* text-gray-800 */
+  border-radius: 9999px;
+  font-weight: 500;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  z-index: 0;
+}
+
+.animated-stroke:hover {
+  transform: scale(1.05);
+}
+
+/* Create the animated border using pseudo-elements */
+.animated-stroke::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg,
+     #0000ee,
+    #f50b0b
+  );
+  animation: spin 4s linear infinite;
+  z-index: -1;
+}
+
+.animated-stroke::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  background: #f3f4f6;
+  border-radius: inherit;
+  z-index: -1;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
