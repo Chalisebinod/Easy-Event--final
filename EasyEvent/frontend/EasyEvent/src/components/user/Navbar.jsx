@@ -7,19 +7,19 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-orange-600 text-white font-semibold shadow-lg sticky top-0 z-50">
-      <div className="container mx-auto px-6 lg:px-12 py-4 flex items-center justify-between">
-        
+    <header className="bg-slate-900 py-4 text-white shadow-xl sticky top-0 z-50 border-b border-slate-700">
+      <div className="container mx-auto px-4 flex items-center justify-between">
         {/* Logo */}
         <div
-          className="text-3xl lg:text-4xl font-bold tracking-wide cursor-pointer hover:text-yellow-300 transition-all duration-300"
+          className="text-3xl md:text-4xl font-bold cursor-pointer flex items-center font-[Poppins]"
           onClick={() => navigate("/user-dashboard")}
         >
-          Easy<span className="text-yellow-300">Events</span>
+          <span className="text-amber-400">Easy</span>
+          <span className="text-slate-100">Events</span>
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
+        <nav className="hidden md:flex items-center space-x-1">
           {[
             { path: "/user-dashboard", label: "Home" },
             { path: "/user-bookings", label: "My Bookings" },
@@ -29,37 +29,42 @@ const Navbar = () => {
             <Link
               key={item.path}
               to={item.path}
-              className="text-lg font-bold hover:text-yellow-300 transition-all duration-300 px-4 py-2 border-b-2 border-transparent hover:border-yellow-300"
+              className="relative px-4 py-2.5 text-lg font-medium group transition-colors duration-300"
             >
-              {item.label}
+              <span className="relative z-10">{item.label}</span>
+              <span className="absolute inset-0 h-full w-0 bg-slate-800 transition-all duration-300 group-hover:w-full rounded-lg"></span>
             </Link>
           ))}
         </nav>
 
         {/* Icons & Mobile Menu */}
-        <div className="flex items-center space-x-6">
+        <div className="flex items-center space-x-4">
           {/* Profile Icon */}
           <div
-            className="text-3xl cursor-pointer hover:text-yellow-300 transition-all duration-300"
+            className="cursor-pointer transition-transform duration-200 hover:scale-110 hover:text-amber-400"
             onClick={() => navigate("/user-profile")}
           >
-            <FaUserCircle />
+            <FaUserCircle className="text-3xl text-slate-300" />
           </div>
 
           {/* Mobile Menu Toggle */}
           <div
-            className="md:hidden text-3xl cursor-pointer hover:text-yellow-300 transition-all duration-300"
+            className="md:hidden p-2.5 rounded-lg hover:bg-slate-800 transition-colors duration-300 cursor-pointer border border-slate-700"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
+            {isMobileMenuOpen ? (
+              <FaTimes className="text-xl text-amber-400" />
+            ) : (
+              <FaBars className="text-xl" />
+            )}
           </div>
         </div>
       </div>
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-orange-600 py-4 shadow-md">
-          <nav className="flex flex-col space-y-3 text-center">
+        <div className="md:hidden bg-slate-800 border-b border-slate-700">
+          <nav className="flex flex-col">
             {[
               { path: "/user-dashboard", label: "Home" },
               { path: "/user-bookings", label: "My Bookings" },
@@ -69,7 +74,7 @@ const Navbar = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className="text-lg font-bold text-white hover:text-yellow-300 transition-all duration-300 py-2"
+                className="px-6 py-4 border-b border-slate-700 hover:bg-slate-700/50 transition-colors duration-300 font-medium"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {item.label}

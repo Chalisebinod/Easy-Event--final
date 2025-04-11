@@ -5,14 +5,16 @@ const BottomNavbar = () => {
   const navigate = useNavigate();
 
   return (
-    <footer className="bg-gray-800 text-white py-8">
-      <div className="container mx-auto px-4 md:px-8">
-        {/* Contact Section */}
-        <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+    <footer className="bg-slate-900 text-white py-10">
+      <div className="container mx-auto px-4 md:px-8 space-y-10">
+        {/* Contact and Help Section */}
+        <div className="flex flex-col md:flex-row justify-between">
           <div>
-            <h3 className="text-xl font-bold mb-2">Contact Us</h3>
-            <p>
-              Email:{" "}
+            <h3 className="text-2xl font-semibold mb-3 text-orange-500">
+              Contact Us
+            </h3>
+            <p className="mb-1">
+              <span className="font-medium text-gray-300">Email: </span>
               <a
                 href="mailto:chalisebinod40@gmail.com"
                 className="text-orange-400 hover:underline"
@@ -20,8 +22,8 @@ const BottomNavbar = () => {
                 chalisebinod40@gmail.com
               </a>
             </p>
-            <p>
-              Phone:{" "}
+            <p className="mb-1">
+              <span className="font-medium text-gray-300">Phone: </span>
               <a
                 href="tel:+9779863335795"
                 className="text-orange-400 hover:underline"
@@ -29,52 +31,51 @@ const BottomNavbar = () => {
                 +977-9863335795
               </a>
             </p>
-            <p>Address: Kathmandu, Nepal</p>
+            <p className="text-gray-300">Address: Kathmandu, Nepal</p>
           </div>
 
-          {/* Become a Venue Owner Section */}
-          <div className="mt-6 md:mt-0">
-            <h3 className="text-xl font-bold mb-2">Become a Venue Owner</h3>
-            <p>List your venue and reach more customers.</p>
-            <button
-              onClick={() => navigate("/venue-owner-signup")}
-              className="mt-3 px-6 py-2 bg-orange-600 text-white text-sm font-medium rounded-full shadow-lg hover:bg-orange-700 transition duration-300"
-            >
-              Sign Up Now
-            </button>
+          <div className="mt-6 md:mt-0 md:text-right">
+            <h3 className="text-2xl font-semibold mb-3 text-orange-500">
+              Suggestions & Support
+            </h3>
+            <p className="text-gray-300">
+              For suggestions, feedback, or any help, feel free to contact our
+              customer care team.
+            </p>
+            <p className="text-gray-300 mt-1">We’re here to help you 24/7.</p>
           </div>
         </div>
 
         {/* Quick Links */}
-        <div className="flex flex-wrap justify-center space-x-6">
+        <div className="flex flex-wrap justify-center space-x-6 border-t border-gray-700 pt-6">
           <button
             onClick={() => navigate("/about")}
-            className="text-sm text-gray-300 hover:text-orange-400"
+            className="text-sm text-gray-400 hover:text-orange-400 transition duration-200"
           >
             About Us
           </button>
           <button
             onClick={() => navigate("/privacy")}
-            className="text-sm text-gray-300 hover:text-orange-400"
+            className="text-sm text-gray-400 hover:text-orange-400 transition duration-200"
           >
             Privacy Policy
           </button>
           <button
             onClick={() => navigate("/terms")}
-            className="text-sm text-gray-300 hover:text-orange-400"
+            className="text-sm text-gray-400 hover:text-orange-400 transition duration-200"
           >
             Terms of Service
           </button>
           <button
             onClick={() => navigate("/faq")}
-            className="text-sm text-gray-300 hover:text-orange-400"
+            className="text-sm text-gray-400 hover:text-orange-400 transition duration-200"
           >
             FAQ
           </button>
         </div>
 
-        {/* Copyright Section */}
-        <div className="mt-6 text-center text-sm text-gray-400">
+        {/* Footer Bottom */}
+        <div className="text-center text-sm text-gray-500">
           &copy; {new Date().getFullYear()} EasyEvents. All Rights Reserved.
         </div>
       </div>

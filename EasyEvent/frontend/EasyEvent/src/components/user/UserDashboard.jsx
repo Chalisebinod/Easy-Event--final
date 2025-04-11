@@ -43,10 +43,13 @@ const UserDashboard = () => {
 
   // Sort venues based on the selected sort option
   const sortedVenues = [...venues].sort((a, b) => {
+    const ratingA = parseFloat(a.rating || 0);
+    const ratingB = parseFloat(b.rating || 0);
+
     if (sortOption === "High to Low") {
-      return parseFloat(b.rating || 0) - parseFloat(a.rating || 0);
+      return ratingB - ratingA; // Higher ratings first
     } else if (sortOption === "Low to High") {
-      return parseFloat(a.rating || 0) - parseFloat(b.rating || 0);
+      return ratingA - ratingB; // Lower ratings first
     }
     return 0; // No sorting if no valid option is selected
   });
@@ -67,32 +70,12 @@ const UserDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-    
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
 
       {/* Main Content */}
-      <main className="container mx-auto px-6 py-12">
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-8 w-full gap-4">
-          {/* Sort dropdowns */}
-          <div className="flex flex-1 sm:flex-none gap-4">
-            <select
-              value={sortOption}
-              onChange={handleSortChange}
-              className="px-6 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-sm transition-all"
-            >
-              <option value="">Sort by Rating</option>
-              <option value="High to Low">High to Low</option>
-              <option value="Low to High">Low to High</option>
-            </select>
-            <select className="px-6 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-sm transition-all">
-              <option>Sort by Location</option>
-              <option>Kathmandu</option>
-              <option>Pokhara</option>
-              <option>Jhapa</option>
-            </select>
-          </div>
-
+      <main className="container mx-auto px-4 py-12">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-8 w-full gap-6">
           {/* Modern Search Input */}
           <div className="relative w-full sm:w-auto flex-1 max-w-lg">
             <input
@@ -100,7 +83,7 @@ const UserDashboard = () => {
               placeholder="Search by venue name..."
               value={searchTerm}
               onChange={handleSearch}
-              className="w-full pl-12 pr-4 py-3 text-sm border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 placeholder-gray-400 transition-all peer"
+              className="w-full pl-12 pr-4 py-3 text-sm border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-orange-500 placeholder-gray-400 transition-all peer"
             />
             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 peer-focus:text-orange-500 transition-colors">
               <svg
@@ -118,6 +101,24 @@ const UserDashboard = () => {
               </svg>
             </div>
           </div>
+          {/* Sort dropdowns */}
+          <div className="flex flex-1 sm:flex-none gap-4">
+            <select
+              value={sortOption}
+              onChange={handleSortChange}
+              className="px-6 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-md transition-all bg-white"
+            >
+              <option value="">Sort by Rating</option>
+              <option value="High to Low">High to Low</option>
+              <option value="Low to High">Low to High</option>
+            </select>
+            <select className="px-6 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-md transition-all bg-white">
+              <option>Sort by Location</option>
+              <option>Kathmandu</option>
+              <option>Pokhara</option>
+              <option>Jhapa</option>
+            </select>
+          </div>
         </div>
 
         {/* Venues Grid or No Venues Message */}
@@ -132,7 +133,10 @@ const UserDashboard = () => {
                       venue.venueImages.map((image, index) => (
                         <div key={index}>
                           <img
-                            src={`http://localhost:8000/${image.replace(/\\/g, "/")}`}
+                            src={`http://localhost:8000/${image.replace(
+                              /\\/g,
+                              "/"
+                            )}`}
                             alt={`Venue ${venue.name} - Image ${index + 1}`}
                             className="w-full h-48 object-cover"
                           />
