@@ -7,6 +7,9 @@ import Slider from "react-slick";
 // Import slick-carousel CSS
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+// Import heroicons
+import { MagnifyingGlassIcon, StarIcon } from "@heroicons/react/24/solid";
+import { MapPinIcon, CalendarIcon, FunnelIcon, AdjustmentsHorizontalIcon } from "@heroicons/react/24/outline";
 
 const UserDashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -67,6 +70,7 @@ const UserDashboard = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
+    arrows: false,
   };
 
   return (
@@ -74,117 +78,151 @@ const UserDashboard = () => {
       <Navbar />
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-12">
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-8 w-full gap-6">
-          {/* Modern Search Input */}
-          <div className="relative w-full sm:w-auto flex-1 max-w-lg">
-            <input
-              type="text"
-              placeholder="Search by venue name..."
-              value={searchTerm}
-              onChange={handleSearch}
-              className="w-full pl-12 pr-4 py-3 text-sm border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-orange-500 placeholder-gray-400 transition-all peer"
-            />
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 peer-focus:text-orange-500 transition-colors">
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-                />
-              </svg>
+      <main className="container mx-auto px-4 py-8">
+        {/* Search and Filter Section */}
+        <div className="mb-8 bg-white rounded-lg shadow-md p-4">
+          <div className="flex flex-col md:flex-row gap-4">
+            {/* Search Input */}
+            <div className="relative flex-grow">
+              <input
+                type="text"
+                placeholder="Search venues..."
+                value={searchTerm}
+                onChange={handleSearch}
+                className="w-full pl-10 pr-4 py-3 text-gray-700 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+              />
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                <MagnifyingGlassIcon className="w-5 h-5" />
+              </div>
+            </div>
+            
+            {/* Sorting Options with Improved Design */}
+            <div className="flex flex-wrap gap-3">
+              <div className="relative min-w-[180px]">
+                <select
+                  value={sortOption}
+                  onChange={handleSortChange}
+                  className="w-full appearance-none pl-10 pr-8 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                >
+                  <option value="">Sort by Rating</option>
+                  <option value="High to Low">High to Low</option>
+                  <option value="Low to High">Low to High</option>
+                </select>
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                  <StarIcon className="w-5 h-5" />
+                </div>
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+              
+              <div className="relative min-w-[180px]">
+                <select className="w-full appearance-none pl-10 pr-8 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                  <option>Sort by Location</option>
+                  <option>Kathmandu</option>
+                  <option>Pokhara</option>
+                  <option>Jhapa</option>
+                </select>
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                  <MapPinIcon className="w-5 h-5" />
+                </div>
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </div>
+              </div>
             </div>
           </div>
-          {/* Sort dropdowns */}
-          <div className="flex flex-1 sm:flex-none gap-4">
-            <select
-              value={sortOption}
-              onChange={handleSortChange}
-              className="px-6 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-md transition-all bg-white"
-            >
-              <option value="">Sort by Rating</option>
-              <option value="High to Low">High to Low</option>
-              <option value="Low to High">Low to High</option>
-            </select>
-            <select className="px-6 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-md transition-all bg-white">
-              <option>Sort by Location</option>
-              <option>Kathmandu</option>
-              <option>Pokhara</option>
-              <option>Jhapa</option>
-            </select>
-          </div>
+        </div>
+        
+        {/* Section Title */}
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-semibold text-gray-800">Available Venues</h2>
+          <p className="text-gray-500 text-sm">
+            {filteredVenues.length} {filteredVenues.length === 1 ? 'venue' : 'venues'} found
+          </p>
         </div>
 
         {/* Venues Grid or No Venues Message */}
         {filteredVenues.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredVenues.map((venue) => (
-              <Link to={`/party-palace/${venue.id}`} key={venue.id}>
-                <div className="bg-white shadow-lg rounded-lg overflow-hidden transition transform hover:scale-105 cursor-pointer">
-                  {/* React Slick Slider for Venue Images */}
-                  <Slider {...sliderSettings} className="w-full h-48">
-                    {venue.venueImages && venue.venueImages.length > 0 ? (
-                      venue.venueImages.map((image, index) => (
-                        <div key={index}>
+              <Link to={`/party-palace/${venue.id}`} key={venue.id} className="block">
+                <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                  {/* Image Slider */}
+                  <div className="relative h-52">
+                    <Slider {...sliderSettings}>
+                      {venue.venueImages && venue.venueImages.length > 0 ? (
+                        venue.venueImages.map((image, index) => (
+                          <div key={index}>
+                            <img
+                              src={`http://localhost:8000/${image.replace(/\\/g, "/")}`}
+                              alt={`Venue ${venue.name} - Image ${index + 1}`}
+                              className="w-full h-52 object-cover"
+                            />
+                          </div>
+                        ))
+                      ) : (
+                        <div>
                           <img
-                            src={`http://localhost:8000/${image.replace(
-                              /\\/g,
-                              "/"
-                            )}`}
-                            alt={`Venue ${venue.name} - Image ${index + 1}`}
-                            className="w-full h-48 object-cover"
+                            src="https://via.placeholder.com/300"
+                            alt="No images available"
+                            className="w-full h-52 object-cover"
                           />
                         </div>
-                      ))
-                    ) : (
-                      <div>
-                        <img
-                          src="https://via.placeholder.com/300"
-                          alt="No images available"
-                          className="w-full h-48 object-cover"
-                        />
+                      )}
+                    </Slider>
+                    
+                    {/* Rating Badge */}
+                    {!isNaN(parseFloat(venue.rating)) && (
+                      <div className="absolute top-3 right-3 bg-white bg-opacity-90 text-indigo-600 font-medium rounded-md px-2 py-1 text-sm flex items-center shadow-sm">
+                        <StarIcon className="w-4 h-4 mr-1 text-yellow-400" />
+                        {parseFloat(venue.rating).toFixed(1)}
                       </div>
                     )}
-                  </Slider>
+                  </div>
 
                   {/* Venue Details */}
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-gray-800 mb-2">
+                  <div className="pt-8 pl-4 flex-1 flex flex-col">
+                    <h3 className="text-lg  font-bold text-gray-800 mb-1">
                       {venue.name}
                     </h3>
-                    <p className="text-gray-600 mb-4">
-                      {venue.location.address}, {venue.location.city},{" "}
-                      {venue.location.state} {venue.location.zip_code}
-                    </p>
-                    <p className="text-gray-500 text-sm mb-4">
+                    
+                    <div className="flex items-center text-red-500 mb-2 text-sm">
+                      <MapPinIcon className="w-4 h-4 mr-1 flex-shrink-0" />
+                      <p className="truncate">
+                        {venue.location.address}, {venue.location.city}
+                      </p>
+                    </div>
+                    
+                    <p className="text-gray-500 text-sm mb-3 line-clamp-2 flex-1">
                       {venue.description}
                     </p>
-                    <div>
-                      {isNaN(parseFloat(venue.rating)) ? (
-                        <p className="text-gray-500 text-sm">{venue.rating}</p>
-                      ) : (
-                        <div className="flex items-center">
-                          {Array(Math.floor(parseFloat(venue.rating)))
-                            .fill()
-                            .map((_, index) => (
-                              <span
-                                key={index}
-                                className="text-orange-500 text-xl"
-                              >
-                                ★
-                              </span>
-                            ))}
-                          {parseFloat(venue.rating) % 1 !== 0 && (
-                            <span className="text-orange-500 text-xl">☆</span>
-                          )}
-                        </div>
-                      )}
+                    
+                    {/* Star Rating */}
+                    {!isNaN(parseFloat(venue.rating)) && (
+                      <div className="flex items-center mt-auto mb-2">
+                        {Array(5).fill().map((_, index) => (
+                          <StarIcon
+                            key={index}
+                            className={`w-4 h-4 ${
+                              index < Math.floor(parseFloat(venue.rating))
+                                ? "text-yellow-400"
+                                : "text-gray-200"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Call to Action */}
+                    <div className="mt-2 pt-2 border-t border-gray-100">
+                      <button className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded transition-colors duration-200">
+                        View Details
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -192,22 +230,19 @@ const UserDashboard = () => {
             ))}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center text-center py-20">
-            <img
-              src="https://via.placeholder.com/300x200?text=No+Venues+Available"
-              alt="No venues available"
-              className="w-60 h-40 mb-6"
-            />
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">
+          <div className="flex flex-col items-center justify-center text-center py-16 bg-white rounded-lg shadow-md">
+            <div className="bg-gray-100 p-5 rounded-full mb-5">
+              <CalendarIcon className="w-12 h-12 text-gray-400" />
+            </div>
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">
               No Venues Available
             </h2>
-            <p className="text-gray-600 mb-4">
-              It seems we don't have any venues at the moment. Please check back
-              later or explore other options.
+            <p className="text-gray-500 mb-5 max-w-md mx-auto">
+              We couldn't find any venues matching your search. Please try different search terms or explore other options.
             </p>
             <Link
               to="/"
-              className="px-6 py-2 bg-orange-600 text-white font-medium rounded-lg shadow-md hover:bg-orange-700 transition duration-300"
+              className="px-6 py-2 bg-indigo-600 text-white font-medium rounded hover:bg-indigo-700 transition duration-200"
             >
               Explore Other Options
             </Link>

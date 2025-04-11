@@ -298,179 +298,186 @@ const accessToken = localStorage.getItem("access_token");
         </div>
       </section>
 
-      {/* Tabs Section with Book Now Button */}
-      <section className="max-w-7xl mx-auto my-8 px-4">
-        <div className="flex justify-center space-x-4 mb-6">
-          {/* Overview Tab */}
-          <button
-            onClick={() => setActiveTab("overview")}
-            className={`px-6 py-2 rounded-full font-medium transition duration-300 ${
-              activeTab === "overview"
-                ? "bg-orange-500 text-white shadow-md"
-                : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-            }`}
-          >
-            Overview
-          </button>
 
-          {/* Completed Events Tab */}
-          {/* <button
-            onClick={() => setActiveTab("completed-events")}
-            className={`px-6 py-2 rounded-full font-medium transition duration-300 ${
-              activeTab === "completed-events"
-                ? "bg-orange-500 text-white shadow-md"
-                : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-            }`}
-          >
-            Completed Events
-          </button> */}
+{/* Tabs Section with Book Now Button */}
+<section className="max-w-7xl mx-auto my-8 px-4">
+  <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
+    {/* Tabs Container */}
+    <div className="flex divide-x divide-orange-100 border border-orange-100 rounded-lg bg-white shadow-sm">
+      <button
+        onClick={() => setActiveTab("overview")}
+        className={`px-8 py-3 text-lg font-semibold transition-colors ${
+          activeTab === "overview"
+            ? "bg-orange-500 text-white"
+            : "text-gray-600 hover:bg-orange-50"
+        }`}
+      >
+        Overview
+      </button>
+      <button
+        onClick={() => setActiveTab("reviews")}
+        className={`px-8 py-3 text-lg font-semibold transition-colors ${
+          activeTab === "reviews"
+            ? "bg-orange-500 text-white"
+            : "text-gray-600 hover:bg-orange-50"
+        }`}
+      >
+        Reviews
+      </button>
+    </div>
 
-          {/* Reviews Tab */}
-          <button
-            onClick={() => setActiveTab("reviews")}
-            className={`px-6 py-2 rounded-full font-medium transition duration-300 ${
-              activeTab === "reviews"
-                ? "bg-orange-500 text-white shadow-md"
-                : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-            }`}
-          >
-            Reviews
-          </button>
+    {/* Book Now Button */}
+    <button
+  onClick={handleBookNow}
+  className="px-8 py-3.5 text-lg font-bold text-white bg-green-500 rounded-lg hover:bg-red-600 transition-all duration-300 shadow-md w-full md:w-auto transform hover:scale-105 active:scale-95"
+>
+  Book Now
+</button>
 
-          {/* Book Now Button */}
-          <button
-            onClick={handleBookNow}
-            className="animated-stroke relative px-6 py-2 rounded-full font-medium transition duration-300 bg-gray-200 text-black hover:bg-gray-300"
-          >
-            Book Now
-          </button>
+  </div>
+
+  {/* Content Section: conditionally render each tab */}
+  {activeTab === "overview" && (
+    <div className="bg-white rounded-xl shadow-lg p-8 space-y-8 border border-orange-100">
+      {/* Top Row: Venue Name and Owner Info */}
+      <div className="flex flex-col lg:flex-row justify-between items-start gap-4">
+        <div className="flex-1">
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">{venue.name}</h2>
+          <p className="text-lg text-orange-600 font-medium">
+            Premier Event Destination
+          </p>
         </div>
 
-        {/* Content Section: conditionally render each tab */}
-        {activeTab === "overview" && (
-          <div className="bg-white rounded-xl shadow-lg p-6 space-y-8">
-            {/* Top Row: Venue Name and Owner Info */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-              <div>
-                <h2 className="text-3xl font-bold text-gray-800">
-                  {venue.name}
-                </h2>
-                <p className="text-gray-600 mt-2">
-                  A premier venue for unforgettable events
-                </p>
-              </div>
-              <div className="mt-4 flex flex-col items-center">
-                <div className="w-24 h-24 rounded-full border-4 border-white shadow-lg flex items-center justify-center">
-                  <img
-                    src={
-                      venue.owner?.profile_image
-                        ? getImageUrl(venue.owner.profile_image)
-                        : "https://via.placeholder.com/80"
-                    }
-                    alt="Owner Profile"
-                    className="w-20 h-20 rounded-full object-cover"
-                  />
-                </div>
-                <p className="mt-2 text-lg font-semibold text-gray-800 flex items-center gap-1">
-                  {venue.owner?.name || "N/A"}
-                  {venue.verification_status === "Verified" && (
-                    <MdVerified
-                      className="text-blue-500"
-                      title="Verified User"
-                      size={20}
-                    />
-                  )}
-                </p>
-                {venue.owner?.email && (
-                  <p className="mt-1 text-gray-600">{venue.owner.email}</p>
-                )}
-              </div>
-            </div>
+{/* Owner Card */}
+<div className="w-full lg:w-96">
+  <div className="flex items-center gap-4 p-3 bg-orange-50 rounded-xl">
+    <div className="relative">
+      <div className="p-2 bg-red-100 rounded-full">
+        <img
+          src={
+            venue.owner?.profile_image
+              ? getImageUrl(venue.owner.profile_image)
+              : "https://via.placeholder.com/80"
+          }
+          alt="Owner"
+          className="w-16 h-16 rounded-full object-cover"
+        />
+      </div>
+      {venue.verification_status === "Verified" && (
+        <MdVerified
+          className="absolute bottom-0 right-0 text-blue-500 bg-white rounded-full p-0.5 shadow-sm"
+          size={20}
+        />
+      )}
+    </div>
+    <div className="flex-1">
+      <p className="text-lg font-semibold text-gray-900">
+        {venue.owner?.name || "Venue Owner"}
+      </p>
+      {venue.owner?.email && (
+        <p className="text-sm text-gray-600 mt-1">{venue.owner.email}</p>
+      )}
+    </div>
+  </div>
+</div>
+      </div>
 
-            {/* Description */}
-            <div>
-              <h3 className="text-2xl font-semibold text-gray-800 mb-2">
-                Description
-              </h3>
-              <p className="text-gray-700">{venue.description}</p>
-            </div>
+      {/* Description */}
+      <div className="space-y-4">
+        <h3 className="text-2xl font-bold text-gray-900 border-l-4 border-orange-500 pl-4">
+          Description
+        </h3>
+        <p className="text-gray-700 text-lg leading-relaxed">
+          {venue.description}
+        </p>
+      </div>
 
-            {/* Features */}
-            <div>
-              <h3 className="text-2xl font-semibold text-gray-800 mb-2">
-                Features
-              </h3>
-              <ul className="list-disc list-inside text-gray-700">
-                {venue.features &&
-                  venue.features.map((feature, index) => (
-                    <li key={index}>{feature}</li>
+      {/* Features */}
+      <div className="space-y-4">
+        <h3 className="text-2xl font-bold text-gray-900 border-l-4 border-orange-500 pl-4">
+          Features
+        </h3>
+        <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {venue.features &&
+            venue.features.map((feature, index) => (
+              <li
+                key={index}
+                className="flex items-center gap-2 p-3 bg-orange-50 rounded-lg"
+              >
+                <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
+                <span className="text-gray-700">{feature}</span>
+              </li>
+            ))}
+        </ul>
+      </div>
+
+      {/* Three-Column Info */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Halls Info */}
+        <div className="bg-white p-6 rounded-xl border border-orange-100 shadow-sm">
+          <h4 className="text-xl font-bold text-gray-900 mb-4">Halls Info</h4>
+          <div className="space-y-3 text-gray-700">
+            <p>No. of halls: {halls.length}</p>
+            <p>
+              Capacities:{" "}
+              {halls.length > 0
+                ? halls.map((hall) => hall.capacity).join(" & ")
+                : "N/A"}
+            </p>
+            <p>Per Plate: {pricePerPlate ? `Rs. ${pricePerPlate}` : "N/A"}</p>
+            {halls.length > 0 && (
+              <div className="mt-4">
+                <label
+                  htmlFor="hall-select"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Select Hall:
+                </label>
+                <select
+                  id="hall-select"
+                  value={selectedHall}
+                  onChange={handleHallSelect}
+                  className="w-full px-4 py-2 border border-orange-200 rounded-lg focus:ring-2 focus:ring-orange-500"
+                >
+                  {halls.map((hall) => (
+                    <option key={hall._id} value={hall._id}>
+                      {hall.name}
+                    </option>
                   ))}
-              </ul>
-            </div>
-
-            {/* Three-Column Info */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-gray-50 p-4 rounded-xl shadow">
-                <h4 className="text-xl font-bold mb-2">Halls Info</h4>
-                {/* Updated halls info from the new API */}
-                <p>No. of halls: {halls.length}</p>
-                <p>
-                  Capacities:{" "}
-                  {halls.length > 0
-                    ? halls.map((hall) => hall.capacity).join(" & ")
-                    : "N/A"}
-                </p>
-                <p className="mt-2">
-                  Per Plate: {pricePerPlate ? `Rs. ${pricePerPlate}` : "N/A"}
-                </p>
-                {/* New Select dropdown to choose a hall */}
-                {halls.length > 0 && (
-                  <div className="mt-2">
-                    <label
-                      htmlFor="hall-select"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Select Hall:
-                    </label>
-                    <select
-                      id="hall-select"
-                      value={selectedHall}
-                      onChange={handleHallSelect}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
-                    >
-                      {halls.map((hall) => (
-                        <option key={hall._id} value={hall._id}>
-                          {hall.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
+                </select>
               </div>
-              <div className="bg-gray-50 p-4 rounded-xl shadow">
-                <h4 className="text-xl font-bold mb-2">Payment Policy</h4>
-                <p>Advance: {venue.payment_policy.advance_percentage}%</p>
-                <p>
-                  Security Deposit: {venue.payment_policy.security_deposit}
-                </p>
-                <p>Refund: {venue.payment_policy.refund_policy}</p>
-                <p>
-                  Cancellation: {venue.payment_policy.cancellation_penalty}
-                </p>
-              </div>
-              <div className="bg-gray-50 p-4 rounded-xl shadow">
-                <h4 className="text-xl font-bold mb-2">Contact Details</h4>
-                <p>Phone: {venue.contact_details.phone}</p>
-                <p>Email: {venue.contact_details.email}</p>
-                <p className="mt-2 font-semibold">
-                  Location: {venue.location.address}
-                </p>
-              </div>
-            </div>
+            )}
           </div>
-        )}
+        </div>
 
-        {activeTab === "completed-events" && (
+        {/* Payment Policy */}
+        <div className="bg-white p-6 rounded-xl border border-orange-100 shadow-sm">
+          <h4 className="text-xl font-bold text-gray-900 mb-4">
+            Payment Policy
+          </h4>
+          <div className="space-y-3 text-gray-700">
+            <p>Advance: {venue.payment_policy.advance_percentage}%</p>
+            <p>Security Deposit: {venue.payment_policy.security_deposit}</p>
+            <p>Refund: {venue.payment_policy.refund_policy}</p>
+            <p>Cancellation: {venue.payment_policy.cancellation_penalty}</p>
+          </div>
+        </div>
+
+        {/* Contact Details */}
+        <div className="bg-white p-6 rounded-xl border border-orange-100 shadow-sm">
+          <h4 className="text-xl font-bold text-gray-900 mb-4">
+            Contact Details
+          </h4>
+          <div className="space-y-3 text-gray-700">
+            <p>Phone: {venue.contact_details.phone}</p>
+            <p>Email: {venue.contact_details.email}</p>
+            <p> Location: {venue.location.address}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )}
+  {activeTab === "completed-events" && (
           <div>
             <h2 className="text-3xl font-semibold text-gray-800 mb-4">
               Completed Events
@@ -506,7 +513,8 @@ const accessToken = localStorage.getItem("access_token");
 
         {/* Render ReviewsList when activeTab is "reviews" */}
         {activeTab === "reviews" && <ReviewsList venueId={id} />}
-      </section>
+  
+</section>
 
       {/* Messaging Feature */}
       {!chatOpen && (
@@ -527,18 +535,6 @@ const accessToken = localStorage.getItem("access_token");
   );
 };
 
-// Sample data for Completed Events
-const mockCompletedEvents = [
-  {
-    name: "Wedding Reception",
-    short_description: "A lovely ceremony with beautiful decorations",
-    image: "https://via.placeholder.com/300x200?text=Wedding",
-  },
-  {
-    name: "Corporate Gala",
-    short_description: "An evening of networking and fine dining",
-    image: "https://via.placeholder.com/300x200?text=Gala",
-  },
-];
+
 
 export default PartyPalace;
