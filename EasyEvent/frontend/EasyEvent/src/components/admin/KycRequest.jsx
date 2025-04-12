@@ -28,7 +28,12 @@ const KycRequest = () => {
       .then((response) => response.json())
       .then((data) => {
         if (data.data) {
-          setKycData(data.data);
+          // Sort the data: pending first, then rejected, then approved
+          const sortedData = data.data.sort((a, b) => {
+            const statusOrder = { pending: 1, rejected: 2, approved: 3 };
+            return statusOrder[a.status] - statusOrder[b.status];
+          });
+          setKycData(sortedData);
         } else {
           setError(data.error || "Error fetching KYC data");
         }
@@ -43,6 +48,7 @@ const KycRequest = () => {
   const handleRowClick = (kycId) => {
     navigate(`/kyc-profile/${kycId}`);
   };
+
   return (
     <div className="flex">
       <Sidebar />
@@ -88,7 +94,7 @@ const KycRequest = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {kycData.map((record, index) => (
+                {kycData.map((record) => (
                   <tr
                     key={record._id} // use _id as key
                     onClick={() => handleRowClick(record._id)}

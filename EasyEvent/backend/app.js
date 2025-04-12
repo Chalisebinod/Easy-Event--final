@@ -20,7 +20,7 @@ const venueBookingRoutes = require("./route/venueBookingRoute");
 const foodRoutes = require("./route/foodRoute");
 const paymentRoute = require("./route/paymentRoute");
 const chatRoute = require("./route/chat");
-const galleryRoutes = require("./route/galleryRoute");
+
 
 dotenv.config();
 
@@ -47,7 +47,7 @@ app.use("/api/booking", venueBookingRoutes);
 app.use("/api", foodRoutes);
 app.use("/api/chat", chatRoute);
 app.use("/api/reviews", reviewRoutes);
-app.use("/api/gallery", galleryRoutes);
+
 
 // Connect to MongoDB
 mongoose

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const KycProfile = () => {
   const { kycId } = useParams();
@@ -13,7 +15,6 @@ const KycProfile = () => {
   const [updateStatus, setUpdateStatus] = useState("");
   const [updateMessage, setUpdateMessage] = useState("");
   const [updateError, setUpdateError] = useState(null);
-  const [updateSuccess, setUpdateSuccess] = useState(null);
 
   // For image modal viewing
   const [selectedImage, setSelectedImage] = useState(null);
@@ -45,8 +46,8 @@ const KycProfile = () => {
   const handleUpdate = (e) => {
     e.preventDefault();
     const accessToken = localStorage.getItem("access_token");
+    // Reset previous errors
     setUpdateError(null);
-    setUpdateSuccess(null);
 
     axios
       .put(
@@ -67,18 +68,37 @@ const KycProfile = () => {
         const data = response.data;
         if (data.error) {
           setUpdateError(data.error);
+          toast.error(data.error, {
+            position: "top-right",
+            theme: "colored",
+          });
         } else {
-          setUpdateSuccess(data.message);
-          // Update profile locally for immediate feedback
+          // Show a toast notification based on the update status.
+          if (updateStatus === "approved") {
+            toast.success("KYC accepted successfully", {
+              position: "top-right",
+              theme: "colored",
+            });
+          } else if (updateStatus === "rejected") {
+            toast.error("KYC rejected successfully", {
+              position: "top-right",
+              theme: "colored",
+            });
+          }
+          // Update the profile locally for immediate feedback.
           setProfile((prev) => ({
             ...prev,
-            verificationStatus: updateStatus,
+            status: updateStatus, // now update the property that UI displays
             rejectMsg: updateStatus === "rejected" ? updateMessage : null,
           }));
         }
       })
       .catch((err) => {
         setUpdateError("Error updating status");
+        toast.error("Error updating status", {
+          position: "top-right",
+          theme: "colored",
+        });
       });
   };
 
@@ -104,6 +124,7 @@ const KycProfile = () => {
     <div className="flex">
       <Sidebar />
       <div className="flex-grow ml-64 p-8 bg-gray-100 min-h-screen">
+        <ToastContainer />
         {loading ? (
           <p className="text-gray-700">Loading profile...</p>
         ) : error ? (
@@ -162,7 +183,7 @@ const KycProfile = () => {
                   </p>
                 </div>
               </div>
-              {/* Venue Details Card - smaller and aligned at the top side */}
+              {/* Venue Details Card */}
               <div className="bg-gray-50 shadow-md rounded-lg p-4 mt-4 md:mt-0 md:ml-8 w-full md:w-1/3">
                 <h3 className="text-xl font-semibold mb-2">Venue Details</h3>
                 <p>
@@ -175,7 +196,7 @@ const KycProfile = () => {
               </div>
             </div>
 
-            {/* Documents Section - bigger card */}
+            {/* Documents Section */}
             <div className="bg-white shadow-lg rounded-lg p-8 mb-8">
               <h3 className="text-2xl font-semibold mb-6">Documents</h3>
               <div className="grid grid-cols-2 gap-6">
@@ -292,13 +313,12 @@ const KycProfile = () => {
                   <select
                     value={updateStatus}
                     onChange={(e) => setUpdateStatus(e.target.value)}
-                    className="w-full p-2 border rounded"
+                    className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   >
                     <option value="">Select Status</option>
                     <option value="approved">Approved</option>
                     <option value="rejected">Rejected</option>
-                    <option value="pending">Pending</option>
                   </select>
                 </div>
                 {updateStatus === "rejected" && (
@@ -309,17 +329,11 @@ const KycProfile = () => {
                     <textarea
                       value={updateMessage}
                       onChange={(e) => setUpdateMessage(e.target.value)}
-                      className="w-full p-2 border rounded"
+                      className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="Enter rejection message"
                       required
                     />
                   </div>
-                )}
-                {updateError && (
-                  <p className="text-red-600 mb-4">{updateError}</p>
-                )}
-                {updateSuccess && (
-                  <p className="text-green-600 mb-4">{updateSuccess}</p>
                 )}
                 <button
                   type="submit"

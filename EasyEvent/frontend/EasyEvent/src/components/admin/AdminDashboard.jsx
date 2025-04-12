@@ -204,7 +204,7 @@ const Dashboard = () => {
   );
 
   return (
-    <div className="flex bg-gray-50 min-h-screen">
+    <div className="flex min-h-screen">
       <Sidebar />
       <div className="ml-64 w-full p-6">
         {/* Header with search and notifications */}

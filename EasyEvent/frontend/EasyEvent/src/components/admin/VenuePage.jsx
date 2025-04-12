@@ -3,7 +3,6 @@ import axios from "axios";
 import DashboardLayout from "./DashboardLayout";
 import { toast } from "react-toastify";
 
-// API configuration
 const API_URL = "http://localhost:8000/api/admin/venues";
 const API_URL_Block = "http://localhost:8000/api/venue";
 
@@ -17,7 +16,7 @@ const VenuePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("date");
 
-  // Function to fetch venues from API
+  // Fetch venues from API
   const fetchVenues = async () => {
     setLoading(true);
     const token = localStorage.getItem("access_token");
@@ -45,12 +44,11 @@ const VenuePage = () => {
     }
   };
 
-  // Fetch venues whenever page, searchTerm, or sortOption changes
   useEffect(() => {
     fetchVenues();
   }, [page, searchTerm, sortOption]);
 
-  // Handle venue block/unblock action
+  // Handle block/unblock action
   const handleBlockVenue = async (venueId, isBlocked) => {
     const confirmMessage = isBlocked
       ? "Are you sure you want to unblock this venue?"
@@ -69,13 +67,7 @@ const VenuePage = () => {
           },
         }
       );
-      // Show the appropriate toast message based on current status
-      if (isBlocked) {
-        toast.success("Venue unblocked successfully");
-      } else {
-        toast.success("Venue blocked successfully");
-      }
-      // Re-fetch venues after toggling status
+      toast.success(isBlocked ? "Venue unblocked successfully" : "Venue blocked successfully");
       fetchVenues();
     } catch (error) {
       console.error("Error toggling venue status:", error);
@@ -83,7 +75,7 @@ const VenuePage = () => {
     }
   };
 
-  // Handlers for filter changes
+  // Filter handlers
   const handlePageChange = (newPage) => setPage(newPage);
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -97,22 +89,22 @@ const VenuePage = () => {
   return (
     <div className="flex">
       <DashboardLayout />
-      <div className="flex-grow p-6 bg-gray-100">
-        <h1 className="text-3xl font-semibold mb-6">Venue Management</h1>
+      <div className="flex-grow p-8 bg-gray-50 min-h-screen">
+        <h1 className="text-4xl font-extrabold mb-8 text-gray-800">Venue Management</h1>
 
-        {/* Filters: Search and Sort */}
-        <div className="mb-4 flex flex-wrap gap-4">
+        {/* Filters */}
+        <div className="mb-8 flex flex-wrap gap-4">
           <input
             type="text"
             value={searchTerm}
             onChange={handleSearchChange}
             placeholder="Search by name, address, or description"
-            className="px-4 py-2 border rounded-md"
+            className="flex-1 min-w-[220px] px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <select
             value={sortOption}
             onChange={handleSortChange}
-            className="px-4 py-2 border rounded-md"
+            className="px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="date">Sort by Date</option>
             <option value="status">Sort by Status</option>
@@ -120,78 +112,67 @@ const VenuePage = () => {
         </div>
 
         {loading ? (
-          <p className="text-center text-lg text-gray-600">Loading...</p>
+          <p className="text-center text-xl text-gray-600">Loading...</p>
         ) : (
           <>
-            <table className="min-w-full bg-white rounded-lg shadow-md overflow-hidden">
-              <thead className="bg-gray-200">
-                <tr>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
-                    Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
-                    Address
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
-                    Contact
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-center text-sm font-medium text-gray-700">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {venues.map((venue) => (
-                  <tr key={venue._id} className="border-b">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {venue.name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {venue.location
-                        ? `${venue.location.address}, ${
-                            venue.location.city || ""
-                          }`
-                        : "N/A"}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {venue.contact_details?.phone || "N/A"}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {venue.is_blocked ? "Blocked" : "Active"}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center">
-                      <button
-                        onClick={() =>
-                          handleBlockVenue(venue._id, venue.is_blocked)
-                        }
-                        className={`px-4 py-2 rounded-md text-white ${
-                          venue.is_blocked
-                            ? "bg-green-500 hover:bg-green-600"
-                            : "bg-red-500 hover:bg-red-600"
-                        }`}
-                      >
-                        {venue.is_blocked ? "Unblock" : "Block"}
-                      </button>
-                    </td>
+            {/* Table */}
+            <div className="overflow-x-auto bg-white rounded-lg shadow-lg">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-blue-600">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wide">Name</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wide">Address</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wide">Contact</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wide">Status</th>
+                    <th className="px-6 py-3 text-center text-sm font-semibold text-white uppercase tracking-wide">Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-100">
+                  {venues.map((venue) => (
+                    <tr key={venue._id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-800">
+                        {venue.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-base text-gray-800">
+                        {venue.location
+                          ? `${venue.location.address}, ${venue.location.city || ""}`
+                          : "N/A"}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-base text-gray-800">
+                        {venue.contact_details?.phone || "N/A"}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-base text-gray-800">
+                        {venue.is_blocked ? "Blocked" : "Active"}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-center">
+                        <button
+                          onClick={() => handleBlockVenue(venue._id, venue.is_blocked)}
+                          className={`px-4 py-2 rounded-md text-white font-medium shadow-sm transition-colors duration-200 ${
+                            venue.is_blocked
+                              ? "bg-green-500 hover:bg-green-600"
+                              : "bg-red-500 hover:bg-red-600"
+                          }`}
+                        >
+                          {venue.is_blocked ? "Unblock" : "Block"}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-            {/* Pagination Controls */}
+            {/* Pagination */}
             <div className="flex justify-center mt-6">
               {Array.from({ length: totalPages }, (_, index) => (
                 <button
                   key={index + 1}
                   onClick={() => handlePageChange(index + 1)}
                   disabled={page === index + 1}
-                  className={`px-4 py-2 mx-1 border rounded ${
+                  className={`px-4 py-2 mx-1 border rounded-lg font-semibold transition-colors duration-200 ${
                     page === index + 1
-                      ? "bg-gray-300 border-gray-400 text-gray-800"
-                      : "bg-white border-gray-300 text-gray-600 hover:bg-gray-100"
+                      ? "bg-blue-600 text-white border-blue-600"
+                      : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
                   }`}
                 >
                   {index + 1}

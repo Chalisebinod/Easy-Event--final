@@ -19,7 +19,7 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-1">
+        <nav className="hidden md:flex items-center space-x-9">
           {[
             { path: "/user-dashboard", label: "Home" },
             { path: "/user-bookings", label: "My Bookings" },

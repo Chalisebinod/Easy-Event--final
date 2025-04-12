@@ -74,11 +74,11 @@ const UserDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <Navbar />
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-1 py-8">
         {/* Search and Filter Section */}
         <div className="mb-8 bg-white rounded-lg shadow-md p-4">
           <div className="flex flex-col md:flex-row gap-4">
@@ -89,9 +89,9 @@ const UserDashboard = () => {
                 placeholder="Search venues..."
                 value={searchTerm}
                 onChange={handleSearch}
-                className="w-full pl-10 pr-4 py-3 text-gray-700 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full pl-10 pr-4 py-3 text-white-700 bg-white-50 border border-white-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
               />
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white-400">
                 <MagnifyingGlassIcon className="w-5 h-5" />
               </div>
             </div>
@@ -102,16 +102,16 @@ const UserDashboard = () => {
                 <select
                   value={sortOption}
                   onChange={handleSortChange}
-                  className="w-full appearance-none pl-10 pr-8 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                  className="w-full appearance-none pl-10 pr-8 py-3 bg-white-50 border border-white-200 rounded-lg text-white-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                 >
                   <option value="">Sort by Rating</option>
                   <option value="High to Low">High to Low</option>
                   <option value="Low to High">Low to High</option>
                 </select>
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white-400">
                   <StarIcon className="w-5 h-5" />
                 </div>
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-white-400 pointer-events-none">
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                   </svg>
@@ -119,16 +119,16 @@ const UserDashboard = () => {
               </div>
               
               <div className="relative min-w-[180px]">
-                <select className="w-full appearance-none pl-10 pr-8 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                <select className="w-full appearance-none pl-10 pr-8 py-3 bg-white-50 border border-white-200 rounded-lg text-white-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
                   <option>Sort by Location</option>
                   <option>Kathmandu</option>
                   <option>Pokhara</option>
                   <option>Jhapa</option>
                 </select>
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white-400">
                   <MapPinIcon className="w-5 h-5" />
                 </div>
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-white-400 pointer-events-none">
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                   </svg>
@@ -140,8 +140,8 @@ const UserDashboard = () => {
         
         {/* Section Title */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-gray-800">Available Venues</h2>
-          <p className="text-gray-500 text-sm">
+          <h2 className="text-xl font-semibold text-white-800">Available Venues</h2>
+          <p className="text-white-500 text-sm">
             {filteredVenues.length} {filteredVenues.length === 1 ? 'venue' : 'venues'} found
           </p>
         </div>
@@ -187,7 +187,7 @@ const UserDashboard = () => {
 
                   {/* Venue Details */}
                   <div className="pt-8 pl-4 flex-1 flex flex-col">
-                    <h3 className="text-lg  font-bold text-gray-800 mb-1">
+                    <h3 className="text-lg  font-bold text-white-800 mb-1">
                       {venue.name}
                     </h3>
                     
@@ -198,7 +198,7 @@ const UserDashboard = () => {
                       </p>
                     </div>
                     
-                    <p className="text-gray-500 text-sm mb-3 line-clamp-2 flex-1">
+                    <p className="text-white-500 text-sm mb-3 line-clamp-2 flex-1">
                       {venue.description}
                     </p>
                     
@@ -211,7 +211,7 @@ const UserDashboard = () => {
                             className={`w-4 h-4 ${
                               index < Math.floor(parseFloat(venue.rating))
                                 ? "text-yellow-400"
-                                : "text-gray-200"
+                                : "text-white-200"
                             }`}
                           />
                         ))}
@@ -219,7 +219,7 @@ const UserDashboard = () => {
                     )}
 
                     {/* Call to Action */}
-                    <div className="mt-2 pt-2 border-t border-gray-100">
+                    <div className="mt-2 pt-2 border-t border-white-100">
                       <button className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded transition-colors duration-200">
                         View Details
                       </button>
@@ -231,13 +231,13 @@ const UserDashboard = () => {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center text-center py-16 bg-white rounded-lg shadow-md">
-            <div className="bg-gray-100 p-5 rounded-full mb-5">
-              <CalendarIcon className="w-12 h-12 text-gray-400" />
+            <div className="bg-white-100 p-5 rounded-full mb-5">
+              <CalendarIcon className="w-12 h-12 text-white-400" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">
+            <h2 className="text-xl font-semibold text-white-800 mb-2">
               No Venues Available
             </h2>
-            <p className="text-gray-500 mb-5 max-w-md mx-auto">
+            <p className="text-white-500 mb-5 max-w-md mx-auto">
               We couldn't find any venues matching your search. Please try different search terms or explore other options.
             </p>
             <Link

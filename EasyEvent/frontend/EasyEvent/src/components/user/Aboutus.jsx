@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Navbar from "./Navbar";
-import aboutUs from "../images/aboutUs.jpg"; 
+
 
 export default function AboutUs() {
   return (
@@ -9,25 +9,8 @@ export default function AboutUs() {
       {/* Navbar */}
       <Navbar />
 
-      {/* Hero Banner */}
-      <div
-        className="relative h-48 md:h-64 bg-cover bg-center"
-        style={{ backgroundImage: `url(${aboutUs})`,}}
-      >
-        <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-3xl md:text-5xl font-bold text-white text-center px-4"
-          >
-            About EasyEvents
-          </motion.h1>
-        </div>
-      </div>
-
       {/* Main Content */}
-      <main className="flex-grow bg-gray-100 py-12 px-6 md:px-16 lg:px-24">
+      <main className="flex-grow bg-white-100 py-12 px-6 md:px-16 lg:px-24">
         <div className="max-w-4xl mx-auto space-y-16">
           {/* Our Mission */}
           <motion.section
@@ -36,7 +19,7 @@ export default function AboutUs() {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-orange-600">Our Mission</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-bg-slate-900">Our Mission</h2>
             <p className="text-gray-700 mt-4 text-lg leading-relaxed">
               Simplifying event planning by connecting people with the perfect venues and services.
               We aim to make the process secure, efficient, and enjoyable for everyone.
@@ -50,7 +33,7 @@ export default function AboutUs() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="bg-white shadow-lg rounded-xl p-8"
           >
-            <h3 className="text-2xl font-semibold text-orange-600">Our Story</h3>
+            <h3 className="text-2xl font-semibold text-bg-slate-900">Our Story</h3>
             <p className="text-gray-700 mt-4 leading-relaxed">
               Our journey began when we realized how stressful event planning can be. We built
               EasyEvents to change that—by leveraging modern tech to give you a seamless platform
@@ -66,7 +49,7 @@ export default function AboutUs() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="bg-white shadow-md rounded-lg p-6"
             >
-              <h4 className="text-xl font-semibold text-orange-600">What We Offer</h4>
+              <h4 className="text-xl font-semibold text-bg-slate-900">What We Offer</h4>
               <ul className="text-gray-700 mt-4 space-y-2">
                 <li>✔ Verified Venue Details</li>
                 <li>✔ Secure Transactions</li>
@@ -81,7 +64,7 @@ export default function AboutUs() {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="bg-white shadow-md rounded-lg p-6"
             >
-              <h4 className="text-xl font-semibold text-orange-600">By the Numbers</h4>
+              <h4 className="text-xl font-semibold text-bg-slate-900">By the Numbers</h4>
               <ul className="text-gray-700 mt-4 space-y-2">
                 <li>📌 1000+ Venues Listed</li>
                 <li>📌 500+ Events Booked Monthly</li>
@@ -95,7 +78,7 @@ export default function AboutUs() {
               transition={{ duration: 0.8, delay: 0.8 }}
               className="bg-white shadow-md rounded-lg p-6"
             >
-              <h4 className="text-xl font-semibold text-orange-600">Contact Us</h4>
+              <h4 className="text-xl font-semibold text-bg-slate-900">Contact Us</h4>
               <p className="text-gray-700 mt-4">Have questions or need assistance?</p>
               <p className="mt-2">📧 chalisebinod40@gmail.com</p>
               <p>📞 +977‑9863335795</p>
@@ -108,7 +91,7 @@ export default function AboutUs() {
       </main>
 
       {/* Call to Action */}
-      <section className="bg-gradient-to-r from-orange-500 to-red-500 py-12 text-center">
+      <section className="bg-slate-900  py-12 text-center">
         <motion.h2
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}

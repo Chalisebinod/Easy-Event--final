@@ -277,32 +277,28 @@ const Booking = () => {
         });
 
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Top Content Area */}
-      <div className="flex-1 bg-gradient-to-br from-blue-50 to-gray-100">
-        <Navbar />
-        <ToastContainer />
-        <div className="max-w-screen-xl mx-auto bg-white shadow-lg rounded-xl p-10 my-8">
-          <h1 className="text-4xl font-extrabold text-center text-gray-900 mb-12">
-            Book Your Event
-          </h1>
+    <div className="min-h-screen bg-gray-50 text-slate-900">
+      <Navbar />
+      <ToastContainer />
+      
+      {/* Main Form Container */}
+      <main className="w-full px-6 py-12">
+        <div className="max-w-7xl mx-auto bg-white shadow-md rounded-lg p-8">
           <form onSubmit={handleSubmit} className="space-y-12">
             {/* Hall Selection */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-800 border-b pb-2 mb-6">
+              <h2 className="text-2xl font-semibold border-b border-slate-300 pb-2 mb-6">
                 Select a Hall
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 {halls.map((hall) => (
                   <div
                     key={hall._id}
-                    className={`border rounded-xl p-4 cursor-pointer transition transform hover:scale-105 ${
+                    className={`relative border p-6 rounded-lg cursor-pointer transition duration-200 ease-in-out hover:shadow-lg ${
                       selectedHall && selectedHall._id === hall._id
-                        ? "border-orange-500 shadow-2xl"
-                        : "border-gray-300"
-                    } ${
-                      !hall.isAvailable ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                        ? "border-slate-900"
+                        : "border-slate-300"
+                    } ${!hall.isAvailable && "opacity-60 cursor-not-allowed"}`}
                     onClick={() => {
                       if (!hall.isAvailable) return;
                       setSelectedHall(hall);
@@ -319,24 +315,24 @@ const Booking = () => {
                           "/"
                         )}`}
                         alt={hall.name}
-                        className="w-full h-48 object-cover rounded-xl mb-4"
+                        className="w-full h-48 object-cover rounded-md mb-4"
                       />
                     ) : (
-                      <div className="w-full h-48 bg-gray-200 rounded-xl mb-4 flex items-center justify-center">
-                        No Image
+                      <div className="w-full h-48 bg-gray-200 rounded-md mb-4 flex items-center justify-center">
+                        <span className="text-slate-700 font-medium">No Image</span>
                       </div>
                     )}
-                    <p className="text-center font-medium text-lg">
-                      {hall.name}
-                    </p>
-                    <p className="text-center text-sm text-gray-600">
-                      Capacity: {hall.capacity}
-                    </p>
-                    {!hall.isAvailable && (
-                      <p className="text-center text-red-500 mt-2">
-                        Not Available
+                    <div className="text-center">
+                      <p className="text-xl font-medium">{hall.name}</p>
+                      <p className="text-sm text-slate-600">
+                        Capacity: {hall.capacity}
                       </p>
-                    )}
+                      {!hall.isAvailable && (
+                        <span className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded">
+                          Not Available
+                        </span>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -347,17 +343,17 @@ const Booking = () => {
               selectedHall.includedFood &&
               selectedHall.includedFood.length > 0 && (
                 <section>
-                  <h2 className="text-2xl font-semibold text-gray-800 border-b pb-2 mb-6">
+                  <h2 className="text-2xl font-semibold border-b border-slate-300 pb-2 mb-6">
                     Included Food Items
                   </h2>
                   <div className="flex flex-wrap gap-4">
                     {selectedHall.includedFood.map((food) => (
-                      <div
+                      <span
                         key={food._id}
-                        className="px-4 py-2 bg-green-100 text-green-800 rounded-full"
+                        className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm"
                       >
                         {food.name}
-                      </div>
+                      </span>
                     ))}
                   </div>
                 </section>
@@ -365,18 +361,18 @@ const Booking = () => {
 
             {/* Event Details */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-800 border-b pb-2 mb-6">
+              <h2 className="text-2xl font-semibold border-b border-slate-300 pb-2 mb-6">
                 Event Details
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div>
-                  <label className="block text-gray-700 font-medium">
+                  <label className="block font-medium mb-2">
                     Event Type
                   </label>
                   <select
                     value={eventType}
                     onChange={(e) => setEventType(e.target.value)}
-                    className="mt-2 w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full p-3 border border-slate-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-slate-900"
                   >
                     <option value="">Select Event Type</option>
                     <option value="Marriage">Marriage</option>
@@ -386,39 +382,43 @@ const Booking = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-gray-700 font-medium">
+                  <label className="block font-medium mb-2">
                     Event Date
                   </label>
                   <input
                     type="date"
                     value={eventDate}
                     onChange={(e) => setEventDate(e.target.value)}
-                    className="mt-2 w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full p-3 border border-slate-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-slate-900"
                   />
                 </div>
                 <div>
-  <label className="block text-gray-700 font-medium">
-    Guest Count
-  </label>
-  <input
-    type="number"
-    value={guestCount}
-    onChange={handleGuestCountChange}
-    className={`mt-2 w-full border rounded-md p-2 focus:outline-none focus:ring-2 ${
-      capacityError ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-orange-500"
-    }`}
-    min="1"
-  />
-  {capacityError && (
-    <p className="text-red-500 text-sm mt-1">{capacityError}</p>
-  )}
-</div>
+                  <label className="block font-medium mb-2">
+                    Guest Count
+                  </label>
+                  <input
+                    type="number"
+                    value={guestCount}
+                    onChange={handleGuestCountChange}
+                    className={`w-full p-3 border rounded-md bg-gray-100 focus:outline-none focus:ring-2 ${
+                      capacityError
+                        ? "border-red-500 focus:ring-red-500"
+                        : "border-slate-300 focus:ring-slate-900"
+                    }`}
+                    min="1"
+                  />
+                  {capacityError && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {capacityError}
+                    </p>
+                  )}
+                </div>
               </div>
             </section>
 
             {/* Extra Food Selection */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-800 border-b pb-2 mb-6">
+              <h2 className="text-2xl font-semibold border-b border-slate-300 pb-2 mb-6">
                 Additional Food Items
               </h2>
               <div className="flex space-x-4 mb-6">
@@ -427,10 +427,10 @@ const Booking = () => {
                     key={type}
                     type="button"
                     onClick={() => setSelectedFoodType(type)}
-                    className={`px-4 py-2 rounded-full transition ${
+                    className={`px-4 py-2 rounded-full transition duration-200 ${
                       selectedFoodType === type
-                        ? "bg-orange-500 text-white"
-                        : "bg-gray-200 text-gray-800"
+                        ? "bg-slate-900 text-white shadow-md"
+                        : "bg-slate-200 text-slate-800 hover:bg-slate-300"
                     }`}
                   >
                     {type}
@@ -442,23 +442,19 @@ const Booking = () => {
                   filteredFoods.map((food) => (
                     <div
                       key={food._id}
-                      className={`border rounded-xl p-3 cursor-pointer transition transform hover:scale-105 ${
+                      className={`border p-4 rounded-md cursor-pointer transition transform hover:scale-105 ${
                         selectedFoods.includes(food._id)
-                          ? "border-orange-500 shadow-xl"
-                          : "border-gray-300"
+                          ? "border-slate-900 shadow-lg"
+                          : "border-slate-300"
                       }`}
                       onClick={() => toggleFoodSelection(food._id)}
                     >
-                      <p className="text-center text-sm font-medium">
-                        {food.name}
-                      </p>
-                      <p className="text-center text-xs text-gray-600">
-                        ${food.price}
-                      </p>
+                      <p className="text-center font-medium">{food.name}</p>
+                      <p className="text-center text-xs text-slate-600">${food.price}</p>
                     </div>
                   ))
                 ) : (
-                  <div className="col-span-full text-center text-gray-600">
+                  <div className="col-span-full text-center text-slate-600">
                     No additional food items available.
                   </div>
                 )}
@@ -467,25 +463,27 @@ const Booking = () => {
 
             {/* Additional Services */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-800 border-b pb-2 mb-6">
+              <h2 className="text-2xl font-semibold border-b border-slate-300 pb-2 mb-6">
                 Additional Services
               </h2>
               {additionalServices.map((service, index) => (
-                <div key={index} className="border p-4 rounded-xl mb-6">
-                  <div className="flex justify-between items-center mb-3">
-                    <p className="font-medium text-lg">Service {index + 1}</p>
+                <div key={index} className="bg-gray-100 border border-slate-300 p-4 rounded-md mb-6 shadow-sm">
+                  <div className="flex justify-between items-center mb-4">
+                    <span className="font-semibold text-lg">
+                      Service {index + 1}
+                    </span>
                     {additionalServices.length > 1 && (
                       <button
                         type="button"
                         onClick={() => removeService(index)}
-                        className="text-red-500 text-sm"
+                        className="text-sm text-red-500 hover:underline"
                       >
                         Remove
                       </button>
                     )}
                   </div>
                   <div className="mb-4">
-                    <label className="block text-gray-700 font-medium">
+                    <label className="block font-medium mb-2">
                       Service Name
                     </label>
                     <input
@@ -494,24 +492,20 @@ const Booking = () => {
                       onChange={(e) =>
                         handleServiceChange(index, "name", e.target.value)
                       }
-                      className="mt-2 w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      className="w-full p-3 border border-slate-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-slate-900"
                       placeholder="Enter service name"
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-700 font-medium">
+                    <label className="block font-medium mb-2">
                       Description
                     </label>
                     <textarea
                       value={service.description}
                       onChange={(e) =>
-                        handleServiceChange(
-                          index,
-                          "description",
-                          e.target.value
-                        )
+                        handleServiceChange(index, "description", e.target.value)
                       }
-                      className="mt-2 w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      className="w-full p-3 border border-slate-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-slate-900"
                       placeholder="Enter description"
                     ></textarea>
                   </div>
@@ -520,7 +514,7 @@ const Booking = () => {
               <button
                 type="button"
                 onClick={addService}
-                className="px-4 py-2 bg-orange-500 text-white rounded-full transition hover:bg-orange-600"
+                className="px-4 py-2 bg-slate-900 text-white rounded-md transition duration-200 hover:bg-slate-800"
               >
                 Add Service
               </button>
@@ -528,41 +522,41 @@ const Booking = () => {
 
             {/* Pricing Section */}
             <section>
-              <h2 className="text-2xl font-semibold text-gray-800 border-b pb-2 mb-6">
+              <h2 className="text-2xl font-semibold border-b border-slate-300 pb-2 mb-6">
                 Pricing
               </h2>
-              <div className="grid grid-cols-1 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Official Pricing */}
-                <div className="p-6 border rounded-xl bg-gray-50 shadow-inner">
+                <div className="p-6 border rounded-md bg-gray-100 shadow-inner">
                   <h3 className="text-xl font-semibold mb-4">
                     Official Pricing
                   </h3>
-                  <div className="grid grid-cols-2 gap-6">
+                  <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-gray-700 font-medium">
+                      <label className="block font-medium mb-2">
                         Price per Plate
                       </label>
                       <input
                         type="number"
                         value={originalPrice}
                         readOnly
-                        className="mt-2 w-full border border-gray-300 rounded-md p-2 bg-gray-100"
+                        className="w-full p-3 border border-slate-300 rounded-md bg-gray-200"
                       />
                     </div>
                     <div>
-                      <label className="block text-gray-700 font-medium">
+                      <label className="block font-medium mb-2">
                         Extra Food Cost
                       </label>
                       <input
                         type="number"
                         value={guestCount ? extraFoodCost.toFixed(2) : 0}
                         readOnly
-                        className="mt-2 w-full border border-gray-300 rounded-md p-2 bg-gray-100"
+                        className="w-full p-3 border border-slate-300 rounded-md bg-gray-200"
                       />
                     </div>
                   </div>
                   <div className="mt-4">
-                    <label className="block text-gray-700 font-medium">
+                    <label className="block font-medium mb-2">
                       Grand Official Price
                     </label>
                     <input
@@ -576,16 +570,16 @@ const Booking = () => {
                           : 0
                       }
                       readOnly
-                      className="mt-2 w-full border border-gray-300 rounded-md p-2 bg-gray-100"
+                      className="w-full p-3 border border-slate-300 rounded-md bg-gray-200"
                     />
                   </div>
                 </div>
 
                 {/* Your Offer */}
-                <div className="p-6 border rounded-xl bg-gray-50 shadow-inner">
+                <div className="p-6 border rounded-md bg-gray-100 shadow-inner">
                   <h3 className="text-xl font-semibold mb-4">Your Offer</h3>
                   <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">
+                    <label className="block font-medium mb-2">
                       Select Offer Type
                     </label>
                     <div className="flex space-x-4">
@@ -596,10 +590,10 @@ const Booking = () => {
                           setUserOfferedValue("");
                           setOfferError("");
                         }}
-                        className={`px-4 py-2 rounded-full transition ${
+                        className={`px-4 py-2 rounded-md transition duration-200 ${
                           offerMode === "perPlate"
-                            ? "bg-orange-500 text-white"
-                            : "bg-gray-200 text-gray-800"
+                            ? "bg-slate-900 text-white shadow-md"
+                            : "bg-slate-200 text-slate-800 hover:bg-slate-300"
                         }`}
                       >
                         Per Plate
@@ -611,21 +605,21 @@ const Booking = () => {
                           setUserOfferedValue("");
                           setOfferError("");
                         }}
-                        className={`px-4 py-2 rounded-full transition ${
+                        className={`px-4 py-2 rounded-md transition duration-200 ${
                           offerMode === "total"
-                            ? "bg-orange-500 text-white"
-                            : "bg-gray-200 text-gray-800"
+                            ? "bg-slate-900 text-white shadow-md"
+                            : "bg-slate-200 text-slate-800 hover:bg-slate-300"
                         }`}
                       >
                         Total
                       </button>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-6">
+                  <div className="grid grid-cols-2 gap-4">
                     {offerMode === "perPlate" ? (
                       <>
                         <div>
-                          <label className="block text-gray-700 font-medium">
+                          <label className="block font-medium mb-2">
                             Offered Price per Plate
                           </label>
                           <input
@@ -633,11 +627,11 @@ const Booking = () => {
                             value={userOfferedValue}
                             onChange={handleUserOfferedValueChange}
                             placeholder="Enter your offered price"
-                            className="mt-2 w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                            className="w-full p-3 border border-slate-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-slate-900"
                           />
                         </div>
                         <div>
-                          <label className="block text-gray-700 font-medium">
+                          <label className="block font-medium mb-2">
                             Total Offer
                           </label>
                           <input
@@ -648,14 +642,14 @@ const Booking = () => {
                                 : ""
                             }
                             readOnly
-                            className="mt-2 w-full border border-gray-300 rounded-md p-2 bg-gray-100"
+                            className="w-full p-3 border border-slate-300 rounded-md bg-gray-200"
                           />
                         </div>
                       </>
                     ) : (
                       <>
                         <div>
-                          <label className="block text-gray-700 font-medium">
+                          <label className="block font-medium mb-2">
                             Offered Total Price
                           </label>
                           <input
@@ -663,11 +657,11 @@ const Booking = () => {
                             value={userOfferedValue}
                             onChange={handleUserOfferedValueChange}
                             placeholder="Enter your offered total price"
-                            className="mt-2 w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                            className="w-full p-3 border border-slate-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-slate-900"
                           />
                         </div>
                         <div>
-                          <label className="block text-gray-700 font-medium">
+                          <label className="block font-medium mb-2">
                             Equivalent Price per Plate
                           </label>
                           <input
@@ -678,38 +672,33 @@ const Booking = () => {
                                 : ""
                             }
                             readOnly
-                            className="mt-2 w-full border border-gray-300 rounded-md p-2 bg-gray-100"
+                            className="w-full p-3 border border-slate-300 rounded-md bg-gray-200"
                           />
                         </div>
                       </>
                     )}
                   </div>
                   {offerError && (
-                    <p className="text-red-500 text-sm mt-2">{offerError}</p>
+                    <p className="mt-2 text-sm text-red-500">{offerError}</p>
                   )}
-                  <div className="mt-6 p-4 border-t">
-                    <p className="text-gray-700">
+                  <div className="mt-6 border-t pt-4">
+                    <p className="text-base">
                       Final Accepted Price per Plate:{" "}
                       <span className="font-semibold">{finalPrice}</span>
                     </p>
-                    <p className="text-gray-700">
+                    <p className="text-base">
                       Total Final Cost:{" "}
                       <span className="font-semibold">{totalCostFinal}</span>
                     </p>
-                    <p className="text-gray-700">
+                    <p className="text-base">
                       Extra Food Cost:{" "}
                       <span className="font-semibold">
                         ${extraFoodCost.toFixed(2)}
                       </span>{" "}
-                      <span className="text-sm">
-                        (for your selected extra food)
-                      </span>
+                      <span className="text-sm">(for your selected extra food)</span>
                     </p>
-                    <p className="text-gray-700 text-xl">
-                      Grand Total (Your Offer + Extras):{" "}
-                      <span className="font-bold">
-                        ${grandTotal.toFixed(2)}
-                      </span>
+                    <p className="text-xl font-bold mt-2">
+                      Grand Total (Your Offer + Extras): ${grandTotal.toFixed(2)}
                     </p>
                   </div>
                 </div>
@@ -719,10 +708,10 @@ const Booking = () => {
             <div className="text-center">
               <button
                 type="submit"
-                className={`px-10 py-4 font-bold rounded-full shadow-lg transition ${
+                className={`w-60 py-4 rounded-lg font-bold transition duration-200 ${
                   bookingSubmitted
-                    ? "bg-green-700 text-white"
-                    : "bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:shadow-2xl"
+                    ? "bg-green-700 text-white cursor-not-allowed"
+                    : "bg-orange-600 text-white hover:shadow-xl"
                 }`}
                 disabled={bookingSubmitted}
               >
@@ -733,19 +722,22 @@ const Booking = () => {
             </div>
           </form>
         </div>
-        {!chatOpen && (
-          <div
-            className="fixed bottom-20 right-6 bg-orange-500 p-4 rounded-full cursor-pointer text-white shadow-2xl hover:scale-110 transition transform duration-300"
-            onClick={openChat}
-            title="Chat with Venue Owner"
-          >
-            <FaComments size={28} />
-          </div>
-        )}
-        {chatOpen && (
-          <ChatWidget partnerId={partnerIdFromState} onClose={closeChat} />
-        )}
-      </div>
+      </main>
+
+      {/* Chat Button */}
+      {!chatOpen && (
+        <div
+          className="fixed bottom-10 right-6 bg-orange-600 p-4 rounded-full cursor-pointer text-white shadow-xl hover:scale-110 transition transform duration-300"
+          onClick={openChat}
+          title="Chat with Venue Owner"
+        >
+          <FaComments size={28} />
+        </div>
+      )}
+      {chatOpen && (
+        <ChatWidget partnerId={partnerIdFromState} onClose={closeChat} />
+      )}
+
       <BottomNavbar />
     </div>
   );

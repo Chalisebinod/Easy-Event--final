@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom"; // Import Link for navigation
+import { Link } from "react-router-dom";
 import DashboardLayout from "./DashboardLayout";
 
 const VenueOwnerPage = () => {
@@ -8,9 +8,9 @@ const VenueOwnerPage = () => {
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(""); // For the search box
-  const [sortBy, setSortBy] = useState("date"); // Default sorting by date
-  const [blockStatus, setBlockStatus] = useState("all"); // To filter by blocked status
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("date");
+  const [blockStatus, setBlockStatus] = useState("all");
 
   useEffect(() => {
     fetchVenueOwners(page, searchTerm, sortBy, blockStatus);
@@ -28,9 +28,7 @@ const VenueOwnerPage = () => {
       const response = await axios.get(
         `http://localhost:8000/api/venue-owners?page=${currentPage}&limit=10&search=${search}&sort=${sort}&blockStatus=${block}`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
       const { data, pagination } = response.data;
@@ -45,24 +43,17 @@ const VenueOwnerPage = () => {
 
   const blockVenueOwner = async (venueOwnerId, isBlocked) => {
     const confirmation = window.confirm(
-      `Are you sure you want to ${
-        isBlocked ? "unblock" : "block"
-      } this venue owner?`
+      `Are you sure you want to ${isBlocked ? "unblock" : "block"} this venue owner?`
     );
     if (!confirmation) return;
-
     const token = localStorage.getItem("access_token");
     try {
       await axios.put(
         `http://localhost:8000/api/venueOwner/block/${venueOwnerId}`,
         {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      fetchVenueOwners(page, searchTerm, sortBy, blockStatus); // Refresh after blocking/unblocking
+      fetchVenueOwners(page, searchTerm, sortBy, blockStatus); // Refresh data
     } catch (error) {
       console.error("Error updating venue owner status:", error);
     }
@@ -74,131 +65,127 @@ const VenueOwnerPage = () => {
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
+    setPage(1);
   };
 
   const handleSortChange = (e) => {
     setSortBy(e.target.value);
+    setPage(1);
   };
 
   const handleBlockStatusChange = (e) => {
     setBlockStatus(e.target.value);
+    setPage(1);
   };
 
   return (
     <div className="flex">
       <DashboardLayout />
-      <div className="flex-grow p-6 bg-gray-100">
-        <h1 className="text-3xl font-semibold mb-6">Venue Owner Management</h1>
+      <div className="flex-grow p-8 bg-gray-50 min-h-screen">
+        <h1 className="text-4xl font-extrabold mb-8 text-gray-800">
+          Venue Owner Management
+        </h1>
 
-        {/* Search Box */}
-        <div className="mb-6 flex items-center space-x-4">
+        {/* Filters */}
+        <div className="mb-8 flex flex-wrap gap-4">
           <input
             type="text"
             placeholder="Search by name, email, or location"
             value={searchTerm}
             onChange={handleSearchChange}
-            className="px-4 py-2 border rounded w-1/3"
+            className="flex-1 min-w-[220px] px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-        </div>
-
-        {/* Sorting Options */}
-        <div className="mb-6 flex items-center space-x-4">
-          <div>
-            <label htmlFor="sortBy" className="mr-2">
-              Sort by:
-            </label>
-            <select
-              id="sortBy"
-              value={sortBy}
-              onChange={handleSortChange}
-              className="px-4 py-2 border rounded"
-            >
-              <option value="date">Account Creation Date</option>
-              <option value="status">Status</option>
-              <option value="blocked">Blocked Status</option>
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="blockStatus" className="mr-2">
-              Filter by Blocked Status:
-            </label>
-            <select
-              id="blockStatus"
-              value={blockStatus}
-              onChange={handleBlockStatusChange}
-              className="px-4 py-2 border rounded"
-            >
-              <option value="all">All</option>
-              <option value="blocked">Blocked</option>
-              <option value="unblocked">Unblocked</option>
-            </select>
-          </div>
+          <select
+            value={blockStatus}
+            onChange={handleBlockStatusChange}
+            className="px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="all">All</option>
+            <option value="blocked">Blocked</option>
+            <option value="unblocked">Unblocked</option>
+          </select>
+          <select
+            value={sortBy}
+            onChange={handleSortChange}
+            className="px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="date">Sort by Date</option>
+            <option value="status">Sort by Status</option>
+          </select>
         </div>
 
         {loading ? (
-          <p className="text-center text-lg text-gray-600">Loading...</p>
+          <p className="text-center text-xl text-gray-600">Loading...</p>
         ) : (
           <>
-            <table className="table-auto w-full bg-white rounded-lg shadow-md overflow-hidden">
-              <thead className="bg-gray-200">
-                <tr>
-                  <th className="px-4 py-2">Name</th>
-                  <th className="px-4 py-2">Email</th>
-                  <th className="px-4 py-2">Contact Number</th>
-                  
-                  <th className="px-4 py-2">Status</th>
-                  <th className="px-4 py-2">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {venueOwners.map((venueOwner) => (
-                  <tr
-                    key={venueOwner._id}
-                    className="border-b last:border-none"
-                  >
-                    <td className="px-4 py-2">
-                      <Link
-                        to={`/venueOwner-profile/${venueOwner._id}`} // Link to the profile page
-                        className="text-blue-500 hover:underline"
-                      >
-                        {venueOwner.name}
-                      </Link>
-                    </td>
-                    <td className="px-4 py-2">{venueOwner.email}</td>
-                    <td className="px-4 py-2">
-                      {venueOwner.contact_number || "N/A"}
-                    </td>
-                    <td className="px-4 py-2">{venueOwner.location}</td>
-                    <td className="px-4 py-2">{venueOwner.status}</td>
-                    <td className="px-4 py-2">
-                      <button
-                        onClick={() =>
-                          blockVenueOwner(venueOwner._id, venueOwner.is_blocked)
-                        }
-                        className={`px-4 py-2 text-white rounded ${
-                          venueOwner.is_blocked
-                            ? "bg-green-500 hover:bg-green-600"
-                            : "bg-red-500 hover:bg-red-600"
-                        }`}
-                      >
-                        {venueOwner.is_blocked ? "Unblock" : "Block"}
-                      </button>
-                    </td>
+            <div className="overflow-x-auto bg-white rounded-lg shadow-lg">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-blue-600">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wide">
+                      Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wide">
+                      Email
+                    </th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wide">
+                      Contact Number
+                    </th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wide">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wide">
+                      Action
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            <div className="flex justify-center mt-4">
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-100">
+                  {venueOwners.map((venueOwner) => (
+                    <tr key={venueOwner._id} className="hover:bg-gray-50">
+                      
+                      <td className="px-6 py-4 whitespace-nowrap text-base text-gray-800">
+                        {venueOwner.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-base text-gray-800">
+                        {venueOwner.email}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-base text-gray-800">
+                        {venueOwner.contact_number || "N/A"}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-base text-gray-800">
+                        {venueOwner.status}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <button
+                          onClick={() =>
+                            blockVenueOwner(venueOwner._id, venueOwner.is_blocked)
+                          }
+                          className={`px-4 py-2 rounded-lg text-white font-medium shadow-sm transition-colors duration-200 ${
+                            venueOwner.is_blocked
+                              ? "bg-green-500 hover:bg-green-600"
+                              : "bg-red-500 hover:bg-red-600"
+                          }`}
+                        >
+                          {venueOwner.is_blocked ? "Unblock" : "Block"}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination */}
+            <div className="flex justify-center mt-8">
               {Array.from({ length: pages }, (_, index) => (
                 <button
                   key={index + 1}
                   onClick={() => handlePageChange(index + 1)}
                   disabled={page === index + 1}
-                  className={`px-4 py-2 mx-1 border rounded ${
+                  className={`px-4 py-2 mx-1 border rounded-lg font-semibold transition-colors duration-200 ${
                     page === index + 1
-                      ? "bg-gray-300 border-gray-400 text-gray-800"
-                      : "bg-white border-gray-300 text-gray-600 hover:bg-gray-100"
+                      ? "bg-blue-600 text-white border-blue-600"
+                      : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
                   }`}
                 >
                   {index + 1}

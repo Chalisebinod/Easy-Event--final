@@ -377,7 +377,7 @@ const KYCPage = () => {
                         Zip Code <span className="text-red-500">*</span>
                       </label>
                       <input
-                        type="text"
+                        type="number"
                         id="zip_code"
                         name="zip_code"
                         value={formValues.zip_code}

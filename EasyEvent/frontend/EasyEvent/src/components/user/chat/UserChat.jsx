@@ -227,7 +227,7 @@ const UserChat = () => {
         {/* Conversation List Panel */}
         <div className="md:w-72 border-r bg-white flex flex-col">
           {/* Panel Header */}
-          <div className="px-6 py-4 bg-orange-600 text-white text-lg font-bold">
+          <div className="px-6 py-4 bg-slate-900 text-white text-lg font-bold">
             Conversations
           </div>
           {/* Search Box */}
@@ -288,7 +288,7 @@ const UserChat = () => {
           {selectedConversation ? (
             <>
               {/* Chat Header */}
-              <div className="bg-orange-600 text-white px-6 py-4 flex items-center space-x-4 shadow">
+              <div className="bg-slate-900 text-white px-6 py-4 flex items-center space-x-4 shadow">
                 <img
                   src={getProfileImageUrl(
                     selectedConversation.participants.partner.profile_image
@@ -318,7 +318,7 @@ const UserChat = () => {
                       <div
                         className={`px-4 py-2 rounded-xl max-w-lg break-words shadow-sm ${
                           msg.senderLabel === "You"
-                            ? "bg-orange-500 text-white rounded-br-none"
+                            ? "bg-slate-900 text-white rounded-br-none"
                             : "bg-white text-gray-800 rounded-bl-none"
                         }`}
                       >
@@ -349,11 +349,11 @@ const UserChat = () => {
                     if (e.key === "Enter") handleSendMessage();
                   }}
                   placeholder="Type a message..."
-                  className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-bg-slate-900"
                 />
                 <button
                   onClick={handleSendMessage}
-                  className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors"
+                  className="bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-900 transition-colors"
                 >
                   Send
                 </button>

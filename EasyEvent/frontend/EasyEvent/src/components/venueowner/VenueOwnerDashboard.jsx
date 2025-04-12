@@ -91,7 +91,7 @@ const VenueOwnerDashboard = () => {
         <VenueSidebar />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <p className="font-bold text-2xl text-yellow-500 mb-4">
+            <p className="font-bold text-2xl text-orange-600 mb-4">
               KYC Verification Required
             </p>
             <p className="mb-6">

@@ -26,7 +26,6 @@ import DeleteAccount from "./components/user/DeleteAccount";
 import UserPage from "./components/admin/UserPage";
 import VenueOwnerPage from "./components/admin/VenueOwnerPage";
 //import AdminPage from "./components/admin/AdminPage";
-import VenueOwnerUserProfile from "./components/admin/VenueOwnerUserProfile";
 import VenueOwnerProfile from "./components/venueowner/VenueOwnerProfile";
 import EmailVerification from "./components/user/EmailVerification";
 import PasswordChange from "./components/user/PasswordChange";

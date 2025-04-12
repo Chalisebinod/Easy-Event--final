@@ -27,6 +27,11 @@ const VenueOwnerSignup = () => {
     return Object.values(strengthChecks).every(Boolean);
   };
 
+  // Validate contact number (exactly 10 digits)
+  const validateContactNumber = (number) => {
+    return /^[0-9]{10}$/.test(number);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -52,6 +57,12 @@ const VenueOwnerSignup = () => {
     // Validate password strength
     if (!validatePassword(formData.password)) {
       toast.error("Password does not meet requirements!");
+      return;
+    }
+
+    // Validate contact number
+    if (!validateContactNumber(formData.contact_number)) {
+      toast.error("Contact number must be exactly 10 digits!");
       return;
     }
 
@@ -91,11 +102,15 @@ const VenueOwnerSignup = () => {
     }
   };
 
+  const handleLoginAlert = () => {
+    toast.info("Please sign up before logging in!");
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-100">
       <ToastContainer />
       {/* Left Section */}
-      <div className="w-1/2 bg-gradient-to-br from-orange-500 to-orange-600 text-white flex flex-col justify-center items-center p-10 shadow-lg">
+      <div className="w-1/2 bg-slate-900  text-white flex flex-col justify-center items-center p-10 shadow-lg">
         <h1 className="text-5xl font-bold mb-4 drop-shadow-lg">
           Welcome, Venue Owners!
         </h1>
@@ -106,7 +121,7 @@ const VenueOwnerSignup = () => {
       </div>
       {/* Right Section */}
       <div className="w-1/2 bg-white flex flex-col justify-center items-center p-10">
-        <h2 className="text-3xl font-bold text-orange-600 mb-6">Signup</h2>
+        <h2 className="text-3xl font-bold text-bg-slate-900  mb-6">Signup</h2>
         <form className="w-3/4" onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
@@ -176,12 +191,18 @@ const VenueOwnerSignup = () => {
               <input
                 type="text"
                 name="contact_number"
-                placeholder="+1234567890"
+                placeholder="1234567890"
                 value={formData.contact_number}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 transition duration-300"
                 required
               />
+              {!validateContactNumber(formData.contact_number) &&
+                formData.contact_number && (
+                  <p className="text-red-600 text-sm mt-2">
+                    Contact number must be exactly 10 digits.
+                  </p>
+                )}
             </div>
           </div>
           <button
@@ -190,7 +211,7 @@ const VenueOwnerSignup = () => {
             className={`w-full mt-6 py-3 rounded-lg text-white font-medium transition-all transform hover:scale-105 ${
               isSubmitting
                 ? "bg-orange-300 cursor-not-allowed"
-                : "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+                : "bg-slate-900 "
             }`}
           >
             {isSubmitting ? "Signing up..." : "Signup"}
@@ -200,6 +221,7 @@ const VenueOwnerSignup = () => {
           Already have an account?{" "}
           <Link
             to="/login"
+            onClick={handleLoginAlert}
             className="text-orange-600 font-medium hover:underline"
           >
             Login

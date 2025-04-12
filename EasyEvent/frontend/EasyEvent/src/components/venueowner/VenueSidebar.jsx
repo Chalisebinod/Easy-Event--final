@@ -1,21 +1,6 @@
 import React, { useEffect, useState, forwardRef } from "react";
-import {
-  Box,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Drawer,
-  Badge,
-  Divider,
-  Typography,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Slide,
-} from "@mui/material";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 import {
   Dashboard as DashboardIcon,
   RequestQuote as RequestQuoteIcon,
@@ -30,11 +15,8 @@ import {
   VerifiedUser as KycIcon,
 } from "@mui/icons-material";
 import BookOnlineIcon from "@mui/icons-material/BookOnline";
-import RateReviewIcon from "@mui/icons-material/RateReview"; 
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
-
-const drawerWidth = 250;
+import RateReviewIcon from "@mui/icons-material/RateReview";
+import Slide from "@mui/material/Slide";
 
 // Logout Dialog Transition
 const Transition = forwardRef(function Transition(props, ref) {
@@ -95,260 +77,133 @@ const VenueSidebar = ({ children }) => {
   const openLogoutDialog = () => setLogoutDialogOpen(true);
   const closeLogoutDialog = () => setLogoutDialogOpen(false);
 
-  // Highlight active menu item
-  const getNavItemStyle = (path) => ({
-    margin: "6px 8px",
-    borderRadius: "4px",
-    backgroundColor: location.pathname === path ? "#e0e0e0" : "transparent",
-    transition: "background-color 0.2s ease",
-    "& .MuiListItemIcon-root, & .MuiListItemText-primary": { color: "#333" },
-    "&:hover": { backgroundColor: "#f5f5f5" },
-  });
+  // Menu items configuration
+  const menuItems = [
+    { path: "/venue-owner-dashboard", icon: <DashboardIcon className="w-5 h-5" />, label: "Dashboard" },
+    { path: "/user-request", icon: <RequestQuoteIcon className="w-5 h-5" />, label: "Request" },
+    { path: "/bookings-owner", icon: <BookOnlineIcon className="w-5 h-5" />, label: "Bookings" },
+    { path: "/foodManagement", icon: <AccountBalanceIcon className="w-5 h-5" />, label: "Food Management" },
+    { path: "/halls", icon: <StoreIcon className="w-5 h-5" />, label: "Halls" },
+    { 
+      path: "/notification", 
+      icon: (
+        <div className="relative">
+          <NotificationsIcon className="w-5 h-5" />
+          {notificationCount > 0 && (
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+              {notificationCount}
+            </span>
+          )}
+        </div>
+      ), 
+      label: "Notifications" 
+    },
+    { path: "/transaction", icon: <PaymentsIcon className="w-5 h-5" />, label: "Payments" },
+    { path: "/agreement", icon: <AccountBalanceIcon className="w-5 h-5" />, label: "Agreement" },
+    { path: "/chat", icon: <EventIcon className="w-5 h-5" />, label: "Chat" },
+    { path: `/venueOwner-profile/${userId}`, icon: <ProfileIcon className="w-5 h-5" />, label: "Profile" },
+    { path: "/venueOwnerKyc", icon: <KycIcon className="w-5 h-5" />, label: "KYC" },
+  ];
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", backgroundColor: "#f4f6f8" }}>
-      {/* Sidebar Drawer */}
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: drawerWidth,
-            boxSizing: "border-box",
-            backgroundColor: "#fff",
-            color: "#333",
-            borderRight: "1px solid #ddd",
-          },
-        }}
-        variant="permanent"
-        anchor="left"
+    <div className="flex min-h-screen bg-gray-50">
+      {/* Sidebar */}
+      <div className="w-64 flex-shrink-0 fixed h-full">
+  <div className="h-full flex flex-col bg-green-900 shadow-xl">
+    {/* Logo/Brand */}
+    <div className="p-6 flex justify-center">
+      <div className="bg-white bg-opacity-10 px-4 py-3 rounded-lg">
+        <h1 className="text-xl font-bold tracking-wide text-white">
+          <span className="text-yellow-400">Easy</span>Event
+        </h1>
+      </div>
+    </div>
+
+    {/* Navigation Links */}
+    <div className="px-4 py-2 flex-grow overflow-y-auto">
+      <ul className="space-y-1">
+        {menuItems.map((item) => (
+          <li key={item.path}>
+            <Link
+              to={item.path}
+              className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${
+                location.pathname === item.path
+                  ? "bg-green-700 text-white font-medium shadow-md"
+                  : "text-green-100 hover:bg-green-800"
+              }`}
+            >
+              <span className="mr-3">{item.icon}</span>
+              <span>{item.label}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    {/* Logout Button */}
+    <div className="p-4 border-t border-green-800">
+      <button
+        onClick={openLogoutDialog}
+        className="w-full flex items-center px-4 py-3 text-green-100 hover:bg-green-800 rounded-lg transition-colors duration-200"
       >
-        {/* Sidebar Header */}
-        <Box
-          sx={{
-            textAlign: "center",
-            p: 3,
-            backgroundColor: "#fff",
-            mb: 2,
-            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-            borderRadius: 1,
-          }}
-        >
-          <Typography variant="h5" sx={{ color: "#FF8C00", fontWeight: "bold" }}>
-            EasyEvent
-          </Typography>
-        </Box>
-
-        {/* Navigation Links */}
-        <List>
-          <ListItem
-            button
-            component={Link}
-            to="/venue-owner-dashboard"
-            sx={getNavItemStyle("/venue-owner-dashboard")}
-          >
-            <ListItemIcon>
-              <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-          </ListItem>
-
-          <ListItem
-            button
-            component={Link}
-            to="/user-request"
-            sx={getNavItemStyle("/user-request")}
-          >
-            <ListItemIcon>
-              <RequestQuoteIcon />
-            </ListItemIcon>
-            <ListItemText primary="Request" />
-          </ListItem>
-
-          <ListItem
-            button
-            component={Link}
-            to="/bookings-owner"
-            sx={getNavItemStyle("/bookings-owner")}
-          >
-            <ListItemIcon>
-              <BookOnlineIcon />
-            </ListItemIcon>
-            <ListItemText primary="Bookings" />
-          </ListItem>
-
-          <ListItem
-            button
-            component={Link}
-            to="/foodManagement"
-            sx={getNavItemStyle("/foodManagement")}
-          >
-            <ListItemIcon>
-              <AccountBalanceIcon />
-            </ListItemIcon>
-            <ListItemText primary="Food Management" />
-          </ListItem>
-
-          <ListItem
-            button
-            component={Link}
-            to="/halls"
-            sx={getNavItemStyle("/halls")}
-          >
-            <ListItemIcon>
-              <StoreIcon />
-            </ListItemIcon>
-            <ListItemText primary="Halls" />
-          </ListItem>
-
-          <ListItem
-            button
-            component={Link}
-            to="/notification"
-            sx={getNavItemStyle("/notification")}
-          >
-            <ListItemIcon>
-              <Badge badgeContent={notificationCount} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </ListItemIcon>
-            <ListItemText primary="Notifications" />
-          </ListItem>
-
-          <ListItem
-            button
-            component={Link}
-            to="/transaction"
-            sx={getNavItemStyle("/transaction")}
-          >
-            <ListItemIcon>
-              <PaymentsIcon />
-            </ListItemIcon>
-            <ListItemText primary="Payments" />
-          </ListItem>
-
-          <ListItem
-            button
-            component={Link}
-            to="/agreement"
-            sx={getNavItemStyle("/agreement")}
-          >
-            <ListItemIcon>
-              <AccountBalanceIcon />
-            </ListItemIcon>
-            <ListItemText primary="Agreement" />
-          </ListItem>
-
-          <ListItem
-            button
-            component={Link}
-            to="/chat"
-            sx={getNavItemStyle("/chat")}
-          >
-            <ListItemIcon>
-              <EventIcon />
-            </ListItemIcon>
-            <ListItemText primary="Chat" />
-          </ListItem>
-
-          <ListItem
-            button
-            component={Link}
-            to={`/venueOwner-profile/${userId}`}
-            sx={getNavItemStyle(`/venueOwner-profile/${userId}`)}
-          >
-            <ListItemIcon>
-              <ProfileIcon />
-            </ListItemIcon>
-            <ListItemText primary="Profile" />
-          </ListItem>
-
-  
-
-          {/* <ListItem
-            button
-            component={Link}
-            to="/reviews"
-            sx={getNavItemStyle("/reviews")}
-          >
-            <ListItemIcon>
-              <RateReviewIcon />
-            </ListItemIcon>
-            <ListItemText primary="Reviews" />
-          </ListItem> */}
-
-          <ListItem
-            button
-            component={Link}
-            to="/venueOwnerKyc"
-            sx={getNavItemStyle("/venueOwnerKyc")}
-          >
-            <ListItemIcon>
-              <KycIcon />
-            </ListItemIcon>
-            <ListItemText primary="KYC" />
-          </ListItem>
-        </List>
-
-        <Divider sx={{ borderColor: "#ddd", my: 2 }} />
-
-        {/* Logout Button */}
-        <List>
-          <ListItem
-            button
-            onClick={openLogoutDialog}
-            sx={{
-              margin: "6px 8px",
-              borderRadius: "4px",
-              "&:hover": { backgroundColor: "#f5f5f5" },
-            }}
-          >
-            <ListItemIcon>
-              <LogoutIcon sx={{ color: "#333" }} />
-            </ListItemIcon>
-            <ListItemText primary="Logout" sx={{ color: "#333" }} />
-          </ListItem>
-        </List>
-      </Drawer>
+        <LogoutIcon className="w-5 h-5 mr-3" />
+        <span>Logout</span>
+      </button>
+    </div>
+  </div>
+</div>
 
       {/* Main Content */}
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <div className="ml-64 flex-grow p-6">
         {children}
-      </Box>
+      </div>
 
       {/* Logout Dialog */}
-      <Dialog
-        open={logoutDialogOpen}
-        onClose={closeLogoutDialog}
-        TransitionComponent={Transition}
-        PaperProps={{ sx: { borderRadius: 2, p: 2, minWidth: "320px" } }}
-      >
-        <DialogTitle sx={{ fontWeight: "bold", fontSize: "1.25rem" }}>
-          Confirm Logout
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="body1">
-            Are you sure you want to log out?
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeLogoutDialog} variant="outlined">
-            Cancel
-          </Button>
-          <Button
-            onClick={handleLogout}
-            variant="contained"
-            sx={{
-              backgroundColor: "#e53935",
-              color: "#fff",
-              "&:hover": { backgroundColor: "#d32f2f" },
-            }}
-          >
-            Logout
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Box>
+      {logoutDialogOpen && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+
+            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div className="sm:flex sm:items-start">
+                  <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                    <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                      Confirm Logout
+                    </h3>
+                    <div className="mt-2">
+                      <p className="text-sm text-gray-500">
+                        Are you sure you want to log out?
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button
+                  type="button"
+                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+                <button
+                  type="button"
+                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                  onClick={closeLogoutDialog}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

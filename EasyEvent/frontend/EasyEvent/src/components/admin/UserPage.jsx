@@ -30,7 +30,6 @@ const UserPage = () => {
         }
       );
 
-      // Assuming your backend returns { success, data, pagination }
       const { data, pagination } = response.data;
       setUsers(data);
       setPages(pagination.totalPages);
@@ -59,7 +58,6 @@ const UserPage = () => {
           },
         }
       );
-      // Refresh the list after the update
       fetchUsers(page);
     } catch (error) {
       console.error("Error blocking user:", error);
@@ -87,24 +85,23 @@ const UserPage = () => {
 
   return (
     <div className="flex">
-      {/* Sidebar or admin dashboard layout */}
       <DashboardLayout />
-      <div className="flex-grow p-6 bg-gray-100">
-        <h1 className="text-3xl font-semibold mb-6">User Management</h1>
+      <div className="flex-grow p-8 bg-gray-100 min-h-screen">
+        <h1 className="text-4xl font-bold mb-8 text-gray-800">User Management</h1>
 
-        {/* Filters: Search, Block Status, and Sort */}
-        <div className="mb-4 flex gap-4">
+        {/* Filters */}
+        <div className="mb-8 flex flex-wrap gap-4">
           <input
             type="text"
             value={search}
             onChange={handleSearchChange}
             placeholder="Search by name or email"
-            className="px-4 py-2 border rounded-md"
+            className="flex-1 min-w-[220px] px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <select
             value={blockStatus}
             onChange={handleBlockStatusChange}
-            className="px-4 py-2 border rounded-md"
+            className="px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="all">All</option>
             <option value="blocked">Blocked</option>
@@ -113,7 +110,7 @@ const UserPage = () => {
           <select
             value={sort}
             onChange={handleSortChange}
-            className="px-4 py-2 border rounded-md"
+            className="px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="date">Sort by Date</option>
             <option value="status">Sort by Status</option>
@@ -121,54 +118,73 @@ const UserPage = () => {
         </div>
 
         {loading ? (
-          <p className="text-center text-lg text-gray-600">Loading...</p>
+          <p className="text-center text-xl text-gray-700">Loading...</p>
         ) : (
           <>
-            <table className="table-auto w-full bg-white rounded-lg shadow-md overflow-hidden">
-              <thead className="bg-gray-200">
-                <tr>
-                  <th className="px-4 py-2">Name</th>
-                  <th className="px-4 py-2">Email</th>
-                  <th className="px-4 py-2">Phone</th>
-                  <th className="px-4 py-2">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr key={user._id} className="border-b last:border-none">
-                    <td className="px-4 py-2">{user.name}</td>
-                    <td className="px-4 py-2">{user.email}</td>
-                    <td className="px-4 py-2">
-                      {user.contact_number || "N/A"}
-                    </td>
-                    <td className="px-4 py-2">
-                      <button
-                        onClick={() => blockUser(user._id, user.is_blocked)}
-                        className={`px-4 py-2 text-white rounded ${
-                          user.is_blocked
-                            ? "bg-green-500 hover:bg-green-600"
-                            : "bg-red-500 hover:bg-red-600"
-                        }`}
-                      >
-                        {user.is_blocked ? "Unblock" : "Block"}
-                      </button>
-                    </td>
+            <div className="overflow-x-auto bg-white shadow-lg rounded-lg">
+              <table className="min-w-full">
+                <thead className="bg-blue-600">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-white uppercase tracking-wider border-b border-blue-700">
+                      Name
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-white uppercase tracking-wider border-b border-blue-700">
+                      Email
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-white uppercase tracking-wider border-b border-blue-700">
+                      Phone
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-white uppercase tracking-wider border-b border-blue-700">
+                      Action
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {users.map((user, index) => (
+                    <tr
+                      key={user._id}
+                      className={`${
+                        index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                      } hover:bg-gray-100`}
+                    >
+                      <td className="px-6 py-4 text-base font-medium text-gray-800 border-b border-gray-200">
+                        {user.name}
+                      </td>
+                      <td className="px-6 py-4 text-base font-medium text-gray-800 border-b border-gray-200">
+                        {user.email}
+                      </td>
+                      <td className="px-6 py-4 text-base font-medium text-gray-800 border-b border-gray-200">
+                        {user.contact_number || "N/A"}
+                      </td>
+                      <td className="px-6 py-4 text-base border-b border-gray-200">
+                        <button
+                          onClick={() => blockUser(user._id, user.is_blocked)}
+                          className={`px-4 py-2 rounded-md text-white font-semibold shadow-sm transition-colors duration-200 ${
+                            user.is_blocked
+                              ? "bg-green-500 hover:bg-green-600"
+                              : "bg-red-500 hover:bg-red-600"
+                          }`}
+                        >
+                          {user.is_blocked ? "Unblock" : "Block"}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
             {/* Pagination */}
-            <div className="flex justify-center mt-4">
+            <div className="flex justify-center mt-8">
               {Array.from({ length: pages }, (_, index) => (
                 <button
                   key={index + 1}
                   onClick={() => handlePageChange(index + 1)}
                   disabled={page === index + 1}
-                  className={`px-4 py-2 mx-1 border rounded ${
+                  className={`px-4 py-2 mx-1 border rounded-md font-semibold transition-colors duration-200 ${
                     page === index + 1
-                      ? "bg-gray-300 border-gray-400 text-gray-800"
-                      : "bg-white border-gray-300 text-gray-600 hover:bg-gray-100"
+                      ? "bg-blue-500 text-white border-blue-500"
+                      : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
                   }`}
                 >
                   {index + 1}

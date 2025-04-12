@@ -150,11 +150,11 @@ const Profile = () => {
             <div className="flex flex-col md:flex-row items-center md:items-start md:space-x-8">
               {/* Profile Image */}
               <div className="flex-shrink-0 mb-6 md:mb-0 relative">
-                <div className="p-1 rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
+                <div className="p-1 rounded-full ">
                   <img
                     src={getProfileImageUrl(profile.profile_image)}
                     alt="Profile"
-                    className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-white"
+                    className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-2 border-gray-500"
                   />
                 </div>
               </div>
@@ -224,7 +224,7 @@ const Profile = () => {
                     <p className="font-medium text-gray-800">{profile.status || "Not Provided"}</p>
                   </div>
                 </div>
-                <div className="flex items-center bg-white p-3 rounded-lg border border-gray-100">
+                {/* <div className="flex items-center bg-white p-3 rounded-lg border border-gray-100">
                   <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
                     <FaClock className="text-green-600" />
                   </div>
@@ -232,7 +232,7 @@ const Profile = () => {
                     <p className="text-sm text-gray-500">Last Login</p>
                     <p className="font-medium text-gray-800">{formatDate(profile.last_login)}</p>
                   </div>
-                </div>
+                </div> */}
                 <div className="flex items-center bg-white p-3 rounded-lg border border-gray-100">
                   <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
                     <FaCalendarAlt className="text-purple-600" />
