@@ -246,15 +246,16 @@ const DashboardBefore = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 font-sans">
       {/* Header */}
-      <header className="bg-white shadow-lg sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
+      <header className="fixed w-full top-0 z-50 bg-white shadow-sm">
+      <div className="flex items-center justify-between h-16 px-10">
           {/* Clickable Logo */}
-          <div
-            onClick={() => navigate("/")}
-            className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-500 cursor-pointer hover:opacity-80 transition-all duration-300"
-          >
-            EasyEvents
-          </div>
+ <div
+          className="text-3xl md:text-4xl font-bold cursor-pointer flex items-center font-[Poppins]"
+          onClick={() => navigate("/")}
+        >
+          <span className="text-orange-600">Easy</span>
+          <span className="text-orange-600">Events</span>
+        </div>
 
           <div className="flex items-center space-x-4">
             <button
@@ -276,7 +277,7 @@ const DashboardBefore = () => {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-6 py-8">
+      <main className="container mx-auto px-6 py-8 mt-12">
         {filteredVenues.length === 0 ? (
           <div className="flex flex-col items-center justify-center text-center py-20">
             <div className="bg-orange-100 p-8 rounded-full mb-6 animate-pulse">

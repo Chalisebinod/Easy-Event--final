@@ -81,7 +81,7 @@ const VenueOwnerPage = () => {
   return (
     <div className="flex">
       <DashboardLayout />
-      <div className="flex-grow p-8 bg-gray-50 min-h-screen">
+      <div className="flex-grow p-8 bg-white min-h-screen">
         <h1 className="text-4xl font-extrabold mb-8 text-gray-800">
           Venue Owner Management
         </h1>

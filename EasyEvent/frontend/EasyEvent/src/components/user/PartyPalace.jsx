@@ -326,13 +326,17 @@ const accessToken = localStorage.getItem("access_token");
       </button>
     </div>
 
-    {/* Book Now Button */}
-    <button
-  onClick={handleBookNow}
-  className="px-8 py-3.5 text-lg font-bold text-white bg-green-500 rounded-lg hover:bg-red-600 transition-all duration-300 shadow-md w-full md:w-auto transform hover:scale-105 active:scale-95"
->
-  Book Now
-</button>
+    <button 
+      onClick={handleBookNow} 
+      className="px-8 py-4 text-xl font-extrabold text-white bg-gradient-to-r from-purple-600 to-pink-500 rounded-full shadow-2xl hover:from-pink-500 hover:to-purple-600 transition-all duration-300 w-full md:w-auto transform hover:scale-105 active:scale-95 border-2 border-white flex items-center justify-center gap-2"
+    >
+    
+      Book Now
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 ml-1 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+      </svg>
+    </button>
+
 
   </div>
 

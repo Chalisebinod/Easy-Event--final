@@ -64,9 +64,9 @@ const MyBookings = () => {
 
   if (error) {
     return (
-      <div className="flex flex-col min-h-screen bg-gray-50">
+      <div className="flex flex-col min-h-screen bg-white">
         <Navbar />
-        <main className="flex-1 container mx-auto px-4 py-8 flex items-center justify-center">
+        <main className="flex-1 container mx-auto px-2 py-8 flex items-center justify-center">
           <div className="text-xl text-red-600">Error: {error}</div>
         </main>
         <BottomNavbar />
@@ -75,9 +75,9 @@ const MyBookings = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-white">
       <Navbar />
-      <main className="flex-1 container mx-auto px-4 py-8">
+      <main className="flex-1 container mx-auto px-2 py-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">My Bookings</h1>
 
         {bookings.length === 0 ? (

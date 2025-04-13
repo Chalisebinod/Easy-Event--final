@@ -86,7 +86,7 @@ const UserPage = () => {
   return (
     <div className="flex">
       <DashboardLayout />
-      <div className="flex-grow p-8 bg-gray-100 min-h-screen">
+      <div className="flex-grow p-8 bg-white min-h-screen">
         <h1 className="text-4xl font-bold mb-8 text-gray-800">User Management</h1>
 
         {/* Filters */}

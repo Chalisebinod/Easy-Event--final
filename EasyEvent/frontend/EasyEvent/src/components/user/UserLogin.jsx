@@ -47,7 +47,7 @@ const UserLogin = () => {
   return (
     <div className="flex h-screen">
       {/* Left Section */}
-      <div className="w-1/2 bg-slate-900  flex flex-col justify-center items-center p-10">
+      <div className="w-1/2 bg-orange-600   flex flex-col justify-center items-center p-10">
         <h1 className="text-5xl font-bold text-white">
           Welcome, <span className="text-yellow-300">Back!</span>
         </h1>
@@ -58,7 +58,7 @@ const UserLogin = () => {
 
       {/* Right Section */}
       <div className="w-1/2 bg-white flex flex-col justify-center items-center p-10">
-        <h2 className="text-3xl font-bold text-slate-900  mb-4">Login</h2>
+        <h2 className="text-3xl font-bold text-orange-600  mb-4">Login</h2>
         <p className="text-gray-600 mb-8">
           Enter your Credentials to access your account
         </p>
@@ -112,7 +112,7 @@ const UserLogin = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-slate-900 text-white py-2 rounded-lg hover:bg-slate-600 transition duration-200"
+            className="w-full bg-orange-600 text-white py-2 rounded-lg hover:bg-orange-700 transition duration-200"
           >
             Login
           </button>

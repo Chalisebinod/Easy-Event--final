@@ -22,7 +22,7 @@ const UserSignup = () => {
       uppercase: /[A-Z]/.test(pwd),
       lowercase: /[a-z]/.test(pwd),
       number: /[0-9]/.test(pwd),
-      specialChar: /[!@#$%^&*(),.?":{}|<>]/.test(pwd)
+      specialChar: /[!@#$%^&*(),.?":{}|<>]/.test(pwd),
     };
     return Object.values(strengthChecks).every(Boolean);
   };
@@ -82,7 +82,7 @@ const UserSignup = () => {
     <div className="flex h-screen">
       <ToastContainer />
       {/* Left Section with Gradient and Pattern Overlay */}
-      <div className="w-1/2 bg-gradient-to-br from-orange-500 to-red-500 flex flex-col justify-center items-center p-10 relative overflow-hidden">
+      <div className="w-1/2 bg-orange-600 flex flex-col justify-center items-center p-10 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('/path/to/pattern.png')] bg-cover"></div>
         <div className="relative z-10 text-center">
           <h1 className="text-5xl font-bold text-white drop-shadow-lg">
@@ -96,13 +96,14 @@ const UserSignup = () => {
 
       {/* Right Section */}
       <div className="w-1/2 bg-white flex flex-col justify-center items-center p-10">
-        <h2 className="text-3xl font-bold text-orange-500 mb-6">
-          Users Signup
-        </h2>
+        <h2 className="text-3xl font-bold text-orange-600 mb-6">User Signup</h2>
 
         <form className="w-3/4" onSubmit={handleSubmit}>
           <div className="mb-5">
-            <label htmlFor="name" className="block text-gray-700 mb-2 font-medium">
+            <label
+              htmlFor="name"
+              className="block text-gray-700 mb-2 font-medium"
+            >
               Name
             </label>
             <input
@@ -116,7 +117,10 @@ const UserSignup = () => {
             />
           </div>
           <div className="mb-5">
-            <label htmlFor="email" className="block text-gray-700 mb-2 font-medium">
+            <label
+              htmlFor="email"
+              className="block text-gray-700 mb-2 font-medium"
+            >
               Email Address
             </label>
             <input
@@ -130,7 +134,10 @@ const UserSignup = () => {
             />
           </div>
           <div className="mb-5 relative">
-            <label htmlFor="password" className="block text-gray-700 mb-2 font-medium">
+            <label
+              htmlFor="password"
+              className="block text-gray-700 mb-2 font-medium"
+            >
               Password
             </label>
             <div className="relative">
@@ -156,8 +163,9 @@ const UserSignup = () => {
               </button>
             </div>
             {formData.password && !validatePassword(formData.password) && (
-              <p className="text-red-600 text-sm mt-2">
-                Password must be 8+ characters, include uppercase, lowercase, number, and special character.
+              <p className="text-orange-600 text-sm mt-2">
+                Password must be 8+ characters, include uppercase, lowercase,
+                number, and special character.
               </p>
             )}
           </div>
@@ -168,7 +176,7 @@ const UserSignup = () => {
             className={`w-full py-3 rounded-lg text-white transition duration-300 transform hover:scale-105 shadow-lg ${
               isSubmitting
                 ? "bg-orange-300 cursor-not-allowed"
-                : "bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                : "bg-orange-600 hover:from-orange-600 hover:to-red-600"
             }`}
           >
             {isSubmitting ? "Signing up..." : "Signup"}
@@ -179,7 +187,10 @@ const UserSignup = () => {
         <div className="mt-6 text-center">
           <p className="text-gray-600 text-sm">
             Already have an account?{" "}
-            <Link to="/login" className="text-orange-600 font-medium hover:underline">
+            <Link
+              to="/login"
+              className="text-orange-600 font-medium hover:underline"
+            >
               Login
             </Link>
           </p>

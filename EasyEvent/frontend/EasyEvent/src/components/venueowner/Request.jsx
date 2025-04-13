@@ -111,7 +111,7 @@ function Request() {
   return (
     <div className="min-h-screen flex">
       <VenueSidebar />
-      <div className="p-6 w-full bg-gray-50">
+      <div className="p-6 w-full bg-white">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">User Requests</h1>
 
         {/* Search and Filters */}

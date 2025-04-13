@@ -43,14 +43,13 @@ const LandingPage = () => {
       <header className="fixed w-full top-0 z-50 bg-white shadow-sm">
         <div className="flex items-center justify-between h-16 px-0">
           {/* Left side - EasyEvents */}
-          <div className="flex-shrink-0">
-            <h1
-              onClick={() => navigate("/")}
-              className="text-2xl font-bold text-orange-600 cursor-pointer hover:text-orange-700 transition-colors ml-10"
-            >
-              EasyEvent
-            </h1>
-          </div>
+          <div
+          className="text-3xl pl-9 md:text-4xl font-bold cursor-pointer flex items-center font-[Poppins]"
+          onClick={() => navigate("/")}
+        >
+          <span className="text-orange-600">Easy</span>
+          <span className="text-orange-600">Events</span>
+        </div>
 
           {/* Right side - Login */}
           <div className="flex items-center">
@@ -88,7 +87,7 @@ const LandingPage = () => {
           <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
             <button
               onClick={scrollToVenueOwnerSection}
-              className="px-8 py-3 bg-white text-orange-600 rounded-full font-semibold hover:bg-orange-50 transition-colors shadow-md"
+              className="px-8 py-3  bg-white text-orange-600 rounded-full font-semibold hover:bg-orange-50 transition-colors shadow-md"
             >
               List Your Venue
             </button>

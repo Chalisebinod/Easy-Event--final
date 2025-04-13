@@ -360,7 +360,7 @@ const Hall = () => {
   const [toggleHall, setToggleHall] = useState(null);
   const [pendingAvailability, setPendingAvailability] = useState(null);
 
-  // Form states
+  // Form states for new hall creation and editing
   const [newHall, setNewHall] = useState({
     name: "",
     capacity: "",
@@ -423,7 +423,7 @@ const Hall = () => {
     fetchHalls();
   }, [venue, accessToken]);
 
-  // Handlers for edit, delete, toggle
+  // Handlers for edit, delete, toggle actions
   const handleEditClick = (hall) => {
     setSelectedHall(hall);
     setEditHall({
@@ -617,8 +617,17 @@ const Hall = () => {
           )}
         </Container>
 
-        {/* Create Hall Dialog */}
-        <Dialog open={isModalOpen} onClose={() => setIsModalOpen(false)} fullWidth maxWidth="md" scroll="paper">
+        {/* Create Hall Dialog with dim background */}
+        <Dialog
+          open={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          fullWidth
+          maxWidth="md"
+          scroll="paper"
+          BackdropProps={{
+            style: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+          }}
+        >
           <DialogTitle
             sx={{
               display: "flex",
@@ -668,7 +677,9 @@ const Hall = () => {
                         startAdornment: <InputAdornment position="start">$</InputAdornment>,
                       }}
                       value={newHall.basePricePerPlate}
-                      onChange={(e) => setNewHall({ ...newHall, basePricePerPlate: e.target.value })}
+                      onChange={(e) =>
+                        setNewHall({ ...newHall, basePricePerPlate: e.target.value })
+                      }
                     />
                   </Grid>
                 </Grid>
@@ -679,8 +690,6 @@ const Hall = () => {
                   </Typography>
                   <FoodPicker onSelectionChange={(selected) => setNewHall({ ...newHall, includedFood: selected })} />
                 </Box>
-
-                {/* Removed the "Available" checkbox */}
 
                 <FormControl component="fieldset" sx={{ mt: 3 }}>
                   <Typography variant="subtitle2" sx={{ color: "text.secondary", mb: 1 }}>
@@ -722,7 +731,6 @@ const Hall = () => {
                       Add
                     </Button>
                   </Box>
-                  {/* Display custom features as chips so they remain visible */}
                   {newHall.features
                     .filter((f) => !defaultFeatures.includes(f))
                     .map((feature, idx) => (
@@ -855,8 +863,6 @@ const Hall = () => {
                     />
                   </Grid>
                 </Grid>
-
-                {/* Removed the "Available" checkbox here */}
 
                 <FormControl component="fieldset" sx={{ mt: 3 }}>
                   <Typography variant="subtitle2" sx={{ color: "text.secondary", mb: 1 }}>

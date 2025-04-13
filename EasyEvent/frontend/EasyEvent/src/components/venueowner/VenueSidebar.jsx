@@ -90,7 +90,7 @@ const VenueSidebar = ({ children }) => {
         <div className="relative">
           <NotificationsIcon className="w-5 h-5" />
           {notificationCount > 0 && (
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+            <span className="absolute -top-2 -right-2 bg-red-500 text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
               {notificationCount}
             </span>
           )}
@@ -106,14 +106,14 @@ const VenueSidebar = ({ children }) => {
   ];
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-white">
       {/* Sidebar */}
       <div className="w-64 flex-shrink-0 fixed h-full">
-  <div className="h-full flex flex-col bg-green-900 shadow-xl">
+  <div className="h-full flex flex-col bg-black shadow-xl">
     {/* Logo/Brand */}
     <div className="p-6 flex justify-center">
-      <div className="bg-white bg-opacity-10 px-4 py-3 rounded-lg">
-        <h1 className="text-xl font-bold tracking-wide text-white">
+      <div className="bg-black bg-opacity-10 px-4 py-3 rounded-lg">
+        <h1 className="text-2xl font-bold tracking-wide text-white">
           <span className="text-yellow-400">Easy</span>Event
         </h1>
       </div>
@@ -126,9 +126,9 @@ const VenueSidebar = ({ children }) => {
           <li key={item.path}>
             <Link
               to={item.path}
-              className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${
+              className={`flex items-center px-4 py-3 rounded-15px transition-all duration-200 ${
                 location.pathname === item.path
-                  ? "bg-green-700 text-white font-medium shadow-md"
+                  ? "bg-white text-black font-medium shadow-md"
                   : "text-green-100 hover:bg-green-800"
               }`}
             >
@@ -168,37 +168,38 @@ const VenueSidebar = ({ children }) => {
 
             <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <div className="inline-block align-bottom bg-black rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+              <div className="bg-black px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div className="sm:flex sm:items-start">
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                    <h3 className="text-lg leading-6 font-bold text-red-700" id="modal-title">
                       Confirm Logout
                     </h3>
                     <div className="mt-2">
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-white">
                         Are you sure you want to log out?
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button
-                  type="button"
-                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </button>
-                <button
-                  type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                  onClick={closeLogoutDialog}
-                >
-                  Cancel
-                </button>
-              </div>
+              <div className="flex justify-end gap-3 bg-white px-6 py-4 border-t rounded-b-md">
+  <button
+    type="button"
+    onClick={handleLogout}
+    className="px-5 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg shadow-md hover:from-red-600 hover:to-red-700 transition-all duration-300 text-sm font-semibold"
+  >
+    Logout
+  </button>
+  <button
+    type="button"
+    onClick={closeLogoutDialog}
+    className="px-5 py-2 bg-gray-100 text-gray-700 rounded-lg shadow-sm hover:bg-gray-200 transition-all duration-300 text-sm font-medium"
+  >
+    Cancel
+  </button>
+</div>
+
             </div>
           </div>
         </div>

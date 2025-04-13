@@ -59,7 +59,7 @@ import AboutUs from "./components/user/Aboutus";
 import MyBookings from "./components/user/MyBookings";
 import SubmitReview from "./components/user/SubmitReview";
 
-// import Reviews from "./components/venueowner/Reviews";
+
 
 function App() {
   // useEffect(() => {
@@ -118,7 +118,7 @@ function App() {
         <Route path="/chat" element={<AllChat />} />
         <Route path="/chat/user" element={<ChatPage />} />
         <Route path="/user-chat" element={<UserChat />} />
-        {/* <Route path="/reviews" element={<Reviews />} /> */}
+        
 
         <Route path="/foodManagement" element={<FoodManagement />} />
 

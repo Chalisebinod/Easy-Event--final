@@ -7,7 +7,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-slate-900 py-4 text-white shadow-xl sticky top-0 z-50 border-b border-slate-700">
+    <header className="bg-slate-900 py-4 text-white shadow-xl sticky top-0 z-50 border-b border-slate-700 mb-px">
       <div className="container mx-auto px-4 flex items-center justify-between">
         {/* Logo */}
         <div
@@ -15,7 +15,7 @@ const Navbar = () => {
           onClick={() => navigate("/user-dashboard")}
         >
           <span className="text-amber-400">Easy</span>
-          <span className="text-slate-100">Events</span>
+          <span className="text-slate-100">Event</span>
         </div>
 
         {/* Desktop Navigation */}

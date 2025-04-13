@@ -248,7 +248,7 @@ const AllChat = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-white">
       {/* Left Sidebar */}
       <VenueSidebar />
 
@@ -336,7 +336,7 @@ const AllChat = () => {
               
 
               {/* Messages List */}
-              <div className="flex-1 overflow-y-auto p-4 bg-gray-50 space-y-4">
+              <div className="flex-1 overflow-y-auto p-4 bg-white space-y-4">
                 {selectedConversation.messages &&
                 selectedConversation.messages.length > 0 ? (
                   selectedConversation.messages.map((msg) => (

@@ -274,7 +274,7 @@ const KYCPage = () => {
     <div className="min-h-screen flex">
       <VenueSidebar />
       <div className="flex-grow">
-        <main className="p-8 bg-gray-50">
+        <main className="p-8 bg-white">
           <div className="max-w-3xl mx-auto bg-white shadow rounded-lg p-6">
             <h2 className="text-xl font-bold text-orange-600 mb-4 text-center">
               KYC Verification

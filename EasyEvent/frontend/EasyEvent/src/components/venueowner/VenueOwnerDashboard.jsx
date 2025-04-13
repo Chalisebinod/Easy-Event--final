@@ -169,11 +169,11 @@ const VenueOwnerDashboard = () => {
   };
 
   return (
-    <div className="h-screen flex bg-gray-50">
+    <div className="h-screen flex bg-white">
       <VenueSidebar />
       <main className="flex-1 p-8 overflow-auto">
         <header className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-800">Venue Analytics Dashboard</h2>
+          <h2 className="text-2xl font-bold text-bg-slate-900">Venue Analytics Dashboard</h2>
           <p className="text-gray-600">Overview of your venue's performance</p>
         </header>
 
@@ -242,7 +242,7 @@ const VenueOwnerDashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* Revenue Overview Doughnut Chart */}
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Revenue Overview</h3>
+            <h3 className="text-lg font-semibold text-bg-slate-900 mb-4">Revenue Overview</h3>
             <div className="h-80">
               <Doughnut data={revenueData} options={chartOptions} />
             </div>
@@ -250,7 +250,7 @@ const VenueOwnerDashboard = () => {
 
           {/* Booking Distribution Pie Chart */}
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Booking Distribution</h3>
+            <h3 className="text-lg font-semibold text-bg-slate-900 mb-4">Booking Distribution</h3>
             <div className="h-80">
               <Pie data={bookingDistributionData} options={chartOptions} />
             </div>
@@ -259,7 +259,7 @@ const VenueOwnerDashboard = () => {
 
         {/* Additional Financial Summary */}
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Financial Summary</h3>
+          <h3 className="text-lg font-semibold text-bg-slate-900 mb-4">Financial Summary</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="p-4 bg-green-50 rounded-lg">
               <p className="text-sm text-green-600 mb-1">Total Revenue Today</p>

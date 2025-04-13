@@ -194,7 +194,7 @@ function EnhancedTransactions() {
   }, [payments]);
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-white">
       <VenueSidebar />
       <ToastContainer />
       <div className="flex-1 p-6 md:p-8">
@@ -250,7 +250,7 @@ function EnhancedTransactions() {
               }
               className="px-3 py-2 border rounded"
             >
-              <option value="">All Statuses</option>
+              <option value="">All Status</option>
               <option value="Completed">Completed</option>
               <option value="Pending">Pending</option>
               <option value="Refunded">Refunded</option>

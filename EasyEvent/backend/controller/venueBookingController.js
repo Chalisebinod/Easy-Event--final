@@ -29,8 +29,7 @@ async function createBooking(req, res) {
 
     if (!userExists && !venueOwnerExists) {
       return res.status(404).json({
-        message:
-          "User not found in both User and VenueOwner collections",
+        message: "User not found in both User and VenueOwner collections",
       });
     }
 
@@ -38,11 +37,13 @@ async function createBooking(req, res) {
     const existingBooking = await BookingRequest.findOne({
       user: userId,
       venue,
+      status: { $nin: ["Rejected", "Completed"] }, // Exclude Rejected and Completed bookings
     });
+
     if (existingBooking) {
       return res.status(400).json({
         message:
-          "You have already booked this venue. Only one booking per venue is allowed.",
+          "You have already booked this venue. Only one active booking per venue is allowed.",
       });
     }
 
@@ -437,22 +438,30 @@ async function getApprovedBookings(req, res) {
     // Fetch corresponding request IDs
     const enhancedBookings = await Promise.all(
       bookings.map(async (booking) => {
+        if (!booking.user || !booking.venue) {
+          console.warn("Invalid booking data:", booking);
+          return null; // Skip invalid bookings
+        }
+
         const request = await BookingRequest.findOne({
           venue: booking.venue,
-          user: booking.user._id
-        }).select('_id');
+          user: booking.user._id,
+        }).select("_id");
 
         return {
           ...booking.toObject(),
-          requestId: request ? request._id : null
+          requestId: request ? request._id : null,
         };
       })
     );
 
+    // Filter out null values from the enhancedBookings array
+    const validBookings = enhancedBookings.filter((booking) => booking !== null);
+
     return res.status(200).json({
       success: true,
-      bookings: enhancedBookings,
-      count: enhancedBookings.length,
+      bookings: validBookings,
+      count: validBookings.length,
     });
   } catch (error) {
     console.error("Get Approved Bookings Error:", error);

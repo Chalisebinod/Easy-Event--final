@@ -32,7 +32,9 @@ const FoodManagement = () => {
   /* ------------------ Food Items Management ------------------ */
   const [foods, setFoods] = useState([]);
   const [loadingFoods, setLoadingFoods] = useState(false);
-  const [foodCategories, setFoodCategories] = useState([]);
+
+  // Fixed food categories drop down — you no longer need to create categories repeatedly
+  const fixedCategories = ["Veg", "Buff", "Chicken", "Mutton", "Pork"];
 
   // Modal state for Food Item creation/editing
   const [foodModalOpen, setFoodModalOpen] = useState(false);
@@ -43,14 +45,7 @@ const FoodManagement = () => {
     name: "",
     price: "",
     description: "",
-    custom_options: "", // comma separated string
-  });
-
-  // Modal state for creating a new category
-  const [categoryModalOpen, setCategoryModalOpen] = useState(false);
-  const [newCategory, setNewCategory] = useState({
-    name: "",
-    mealType: "starter",
+    custom_options: "",
   });
 
   // Fetch Food Items for the current venue
@@ -69,22 +64,8 @@ const FoodManagement = () => {
     }
   };
 
-  // Fetch Food Categories for the current venue
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8000/api/foodCategory/${venueId}`,
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      );
-      setFoodCategories(response.data.categories || []);
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Error fetching categories");
-    }
-  };
-
   useEffect(() => {
     fetchFoods();
-    fetchCategories();
   }, [accessToken, venueId]);
 
   const openFoodModal = (food = null) => {
@@ -127,7 +108,9 @@ const FoodManagement = () => {
     try {
       const payload = {
         ...foodForm,
-        custom_options: foodForm.custom_options.split(",").map((s) => s.trim()),
+        custom_options: foodForm.custom_options
+          .split(",")
+          .map((s) => s.trim()),
         venue: venueId,
       };
       if (editingFood) {
@@ -167,141 +150,106 @@ const FoodManagement = () => {
     }
   };
 
-  // Delete a category from Food Categories
-  const handleDeleteCategory = async (categoryId) => {
-    try {
-      await axios.delete(
-        `http://localhost:8000/api/foodCategory/${categoryId}`,
-        {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        }
-      );
-      setFoodCategories(foodCategories.filter((cat) => cat._id !== categoryId));
-      toast.success("Category deleted successfully!");
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Error deleting category");
-    }
-  };
-
-  // Handle category modal save
-  const handleSaveCategory = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:8000/api/foodCategory/create",
-        { ...newCategory, venue: venueId },
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      );
-      // Add new category to state
-      setFoodCategories([...foodCategories, response.data.category]);
-      // Auto-select the new category in the food form
-      setFoodForm((prev) => ({
-        ...prev,
-        category: response.data.category.name,
-      }));
-      setCategoryModalOpen(false);
-      setNewCategory({ name: "", mealType: foodForm.mealType });
-      toast.success("Category created successfully!");
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Error creating category");
-    }
-  };
-
   // Handle tab change – here we have only one tab for Food Items
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
   };
 
+  // Dialog classes for consistent styling and spacing
+  const [dialogTitleClasses] = useState(
+    "bg-indigo-600 text-white font-bold text-xl relative px-8 py-6"
+  );
+  const [dialogCloseIconClasses] = useState(
+    "absolute top-5 right-5 text-white hover:text-gray-200"
+  );
+  const [dialogContentClasses] = useState("px-10 py-10 bg-white");
+  const [dialogActionsClasses] = useState("bg-gray-100 px-8 py-6");
+
   return (
-    <Box display="flex" minHeight="100vh" bgcolor="#f8f9fa">
+    <Box className="flex min-h-screen bg-gradient-to-br from-gray-100 to-gray-50">
       {/* Sidebar */}
       <VenueSidebar />
 
       {/* Main Content Area */}
-      <Box flexGrow={1} p={3}>
+      <Box className="flex-grow p-6">
         <ToastContainer position="top-center" autoClose={3000} />
+
+        {/* Header */}
         <Typography
           variant="h4"
           align="center"
           gutterBottom
-          sx={{ fontWeight: "bold", marginBottom: 3 }}
+          className="text-3xl font-extrabold text-gray-800 mb-8"
         >
           Food Management
         </Typography>
 
+        {/* Tabs */}
         <Tabs
           value={activeTab}
           onChange={handleTabChange}
           centered
           textColor="primary"
           indicatorColor="primary"
-          sx={{ marginBottom: 3 }}
+          className="mb-8 border-b border-gray-300"
         >
-          <Tab label="Food Items" />
+          <Tab label="Food Items" className="focus:outline-none" />
         </Tabs>
 
-        {/* Food Items Tab */}
         {activeTab === 0 && (
-          <Box mt={4}>
-            <Box display="flex" justifyContent="flex-end" mb={3}>
+          <Box>
+            {/* CREATE FOOD Button with extra right margin */}
+            <Box className="flex justify-end mb-8 mr-20">
               <Button
                 variant="contained"
                 color="primary"
                 onClick={() => openFoodModal()}
                 startIcon={<Add />}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg"
               >
-                Create Food
+                CREATE FOOD
               </Button>
             </Box>
+
             {loadingFoods ? (
-              <Typography align="center">Loading foods...</Typography>
+              <Typography align="center" className="text-gray-700">
+                Loading foods...
+              </Typography>
+            ) : foods.length === 0 ? (
+              <Typography align="center" className="text-xl text-gray-600">
+                No foods found for this venue
+              </Typography>
             ) : (
-              <Grid container spacing={3}>
+              <Grid container spacing={6}>
                 {foods.map((food) => (
                   <Grid item xs={12} sm={6} md={4} key={food._id}>
-                    <Paper
-                      sx={{
-                        p: 2,
-                        borderRadius: 2,
-                        boxShadow: 3,
-                        transition: "transform 0.3s",
-                        "&:hover": { transform: "scale(1.02)" },
-                      }}
-                    >
-                      <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                    <Paper className="p-6 rounded-xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-1">
+                      <Typography variant="h6" className="font-bold text-gray-800">
                         {food.name}
                       </Typography>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{ marginBottom: 1 }}
-                      >
-                        {food.mealType.toUpperCase()} - {food.category}
+                      <Typography className="text-sm text-gray-500 mb-1">
+                        {food.mealType.toUpperCase()} | {food.category}
                       </Typography>
-                      <Typography
-                        variant="body1"
-                        sx={{ fontWeight: "bold", color: "#2e7d32" }}
-                      >
+                      <Typography className="text-lg font-semibold text-indigo-600">
                         ${food.price}
                       </Typography>
                       {food.description && (
-                        <Typography
-                          variant="caption"
-                          display="block"
-                          sx={{ mt: 1, color: "#757575" }}
-                        >
+                        <Typography className="text-xs text-gray-500 mt-2">
                           {food.description}
                         </Typography>
                       )}
-                      <Box mt={2} display="flex" justifyContent="flex-end">
+                      <Box className="mt-4 flex justify-end space-x-2">
                         <IconButton
                           onClick={() => openFoodModal(food)}
                           color="primary"
+                          className="text-gray-800 hover:text-gray-600"
                         >
                           <Edit />
                         </IconButton>
                         <IconButton
                           onClick={() => handleDeleteFood(food._id)}
                           color="error"
+                          className="text-red-600 hover:text-red-500"
                         >
                           <Delete />
                         </IconButton>
@@ -315,206 +263,113 @@ const FoodManagement = () => {
             {/* Food Item Modal */}
             <Dialog
               open={foodModalOpen}
-              onClose={() => setFoodModalOpen(false)}
+              onClose={closeFoodModal}
               fullWidth
               maxWidth="sm"
+              PaperProps={{ className: "rounded-xl" }}
             >
-              <DialogTitle>
+              {/* Dialog Title with bigger padding and edge-close button */}
+              <DialogTitle className={dialogTitleClasses}>
                 {editingFood ? "Edit Food" : "Create Food"}
                 <IconButton
-                  onClick={() => setFoodModalOpen(false)}
-                  sx={{ position: "absolute", right: 8, top: 8 }}
+                  onClick={closeFoodModal}
+                  className="absolute -right-96 text-white hover:text-gray-200"
+
+                  size="large"
                 >
                   <Close />
                 </IconButton>
               </DialogTitle>
-              <DialogContent dividers>
-                <FormControl fullWidth sx={{ mt: 2 }}>
-                  <InputLabel id="meal-type-label">Meal Type</InputLabel>
-                  <Select
-                    labelId="meal-type-label"
-                    name="mealType"
-                    value={foodForm.mealType}
-                    onChange={handleFoodFormChange}
-                    label="Meal Type"
-                  >
-                    <MenuItem value="starter">Starter</MenuItem>
-                    <MenuItem value="launch">Launch</MenuItem>
-                    <MenuItem value="dinner">Dinner</MenuItem>
-                  </Select>
-                </FormControl>
-                {/* Category selection with "Create New Category" option */}
-                <FormControl fullWidth sx={{ mt: 2 }}>
-                  <InputLabel id="category-label">Category</InputLabel>
-                  <Select
-                    labelId="category-label"
-                    name="category"
-                    value={foodForm.category}
-                    onChange={(e) => {
-                      if (e.target.value === "__create_new__") {
-                        setCategoryModalOpen(true);
-                      } else {
-                        handleFoodFormChange(e);
-                      }
-                    }}
-                    label="Category"
-                  >
-                    {foodCategories
-                      .filter((cat) => cat.mealType === foodForm.mealType)
-                      .map((cat) => (
-                        <MenuItem key={cat._id} value={cat.name}>
-                          {cat.name}
+
+              {/* Dialog Content with bigger padding */}
+              <DialogContent dividers className={dialogContentClasses}>
+                <Box className="space-y-6">
+                  <FormControl fullWidth>
+                    <InputLabel id="meal-type-label" className="text-gray-700">
+                      Meal Type
+                    </InputLabel>
+                    <Select
+                      labelId="meal-type-label"
+                      name="mealType"
+                      value={foodForm.mealType}
+                      onChange={handleFoodFormChange}
+                      label="Meal Type"
+                      className="rounded-md"
+                    >
+                      <MenuItem value="starter">Starter</MenuItem>
+                      <MenuItem value="launch">Launch</MenuItem>
+                      <MenuItem value="dinner">Dinner</MenuItem>
+                    </Select>
+                  </FormControl>
+
+                  {/* Category selection using fixed options */}
+                  <FormControl fullWidth>
+                    <InputLabel id="category-label" className="text-gray-700">
+                      Category
+                    </InputLabel>
+                    <Select
+                      labelId="category-label"
+                      name="category"
+                      value={foodForm.category}
+                      onChange={handleFoodFormChange}
+                      label="Category"
+                      className="rounded-md"
+                    >
+                      {fixedCategories.map((cat, index) => (
+                        <MenuItem key={index} value={cat}>
+                          {cat}
                         </MenuItem>
                       ))}
-                    <MenuItem value="__create_new__">
-                      <em>Create New Category</em>
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-                {/* List existing categories for selected meal type with delete option */}
-                <Box sx={{ mt: 2 }}>
-                  <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                    Existing Categories for {foodForm.mealType.toUpperCase()}:
-                  </Typography>
-                  {foodCategories
-                    .filter((cat) => cat.mealType === foodForm.mealType)
-                    .map((cat) => (
-                      <Box
-                        key={cat._id}
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="space-between"
-                        sx={{
-                          border: "1px solid #e0e0e0",
-                          borderRadius: 1,
-                          p: 1,
-                          mb: 1,
-                        }}
-                      >
-                        <Typography>{cat.name}</Typography>
-                        <IconButton
-                          onClick={() => handleDeleteCategory(cat._id)}
-                          color="error"
-                          size="small"
-                        >
-                          <Delete fontSize="small" />
-                        </IconButton>
-                      </Box>
-                    ))}
+                    </Select>
+                  </FormControl>
+
+                  <TextField
+                    name="name"
+                    label="Food Name"
+                    fullWidth
+                    variant="outlined"
+                    className="rounded-md"
+                    value={foodForm.name}
+                    onChange={handleFoodFormChange}
+                  />
+                  <TextField
+                    name="price"
+                    label="Price"
+                    type="number"
+                    fullWidth
+                    variant="outlined"
+                    className="rounded-md"
+                    value={foodForm.price}
+                    onChange={handleFoodFormChange}
+                  />
+                  <TextField
+                    name="description"
+                    label="Description"
+                    fullWidth
+                    variant="outlined"
+                    multiline
+                    rows={4}
+                    className="rounded-md"
+                    value={foodForm.description}
+                    onChange={handleFoodFormChange}
+                  />
                 </Box>
-                <TextField
-                  name="name"
-                  label="Food Name"
-                  fullWidth
-                  variant="outlined"
-                  sx={{ mt: 2 }}
-                  value={foodForm.name}
-                  onChange={handleFoodFormChange}
-                />
-                <TextField
-                  name="price"
-                  label="Price"
-                  type="number"
-                  fullWidth
-                  variant="outlined"
-                  sx={{ mt: 2 }}
-                  value={foodForm.price}
-                  onChange={handleFoodFormChange}
-                />
-                <TextField
-                  name="description"
-                  label="Description"
-                  fullWidth
-                  variant="outlined"
-                  sx={{ mt: 2 }}
-                  multiline
-                  rows={3}
-                  value={foodForm.description}
-                  onChange={handleFoodFormChange}
-                />
-                {/* <TextField
-                  name="custom_options"
-                  label="Custom Options (comma separated)"
-                  fullWidth
-                  variant="outlined"
-                  sx={{ mt: 2 }}
-                  value={foodForm.custom_options}
-                  onChange={handleFoodFormChange}
-                /> */}
               </DialogContent>
-              <DialogActions>
-                <Button onClick={() => setFoodModalOpen(false)} color="inherit">
+
+              {/* Dialog Actions with bigger padding */}
+              <DialogActions className={dialogActionsClasses}>
+                <Button
+                  onClick={closeFoodModal}
+                  color="inherit"
+                  className="text-gray-700 hover:underline"
+                >
                   Cancel
                 </Button>
                 <Button
                   onClick={handleSaveFood}
                   variant="contained"
                   color="primary"
-                >
-                  Save
-                </Button>
-              </DialogActions>
-            </Dialog>
-
-            {/* Category Creation Modal */}
-            <Dialog
-              open={categoryModalOpen}
-              onClose={() => setCategoryModalOpen(false)}
-              fullWidth
-              maxWidth="sm"
-            >
-              <DialogTitle>
-                Create New Food Category
-                <IconButton
-                  onClick={() => setCategoryModalOpen(false)}
-                  sx={{ position: "absolute", right: 8, top: 8 }}
-                >
-                  <Close />
-                </IconButton>
-              </DialogTitle>
-              <DialogContent dividers>
-                <TextField
-                  label="Category Name"
-                  fullWidth
-                  value={newCategory.name}
-                  onChange={(e) =>
-                    setNewCategory({ ...newCategory, name: e.target.value })
-                  }
-                  sx={{ mt: 2 }}
-                />
-                <FormControl fullWidth sx={{ mt: 2 }}>
-                  <InputLabel id="new-category-mealtype-label">
-                    Meal Type
-                  </InputLabel>
-                  <Select
-                    labelId="new-category-mealtype-label"
-                    name="mealType"
-                    value={newCategory.mealType}
-                    onChange={(e) =>
-                      setNewCategory({
-                        ...newCategory,
-                        mealType: e.target.value,
-                      })
-                    }
-                    label="Meal Type"
-                  >
-                    <MenuItem value="starter">Starter</MenuItem>
-                    <MenuItem value="launch">Launch</MenuItem>
-                    <MenuItem value="dinner">Dinner</MenuItem>
-                  </Select>
-                </FormControl>
-              </DialogContent>
-              <DialogActions>
-                <Button
-                  onClick={() => setCategoryModalOpen(false)}
-                  color="inherit"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleSaveCategory}
-                  variant="contained"
-                  color="primary"
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg"
                 >
                   Save
                 </Button>

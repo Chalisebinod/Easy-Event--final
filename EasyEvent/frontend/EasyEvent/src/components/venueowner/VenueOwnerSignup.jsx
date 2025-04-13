@@ -110,7 +110,7 @@ const VenueOwnerSignup = () => {
     <div className="flex min-h-screen bg-gray-100">
       <ToastContainer />
       {/* Left Section */}
-      <div className="w-1/2 bg-slate-900  text-white flex flex-col justify-center items-center p-10 shadow-lg">
+      <div className="w-1/2 bg-orange-600  text-white flex flex-col justify-center items-center p-10 shadow-lg">
         <h1 className="text-5xl font-bold mb-4 drop-shadow-lg">
           Welcome, Venue Owners!
         </h1>
@@ -121,7 +121,7 @@ const VenueOwnerSignup = () => {
       </div>
       {/* Right Section */}
       <div className="w-1/2 bg-white flex flex-col justify-center items-center p-10">
-        <h2 className="text-3xl font-bold text-bg-slate-900  mb-6">Signup</h2>
+        <h2 className="text-3xl font-bold text-orange-600 text-bg-slate-900  mb-6">Signup</h2>
         <form className="w-3/4" onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
@@ -211,7 +211,7 @@ const VenueOwnerSignup = () => {
             className={`w-full mt-6 py-3 rounded-lg text-white font-medium transition-all transform hover:scale-105 ${
               isSubmitting
                 ? "bg-orange-300 cursor-not-allowed"
-                : "bg-slate-900 "
+                : "bg-orange-600 "
             }`}
           >
             {isSubmitting ? "Signing up..." : "Signup"}
