@@ -90,7 +90,7 @@ const VenueOwnerPage = () => {
         <div className="mb-8 flex flex-wrap gap-4">
           <input
             type="text"
-            placeholder="Search by name, email, or location"
+            placeholder="Search by name or email"
             value={searchTerm}
             onChange={handleSearchChange}
             className="flex-1 min-w-[220px] px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"

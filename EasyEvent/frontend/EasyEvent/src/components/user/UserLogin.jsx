@@ -18,6 +18,7 @@ const UserLogin = () => {
         email,
         password,
       });
+  
       toast.success(response.data.message);
       const token = response.data.token;
       localStorage.setItem("access_token", token);
@@ -43,7 +44,6 @@ const UserLogin = () => {
       toast.error(errorMessage);
     }
   };
-
   return (
     <div className="flex h-screen">
       {/* Left Section */}

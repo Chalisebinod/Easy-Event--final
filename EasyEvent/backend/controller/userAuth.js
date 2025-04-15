@@ -169,8 +169,8 @@ const login = async (req, res) => {
     // Try to find as a regular user first
     let user = await User.findOne({ email });
     let isVenueOwner = false;
-    
-    // If not found, try to find as a venueOwner
+
+    // If not found, try to find as a venue owner
     if (!user) {
       user = await VenueOwner.findOne({ email });
       if (user) {
@@ -182,6 +182,14 @@ const login = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    // Check if the user is blocked
+    if (user.is_blocked) {
+      return res.status(403).json({
+        message: "Your account has been deactivated. You did not follow our guidelines.",
+      });
+    }
+
+    // Verify the password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
@@ -202,17 +210,17 @@ const login = async (req, res) => {
       role: user.role,
       email: user.email,
       name: user.name,
-      venueId: venueId // Include venueId in token for venue owners
+      venueId: venueId, // Include venueId in token for venue owners
     };
 
-    const token = jwt.sign(tokenData, JWT_SECRET, { expiresIn: '24h' });
+    const token = jwt.sign(tokenData, JWT_SECRET, { expiresIn: "24h" });
 
     // Construct response data
     const responseData = {
       message: "Login successful",
       token,
       role: user.role,
-      venueId: venueId
+      venueId: venueId,
     };
 
     res.status(200).json(responseData);
