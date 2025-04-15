@@ -39,17 +39,31 @@ const UserDashboard = () => {
     setSearchTerm(e.target.value);
   };
 
-  // Always sort venues so that those with a valid rating are ordered
-  // in descending order (highest first) and venues with no rating appear at the end.
+  // Always sort venues so that those with a valid rating are ordered in descending order
+  // and venues with no rating appear at the end.
   const sortedVenues = [...venues].sort((a, b) => {
-    const ratingA = !isNaN(parseFloat(a.rating)) ? parseFloat(a.rating) : -Infinity;
-    const ratingB = !isNaN(parseFloat(b.rating)) ? parseFloat(b.rating) : -Infinity;
+    const ratingA = !isNaN(parseFloat(a.rating))
+      ? parseFloat(a.rating)
+      : -Infinity;
+    const ratingB = !isNaN(parseFloat(b.rating))
+      ? parseFloat(b.rating)
+      : -Infinity;
     return ratingB - ratingA;
   });
 
-  const filteredVenues = sortedVenues.filter((venue) =>
-    venue.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Updated filter: search by venue name, address, or city.
+  const filteredVenues = sortedVenues.filter((venue) => {
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    return (
+      venue.name.toLowerCase().includes(lowerCaseSearchTerm) ||
+      (venue.location &&
+        venue.location.address &&
+        venue.location.address.toLowerCase().includes(lowerCaseSearchTerm)) ||
+      (venue.location &&
+        venue.location.city &&
+        venue.location.city.toLowerCase().includes(lowerCaseSearchTerm))
+    );
+  });
 
   // Slider settings for react-slick with autoplay every 3 seconds
   const sliderSettings = {
@@ -76,7 +90,7 @@ const UserDashboard = () => {
             <div className="relative flex-grow">
               <input
                 type="text"
-                placeholder="Search venues..."
+                placeholder="Search venues by name or location ..."
                 value={searchTerm}
                 onChange={handleSearch}
                 className="w-full pl-10 pr-4 py-3 text-gray-700 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
@@ -94,12 +108,15 @@ const UserDashboard = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Section Title */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-gray-800">Available Venues</h2>
+          <h2 className="text-xl font-semibold text-gray-800">
+            Available Venues
+          </h2>
           <p className="text-gray-500 text-sm">
-            {filteredVenues.length} {filteredVenues.length === 1 ? 'venue' : 'venues'} found
+            {filteredVenues.length}{" "}
+            {filteredVenues.length === 1 ? "venue" : "venues"} found
           </p>
         </div>
 
@@ -107,7 +124,11 @@ const UserDashboard = () => {
         {filteredVenues.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredVenues.map((venue) => (
-              <Link to={`/party-palace/${venue.id}`} key={venue.id} className="block">
+              <Link
+                to={`/party-palace/${venue.id}`}
+                key={venue.id}
+                className="block"
+              >
                 <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                   {/* Image Slider */}
                   <div className="relative h-52">
@@ -116,7 +137,10 @@ const UserDashboard = () => {
                         venue.venueImages.map((image, index) => (
                           <div key={index}>
                             <img
-                              src={`http://localhost:8000/${image.replace(/\\/g, "/")}`}
+                              src={`http://localhost:8000/${image.replace(
+                                /\\/g,
+                                "/"
+                              )}`}
                               alt={`Venue ${venue.name} - Image ${index + 1}`}
                               className="w-full h-52 object-cover"
                             />
@@ -132,7 +156,7 @@ const UserDashboard = () => {
                         </div>
                       )}
                     </Slider>
-                    
+
                     {/* Rating Badge */}
                     {!isNaN(parseFloat(venue.rating)) && (
                       <div className="absolute top-3 right-3 bg-white bg-opacity-90 text-indigo-600 font-medium rounded-md px-2 py-1 text-sm flex items-center shadow-sm">
@@ -147,18 +171,18 @@ const UserDashboard = () => {
                     <h3 className="text-lg font-bold text-gray-800 mb-1">
                       {venue.name}
                     </h3>
-                    
+
                     <div className="flex items-center text-red-500 mb-2 text-sm">
                       <MapPinIcon className="w-4 h-4 mr-1 flex-shrink-0" />
                       <p className="truncate">
                         {venue.location.address}, {venue.location.city}
                       </p>
                     </div>
-                    
+
                     <p className="text-gray-500 text-sm mb-3 line-clamp-2 flex-1">
                       {venue.description}
                     </p>
-                    
+
                     {/* Star Rating */}
                     {!isNaN(parseFloat(venue.rating)) && (
                       <div className="flex items-center mt-auto mb-2">
@@ -197,7 +221,8 @@ const UserDashboard = () => {
               No Venues Available
             </h2>
             <p className="text-gray-500 mb-5 max-w-md mx-auto">
-              We couldn't find any venues matching your search. Please try different search terms or explore other options.
+              We couldn't find any venues matching your search. Please try
+              different search terms or explore other options.
             </p>
             <Link
               to="/"

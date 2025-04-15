@@ -296,7 +296,7 @@ const Booking = () => {
                     key={hall._id}
                     className={`relative border p-6 rounded-lg cursor-pointer transition duration-200 ease-in-out hover:shadow-lg ${
                       selectedHall && selectedHall._id === hall._id
-                        ? "border-slate-900"
+                        ? "border-orange-600"
                         : "border-slate-300"
                     } ${!hall.isAvailable && "opacity-60 cursor-not-allowed"}`}
                     onClick={() => {
@@ -444,7 +444,7 @@ const Booking = () => {
                       key={food._id}
                       className={`border p-4 rounded-md cursor-pointer transition transform hover:scale-105 ${
                         selectedFoods.includes(food._id)
-                          ? "border-slate-900 shadow-lg"
+                          ? "border-orange-600 shadow-lg"
                           : "border-slate-300"
                       }`}
                       onClick={() => toggleFoodSelection(food._id)}

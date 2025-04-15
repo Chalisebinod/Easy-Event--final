@@ -48,7 +48,7 @@ const LandingPage = () => {
           onClick={() => navigate("/")}
         >
           <span className="text-orange-600">Easy</span>
-          <span className="text-orange-600">Events</span>
+          <span className="text-orange-600">Event</span>
         </div>
 
           {/* Right side - Login */}

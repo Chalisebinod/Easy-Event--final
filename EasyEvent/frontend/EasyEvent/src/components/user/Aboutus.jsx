@@ -1,9 +1,11 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import Navbar from "./Navbar";
 
-
 export default function AboutUs() {
+  const navigate = useNavigate(); // Initialize navigate
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
       {/* Navbar */}
@@ -19,10 +21,13 @@ export default function AboutUs() {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-orange-600">Our Mission</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-orange-600">
+              Our Mission
+            </h2>
             <p className="text-gray-700 mt-4 text-lg leading-relaxed">
-              Simplifying event planning by connecting people with the perfect venues and services.
-              We aim to make the process secure, efficient, and enjoyable for everyone.
+              Simplifying event planning by connecting people with the perfect
+              venues and services. We aim to make the process secure, efficient,
+              and enjoyable for everyone.
             </p>
           </motion.section>
 
@@ -35,9 +40,9 @@ export default function AboutUs() {
           >
             <h3 className="text-2xl font-semibold text-orange-600">Our Story</h3>
             <p className="text-gray-700 mt-4 leading-relaxed">
-              Our journey began when we realized how stressful event planning can be. We built
-              EasyEvents to change that—by leveraging modern tech to give you a seamless platform
-              where searching, booking, and managing venues is a breeze.
+              Our journey began when we realized how stressful event planning can be.
+              We built EasyEvents to change that—by leveraging modern tech to give you a
+              seamless platform where searching, booking, and managing venues is a breeze.
             </p>
           </motion.section>
 
@@ -85,13 +90,11 @@ export default function AboutUs() {
               <p>📍 Kathmandu, Nepal</p>
             </motion.div>
           </div>
-
- 
         </div>
       </main>
 
       {/* Call to Action */}
-      <section className="bg-slate-900  py-12 text-center">
+      <section className="bg-slate-900 py-12 text-center">
         <motion.h2
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -101,7 +104,7 @@ export default function AboutUs() {
           Ready to Plan Your Next Event?
         </motion.h2>
         <button
-          onClick={() => window.location.href = "/user-signup"}
+          onClick={() => navigate("/user-dashboard")}
           className="px-6 py-3 bg-white text-orange-600 font-semibold rounded-full shadow-lg hover:bg-gray-100 transition"
         >
           Get Started

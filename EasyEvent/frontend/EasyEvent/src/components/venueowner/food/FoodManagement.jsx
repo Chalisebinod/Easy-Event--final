@@ -33,8 +33,8 @@ const FoodManagement = () => {
   const [foods, setFoods] = useState([]);
   const [loadingFoods, setLoadingFoods] = useState(false);
 
-  // Fixed food categories drop down — you no longer need to create categories repeatedly
-  const fixedCategories = ["Veg", "Buff", "Chicken", "Mutton", "Pork"];
+  // Fixed food categories drop down — default categories
+  const fixedCategories = ["Veg", "Buff", "Chicken"];
 
   // Modal state for Food Item creation/editing
   const [foodModalOpen, setFoodModalOpen] = useState(false);
@@ -47,6 +47,10 @@ const FoodManagement = () => {
     description: "",
     custom_options: "",
   });
+
+  // Additional state for custom category input
+  const [showCustomInput, setShowCustomInput] = useState(false);
+  const [customCategory, setCustomCategory] = useState("");
 
   // Fetch Food Items for the current venue
   const fetchFoods = async () => {
@@ -77,10 +81,16 @@ const FoodManagement = () => {
         name: food.name,
         price: food.price,
         description: food.description || "",
-        custom_options: food.custom_options
-          ? food.custom_options.join(", ")
-          : "",
+        custom_options: food.custom_options ? food.custom_options.join(", ") : "",
       });
+      // If the current category is not one of the fixed ones, show the custom input prefilled
+      if (!fixedCategories.includes(food.category) && food.category !== "") {
+        setShowCustomInput(true);
+        setCustomCategory(food.category);
+      } else {
+        setShowCustomInput(false);
+        setCustomCategory("");
+      }
     } else {
       setEditingFood(null);
       setFoodForm({
@@ -91,6 +101,8 @@ const FoodManagement = () => {
         description: "",
         custom_options: "",
       });
+      setShowCustomInput(false);
+      setCustomCategory("");
     }
     setFoodModalOpen(true);
   };
@@ -104,13 +116,25 @@ const FoodManagement = () => {
     setFoodForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Custom handler for category select
+  const handleCategoryChange = (e) => {
+    const { value } = e.target;
+    if (value === "custom") {
+      setShowCustomInput(true);
+      // Clear previous category value for fresh custom input
+      setFoodForm((prev) => ({ ...prev, category: "" }));
+    } else {
+      setShowCustomInput(false);
+      setCustomCategory("");
+      setFoodForm((prev) => ({ ...prev, category: value }));
+    }
+  };
+
   const handleSaveFood = async () => {
     try {
       const payload = {
         ...foodForm,
-        custom_options: foodForm.custom_options
-          .split(",")
-          .map((s) => s.trim()),
+        custom_options: foodForm.custom_options.split(",").map((s) => s.trim()),
         venue: venueId,
       };
       if (editingFood) {
@@ -274,7 +298,6 @@ const FoodManagement = () => {
                 <IconButton
                   onClick={closeFoodModal}
                   className="absolute -right-96 text-white hover:text-gray-200"
-
                   size="large"
                 >
                   <Close />
@@ -310,8 +333,11 @@ const FoodManagement = () => {
                     <Select
                       labelId="category-label"
                       name="category"
-                      value={foodForm.category}
-                      onChange={handleFoodFormChange}
+                      value={
+                        // When custom input is shown, keep value empty so the TextField controls it
+                        showCustomInput ? "custom" : foodForm.category
+                      }
+                      onChange={handleCategoryChange}
                       label="Category"
                       className="rounded-md"
                     >
@@ -320,8 +346,37 @@ const FoodManagement = () => {
                           {cat}
                         </MenuItem>
                       ))}
+                      <MenuItem value="custom">+ Add Custom</MenuItem>
                     </Select>
                   </FormControl>
+
+                  {/* Render Custom Category text field if "Add Custom" is selected */}
+                  {showCustomInput && (
+                    <Box mt={2} display="flex" alignItems="center">
+                      <TextField
+                        fullWidth
+                        variant="outlined"
+                        label="Custom Category"
+                        value={customCategory}
+                        onChange={(e) => {
+                          setCustomCategory(e.target.value);
+                          setFoodForm((prev) => ({
+                            ...prev,
+                            category: e.target.value,
+                          }));
+                        }}
+                      />
+                      <IconButton
+                        onClick={() => {
+                          setShowCustomInput(false);
+                          setCustomCategory("");
+                          setFoodForm((prev) => ({ ...prev, category: "" }));
+                        }}
+                      >
+                        <Close />
+                      </IconButton>
+                    </Box>
+                  )}
 
                   <TextField
                     name="name"
