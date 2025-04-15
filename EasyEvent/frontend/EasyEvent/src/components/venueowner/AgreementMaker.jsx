@@ -4,7 +4,6 @@ import "react-quill/dist/quill.snow.css";
 import {
   Box,
   Button,
-  TextField,
   Typography,
   Divider,
   Paper,
@@ -21,45 +20,69 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const AgreementMaker = () => {
-  // Template Management State
+  // --------------------------------------------------------------------------
+  // STATE
+  // --------------------------------------------------------------------------
+  const [tabValue, setTabValue] = useState(0); // 0=Terms, 1=Rules, 2=Cancellation
   const [templates, setTemplates] = useState({
     terms: [],
     rules: [],
     cancellation: []
   });
-  const [tabValue, setTabValue] = useState(0);
-  const [newTemplate, setNewTemplate] = useState({
-    title: "",
-    content: "",
-    type: "terms"
-  });
-  const [editingTemplate, setEditingTemplate] = useState(null);
-  const [editForm, setEditForm] = useState({
-    title: "",
-    content: ""
-  });
+  
+  // For creating a new template, we only store the "content"
+  // The title is auto-set based on the current tab.
+  const [newTemplateContent, setNewTemplateContent] = useState("");
 
+  // For editing an existing template:
+  const [editingTemplate, setEditingTemplate] = useState(null);
+  const [editContent, setEditContent] = useState("");
+
+  // --------------------------------------------------------------------------
+  // EFFECTS
+  // --------------------------------------------------------------------------
   useEffect(() => {
     fetchTemplates();
   }, []);
 
+  // --------------------------------------------------------------------------
+  // HELPER FUNCTIONS
+  // --------------------------------------------------------------------------
+  const getVenueId = () => localStorage.getItem("venueId");
+  const getAuthHeaders = () => ({
+    headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
+  });
+
+  // Get the display label based on the tab index
+  const getTemplateTypeLabel = (index) => {
+    const labels = {
+      0: "Terms & Conditions",
+      1: "Venue Rules",
+      2: "Cancellation Policy",
+    };
+    return labels[index];
+  };
+
+  // Back-end type strings
+  const typeMap = ["terms", "rules", "cancellation"];
+
+  // --------------------------------------------------------------------------
+  // API CALLS
+  // --------------------------------------------------------------------------
   const fetchTemplates = async () => {
     try {
-      const venueId = localStorage.getItem("venueId");
       const response = await axios.get(
-        `http://localhost:8000/api/booking/templates/${venueId}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` }
-        }
+        `http://localhost:8000/api/booking/templates/${getVenueId()}`,
+        getAuthHeaders()
       );
 
       if (response.data.success) {
-        const sortedTemplates = {
-          terms: response.data.templates.filter(t => t.type === "terms"),
-          rules: response.data.templates.filter(t => t.type === "rules"),
-          cancellation: response.data.templates.filter(t => t.type === "cancellation")
+        const sorted = {
+          terms: response.data.templates.filter((t) => t.type === "terms"),
+          rules: response.data.templates.filter((t) => t.type === "rules"),
+          cancellation: response.data.templates.filter((t) => t.type === "cancellation"),
         };
-        setTemplates(sortedTemplates);
+        setTemplates(sorted);
       }
     } catch (error) {
       console.error("Error fetching templates:", error);
@@ -69,22 +92,23 @@ const AgreementMaker = () => {
 
   const handleCreateTemplate = async () => {
     try {
-      const venueId = localStorage.getItem("venueId");
+      const templateType = typeMap[tabValue]; // "terms", "rules", or "cancellation"
       const response = await axios.post(
         "http://localhost:8000/api/booking/templates",
         {
-          ...newTemplate,
-          type: ["terms", "rules", "cancellation"][tabValue],
-          venue: venueId
+          title: getTemplateTypeLabel(tabValue), // auto-set the title
+          content: newTemplateContent,
+          type: templateType,
+          venue: getVenueId(),
         },
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` }
-        }
+        getAuthHeaders()
       );
 
       if (response.data.success) {
         toast.success("Template created successfully");
-        setNewTemplate({ title: "", content: "" });
+        // Clear the new content field so that you see the existing templates immediately.
+        setNewTemplateContent("");
+        // (Auto-advance has been removed so that after creating each policy, the list is visible.)
         fetchTemplates();
       }
     } catch (error) {
@@ -93,32 +117,45 @@ const AgreementMaker = () => {
     }
   };
 
-  const handleSetDefaultTemplate = async (templateId) => {
+  const startEditing = (template) => {
+    setEditingTemplate(template);
+    setEditContent(template.content);
+  };
+
+  const cancelEditing = () => {
+    setEditingTemplate(null);
+    setEditContent("");
+  };
+
+  const handleEditTemplate = async () => {
+    if (!editingTemplate) return;
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/booking/templates/${templateId}/set-default`,
-        {},
+        `http://localhost:8000/api/booking/templates/${editingTemplate._id}`,
         {
-          headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` }
-        }
+          // Keep the original title
+          title: editingTemplate.title,
+          content: editContent,
+        },
+        getAuthHeaders()
       );
 
       if (response.data.success) {
-        toast.success("Default template updated");
+        toast.success("Template updated successfully");
+        setEditingTemplate(null);
+        setEditContent("");
         fetchTemplates();
       }
     } catch (error) {
-      console.error("Error setting default template:", error);
-      toast.error("Failed to set default template");
+      console.error("Error updating template:", error);
+      toast.error("Failed to update template");
     }
   };
 
   const handleDeleteTemplate = async (templateId) => {
     try {
-      // Find the template to check if it's default
-      const templateType = ["terms", "rules", "cancellation"][tabValue];
-      const templateToDelete = templates[templateType].find(t => t._id === templateId);
-      
+      const currentType = typeMap[tabValue];
+      const templateToDelete = templates[currentType].find((t) => t._id === templateId);
       if (templateToDelete?.isDefault) {
         toast.warning("Please set another template as default before deleting this one.");
         return;
@@ -126,9 +163,7 @@ const AgreementMaker = () => {
 
       const response = await axios.delete(
         `http://localhost:8000/api/booking/templates/${templateId}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` }
-        }
+        getAuthHeaders()
       );
 
       if (response.data.success) {
@@ -142,61 +177,33 @@ const AgreementMaker = () => {
     }
   };
 
-  // Add a helper function to check if delete should be disabled
   const isDeleteDisabled = (template) => {
-    const templateType = ["terms", "rules", "cancellation"][tabValue];
-    const typeTemplates = templates[templateType] || [];
-    return typeTemplates.length <= 1 || template.isDefault;
+    const currentType = typeMap[tabValue];
+    const templatesInType = templates[currentType] || [];
+    return templatesInType.length <= 1 || template.isDefault;
   };
 
-  const getTemplateTypeLabel = (index) => {
-    const labels = {
-      0: "Terms & Conditions",
-      1: "Venue Rules",
-      2: "Cancellation Policy"
-    };
-    return labels[index];
-  };
-
-  const handleEditTemplate = async () => {
+  const handleSetDefaultTemplate = async (templateId) => {
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/booking/templates/${editingTemplate._id}`,
-        {
-          title: editForm.title,
-          content: editForm.content
-        },
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` }
-        }
+        `http://localhost:8000/api/booking/templates/${templateId}/set-default`,
+        {},
+        getAuthHeaders()
       );
 
       if (response.data.success) {
-        toast.success("Template updated successfully");
-        setEditingTemplate(null);
-        setEditForm({ title: "", content: "" });
+        toast.success("Default template updated");
         fetchTemplates();
       }
     } catch (error) {
-      console.error("Error updating template:", error);
-      toast.error("Failed to update template");
+      console.error("Error setting default template:", error);
+      toast.error("Failed to set default template");
     }
   };
 
-  const startEditing = (template) => {
-    setEditingTemplate(template);
-    setEditForm({
-      title: template.title,
-      content: template.content
-    });
-    setNewTemplate({ title: "", content: "" }); // Clear new template form
-  };
-
-  const cancelEditing = () => {
-    setEditingTemplate(null);
-    setEditForm({ title: "", content: "" });
-  };
-
+  // --------------------------------------------------------------------------
+  // RENDER
+  // --------------------------------------------------------------------------
   return (
     <div className="min-h-screen flex bg-gray-100">
       <VenueSidebar />
@@ -210,11 +217,14 @@ const AgreementMaker = () => {
             These templates can be reused when creating agreements.
           </Alert>
 
-          <Tabs 
-            value={tabValue} 
+          <Tabs
+            value={tabValue}
             onChange={(e, newValue) => {
               setTabValue(newValue);
-              setNewTemplate({ ...newTemplate, content: "" });
+              // Clear the new content area whenever we switch tabs.
+              setNewTemplateContent("");
+              // Also cancel any editing in progress.
+              cancelEditing();
             }}
             sx={{ mb: 3 }}
           >
@@ -223,67 +233,69 @@ const AgreementMaker = () => {
             <Tab label="Cancellation Policy" />
           </Tabs>
 
-          {/* Create/Edit Template Section */}
-          <Box sx={{ mb: 4 }}>
-            <Typography variant="h6" gutterBottom>
-              {editingTemplate ? `Edit ${editingTemplate.title}` : `Create New ${getTemplateTypeLabel(tabValue)} Template`}
-            </Typography>
-            <TextField
-              fullWidth
-              label="Template Title"
-              value={editingTemplate ? editForm.title : newTemplate.title}
-              onChange={(e) => 
-                editingTemplate 
-                  ? setEditForm({ ...editForm, title: e.target.value })
-                  : setNewTemplate({ ...newTemplate, title: e.target.value })
-              }
-              sx={{ mb: 2 }}
-            />
-            <ReactQuill
-              value={editingTemplate ? editForm.content : newTemplate.content}
-              onChange={(content) => 
-                editingTemplate
-                  ? setEditForm({ ...editForm, content })
-                  : setNewTemplate({ ...newTemplate, content })
-              }
-              style={{ height: "200px", marginBottom: "50px" }}
-            />
-            {editingTemplate ? (
-              <Box sx={{ mt: 2 }}>
-                <Button
-                  variant="contained"
-                  onClick={handleEditTemplate}
-                  disabled={!editForm.title || !editForm.content}
-                  sx={{ mr: 2 }}
-                >
-                  Save Changes
-                </Button>
-                <Button
-                  variant="outlined"
-                  onClick={cancelEditing}
-                >
-                  Cancel
-                </Button>
-              </Box>
-            ) : (
+          {/* CREATE / EDIT TEMPLATE SECTION */}
+          {!editingTemplate ? (
+            // ------------------ CREATE NEW TEMPLATE ------------------
+            <Box sx={{ mb: 4 }}>
+              <Typography variant="h6" gutterBottom>
+                Create New {getTemplateTypeLabel(tabValue)} Template
+              </Typography>
+              {/* The title is auto-set – we only take the content */}
+              <ReactQuill
+                value={newTemplateContent}
+                onChange={(content) => setNewTemplateContent(content)}
+                style={{ height: "200px", marginBottom: "50px" }}
+              />
               <Button
                 variant="contained"
                 onClick={handleCreateTemplate}
-                disabled={!newTemplate.title || !newTemplate.content}
+                disabled={!newTemplateContent}
                 sx={{ mt: 2 }}
               >
                 Create Template
               </Button>
-            )}
-          </Box>
+            </Box>
+          ) : (
+            // ------------------ EDIT EXISTING TEMPLATE ------------------
+            <Box sx={{ mb: 4 }}>
+              <Typography variant="h6" gutterBottom>
+                Editing: {editingTemplate.title}
+              </Typography>
+              <ReactQuill
+                value={editContent}
+                onChange={(content) => setEditContent(content)}
+                style={{ height: "200px", marginBottom: "50px" }}
+              />
+              <Box sx={{ mt: 2 }}>
+                <Button
+                  variant="contained"
+                  onClick={handleEditTemplate}
+                  disabled={!editContent}
+                  sx={{ mr: 2 }}
+                >
+                  Save Changes
+                </Button>
+                <Button variant="outlined" onClick={cancelEditing}>
+                  Cancel
+                </Button>
+              </Box>
+            </Box>
+          )}
 
           <Divider sx={{ my: 4 }} />
 
-          {/* Existing Templates Section */}
+          {/* LIST EXISTING TEMPLATES */}
           <Typography variant="h6" gutterBottom>
             Existing {getTemplateTypeLabel(tabValue)} Templates
           </Typography>
-          {templates[["terms", "rules", "cancellation"][tabValue]]?.map((template) => (
+
+          {templates[typeMap[tabValue]]?.length === 0 && (
+            <Alert severity="info">
+              No templates found. Create your first {getTemplateTypeLabel(tabValue).toLowerCase()} template.
+            </Alert>
+          )}
+
+          {templates[typeMap[tabValue]]?.map((template) => (
             <Paper key={template._id} sx={{ p: 3, mb: 2, bgcolor: "grey.50" }}>
               <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                 <Typography variant="h6" color={template.isDefault ? "primary" : "textPrimary"}>
@@ -302,6 +314,7 @@ const AgreementMaker = () => {
                     onClick={() => handleSetDefaultTemplate(template._id)}
                     color={template.isDefault ? "primary" : "default"}
                     title={template.isDefault ? "Default Template" : "Set as Default"}
+                    sx={{ mr: 1 }}
                   >
                     <StarIcon />
                   </IconButton>
@@ -310,34 +323,28 @@ const AgreementMaker = () => {
                     color="error"
                     disabled={isDeleteDisabled(template)}
                     title={
-                      template.isDefault 
-                        ? "Cannot delete default template" 
-                        : templates[["terms", "rules", "cancellation"][tabValue]].length <= 1
-                          ? "Cannot delete the only template"
-                          : "Delete Template"
+                      template.isDefault
+                        ? "Cannot delete default template"
+                        : templates[typeMap[tabValue]].length <= 1
+                        ? "Cannot delete the only template"
+                        : "Delete Template"
                     }
                   >
                     <DeleteIcon />
                   </IconButton>
                 </Box>
               </Box>
-              <div 
+              <div
                 dangerouslySetInnerHTML={{ __html: template.content }}
-                style={{ 
-                  backgroundColor: "white", 
-                  padding: "16px", 
+                style={{
+                  backgroundColor: "white",
+                  padding: "16px",
                   borderRadius: "4px",
-                  border: "1px solid #e0e0e0" 
+                  border: "1px solid #e0e0e0"
                 }}
               />
             </Paper>
           ))}
-
-          {templates[["terms", "rules", "cancellation"][tabValue]]?.length === 0 && (
-            <Alert severity="info">
-              No templates found. Create your first {getTemplateTypeLabel(tabValue).toLowerCase()} template.
-            </Alert>
-          )}
         </Paper>
       </Container>
     </div>

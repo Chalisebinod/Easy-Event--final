@@ -429,8 +429,8 @@ const Booking = () => {
                     onClick={() => setSelectedFoodType(type)}
                     className={`px-4 py-2 rounded-full transition duration-200 ${
                       selectedFoodType === type
-                        ? "bg-slate-900 text-white shadow-md"
-                        : "bg-slate-200 text-slate-800 hover:bg-slate-300"
+                        ? "bg-orange-600 text-white shadow-md"
+                        : "bg-slate-200 text-slate-800 hover:bg-orange-600"
                     }`}
                   >
                     {type}
@@ -492,7 +492,7 @@ const Booking = () => {
                       onChange={(e) =>
                         handleServiceChange(index, "name", e.target.value)
                       }
-                      className="w-full p-3 border border-slate-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-slate-900"
+                      className="w-full p-3 border border-slate-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
                       placeholder="Enter service name"
                     />
                   </div>
@@ -505,7 +505,7 @@ const Booking = () => {
                       onChange={(e) =>
                         handleServiceChange(index, "description", e.target.value)
                       }
-                      className="w-full p-3 border border-slate-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-slate-900"
+                      className="w-full p-3 border border-slate-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
                       placeholder="Enter description"
                     ></textarea>
                   </div>
@@ -514,7 +514,7 @@ const Booking = () => {
               <button
                 type="button"
                 onClick={addService}
-                className="px-4 py-2 bg-slate-900 text-white rounded-md transition duration-200 hover:bg-slate-800"
+                className="px-4 py-2 bg-orange-600 text-white rounded-md transition duration-200 hover:bg-orange-500"
               >
                 Add Service
               </button>
@@ -592,7 +592,7 @@ const Booking = () => {
                         }}
                         className={`px-4 py-2 rounded-md transition duration-200 ${
                           offerMode === "perPlate"
-                            ? "bg-slate-900 text-white shadow-md"
+                            ? "bg-orange-600 text-white shadow-md"
                             : "bg-slate-200 text-slate-800 hover:bg-slate-300"
                         }`}
                       >
@@ -607,7 +607,7 @@ const Booking = () => {
                         }}
                         className={`px-4 py-2 rounded-md transition duration-200 ${
                           offerMode === "total"
-                            ? "bg-slate-900 text-white shadow-md"
+                            ? "bg-orange-600 text-white shadow-md"
                             : "bg-slate-200 text-slate-800 hover:bg-slate-300"
                         }`}
                       >
@@ -627,7 +627,7 @@ const Booking = () => {
                             value={userOfferedValue}
                             onChange={handleUserOfferedValueChange}
                             placeholder="Enter your offered price"
-                            className="w-full p-3 border border-slate-300 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-slate-900"
+                            className="w-full p-3 border border-slate-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
                           />
                         </div>
                         <div>
@@ -642,7 +642,7 @@ const Booking = () => {
                                 : ""
                             }
                             readOnly
-                            className="w-full p-3 border border-slate-300 rounded-md bg-gray-200"
+                            className="w-full p-3 border border-slate-300 rounded-md bg-white"
                           />
                         </div>
                       </>

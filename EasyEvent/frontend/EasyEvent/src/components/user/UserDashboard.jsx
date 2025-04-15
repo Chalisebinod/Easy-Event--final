@@ -173,10 +173,11 @@ const UserDashboard = () => {
                     </h3>
 
                     <div className="flex items-center text-red-500 mb-2 text-sm">
-                      <MapPinIcon className="w-4 h-4 mr-1 flex-shrink-0" />
-                      <p className="truncate">
-                        {venue.location.address}, {venue.location.city}
-                      </p>
+                      
+                      <p className="text-red-500 mb-2 flex items-center">
+          <MapPinIcon className="w-5 h-5 mr-2" /> {/* Red location icon */}
+          {venue.location.address}, {venue.location.city}, {venue.location.state}
+        </p>
                     </div>
 
                     <p className="text-gray-500 text-sm mb-3 line-clamp-2 flex-1">

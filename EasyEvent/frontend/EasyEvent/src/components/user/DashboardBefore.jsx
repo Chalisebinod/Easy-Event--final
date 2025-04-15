@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import BottomNavbar from "./BottomNavbar";
 import { ArrowRightIcon, Image as GalleryIcon } from "lucide-react";
+import { MapPinIcon } from "@heroicons/react/24/solid";
 
 const ImageCarousel = ({ images }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -98,10 +99,10 @@ const ImageCarousel = ({ images }) => {
 
 const ImageGalleryPreview = ({ images, onGalleryClick }) => {
   const previewImages = images.slice(0, Math.min(3, images.length));
-  
+
   return (
-    <div 
-      onClick={onGalleryClick} 
+    <div
+      onClick={onGalleryClick}
       className="absolute bottom-4 right-4 flex items-center gap-1 bg-white/70 p-1 rounded-lg cursor-pointer hover:bg-white transition-all duration-300 z-10"
     >
       {previewImages.map((image, index) => (
@@ -128,7 +129,7 @@ const VenueCard = ({ venue, openModal }) => {
   ];
 
   const mainImage = venueImages[0];
-  
+
   const handleGalleryClick = (e) => {
     e.stopPropagation(); // Prevent card click from opening modal
     // Instead of showing gallery in the card, open the modal with gallery open
@@ -148,18 +149,19 @@ const VenueCard = ({ venue, openModal }) => {
         />
         {/* Gallery Icon with Image Preview */}
         {venueImages.length > 1 && (
-          <ImageGalleryPreview 
-            images={venueImages} 
-            onGalleryClick={handleGalleryClick} 
+          <ImageGalleryPreview
+            images={venueImages}
+            onGalleryClick={handleGalleryClick}
           />
         )}
       </div>
-      
+
       <div className="p-6">
         <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-orange-600 transition duration-300">
           {venue.name}
         </h3>
-        <p className="text-gray-600 mb-2">
+        <p className="text-red-500 mb-2 flex items-center">
+          <MapPinIcon className="w-5 h-5 mr-2" /> {/* Red location icon */}
           {venue.location.address}, {venue.location.city}, {venue.location.state}
         </p>
         <p className="text-gray-500 text-sm mb-4 line-clamp-2">
@@ -221,7 +223,18 @@ const DashboardBefore = () => {
     setSearchTerm(e.target.value);
   };
 
-  const filteredVenues = venues.filter((venue) =>
+  // Sort venues by rating in descending order
+  const sortedVenues = [...venues].sort((a, b) => {
+    const ratingA = !isNaN(parseFloat(a.rating))
+      ? parseFloat(a.rating)
+      : -Infinity;
+    const ratingB = !isNaN(parseFloat(b.rating))
+      ? parseFloat(b.rating)
+      : -Infinity;
+    return ratingB - ratingA;
+  });
+
+  const filteredVenues = sortedVenues.filter((venue) =>
     venue.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -247,15 +260,15 @@ const DashboardBefore = () => {
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 font-sans">
       {/* Header */}
       <header className="fixed w-full top-0 z-50 bg-white shadow-sm">
-      <div className="flex items-center justify-between h-16 px-10">
+        <div className="flex items-center justify-between h-16 px-10">
           {/* Clickable Logo */}
- <div
-          className="text-3xl md:text-4xl font-bold cursor-pointer flex items-center font-[Poppins]"
-          onClick={() => navigate("/")}
-        >
-          <span className="text-orange-600">Easy</span>
-          <span className="text-orange-600">Events</span>
-        </div>
+          <div
+            className="text-3xl md:text-4xl font-bold cursor-pointer flex items-center font-[Poppins]"
+            onClick={() => navigate("/")}
+          >
+            <span className="text-orange-600">Easy</span>
+            <span className="text-orange-600">Events</span>
+          </div>
 
           <div className="flex items-center space-x-4">
             <button
@@ -357,24 +370,26 @@ const DashboardBefore = () => {
                     alt={selectedVenue.name}
                     className="w-full h-full object-cover"
                   />
-                  
+
                   {/* Gallery Icon with Image Preview in Modal */}
-                  {selectedVenue.venueImages && selectedVenue.venueImages.length > 0 && (
-                    <ImageGalleryPreview 
-                      images={[
-                        selectedVenue.profile_image
-                          ? `http://localhost:8000/${selectedVenue.profile_image.replace(
-                              /\\/g,
-                              "/"
-                            )}`
-                          : "https://via.placeholder.com/300",
-                        ...(selectedVenue.venueImages || []).map(
-                          (img) => `http://localhost:8000/${img.replace(/\\/g, "/")}`
-                        ),
-                      ]}
-                      onGalleryClick={toggleGalleryInModal}
-                    />
-                  )}
+                  {selectedVenue.venueImages &&
+                    selectedVenue.venueImages.length > 0 && (
+                      <ImageGalleryPreview
+                        images={[
+                          selectedVenue.profile_image
+                            ? `http://localhost:8000/${selectedVenue.profile_image.replace(
+                                /\\/g,
+                                "/"
+                              )}`
+                            : "https://via.placeholder.com/300",
+                          ...(selectedVenue.venueImages || []).map(
+                            (img) =>
+                              `http://localhost:8000/${img.replace(/\\/g, "/")}`
+                          ),
+                        ]}
+                        onGalleryClick={toggleGalleryInModal}
+                      />
+                    )}
                 </div>
               )}
             </div>
