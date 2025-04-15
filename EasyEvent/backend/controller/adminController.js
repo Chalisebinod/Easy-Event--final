@@ -261,7 +261,7 @@ async function blockUser(req, res) {
   const { userId } = req.params;
 
   try {
-    const user = await User.findById(userId);
+    const user = await User.findById(userId); // Find the venue owner by ID
 
     if (!user) {
       return res
@@ -270,8 +270,8 @@ async function blockUser(req, res) {
     }
 
     // Toggle the block status
-    user.is_blocked = !user.is_blocked;
-    await user.save();
+    user.is_blocked = !user.is_blocked; // If user is blocked, it will be unblocked, and vice versa.
+    await user.save(); // Save the updated user document
 
     res.status(200).json({
       success: true,

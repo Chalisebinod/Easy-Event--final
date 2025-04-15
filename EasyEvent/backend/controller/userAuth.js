@@ -157,8 +157,6 @@ const signupVenueOwner = async (req, res) => {
 
 // Login Controller
 const login = async (req, res) => {
-  console.log("User login details:", req.body);
-
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -166,11 +164,9 @@ const login = async (req, res) => {
   }
 
   try {
-    // Try to find as a regular user first
     let user = await User.findOne({ email });
     let isVenueOwner = false;
 
-    // If not found, try to find as a venue owner
     if (!user) {
       user = await VenueOwner.findOne({ email });
       if (user) {
@@ -185,17 +181,15 @@ const login = async (req, res) => {
     // Check if the user is blocked
     if (user.is_blocked) {
       return res.status(403).json({
-        message: "Your account has been deactivated. You did not follow our guidelines.",
+        message: "Your account has been deactivated. You did not follow our guidelines. Please contact support for further assistance.",
       });
     }
 
-    // Verify the password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // If the user is a venue owner, get their venue details
     let venueId = null;
     if (isVenueOwner) {
       const venue = await Venue.findOne({ owner: user._id });
@@ -204,26 +198,22 @@ const login = async (req, res) => {
       }
     }
 
-    // Generate token with additional venue information for venue owners
     const tokenData = {
       id: user._id,
       role: user.role,
       email: user.email,
       name: user.name,
-      venueId: venueId, // Include venueId in token for venue owners
+      venueId: venueId,
     };
 
     const token = jwt.sign(tokenData, JWT_SECRET, { expiresIn: "24h" });
 
-    // Construct response data
-    const responseData = {
+    res.status(200).json({
       message: "Login successful",
       token,
       role: user.role,
       venueId: venueId,
-    };
-
-    res.status(200).json(responseData);
+    });
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ message: "Server error", error: error.message });

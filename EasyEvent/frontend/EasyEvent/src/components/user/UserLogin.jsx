@@ -41,9 +41,12 @@ const UserLogin = () => {
         error.response && error.response.data && error.response.data.message
           ? error.response.data.message
           : "Login failed!";
+      
+      // Display the error message (e.g., for blocked users)
       toast.error(errorMessage);
     }
   };
+
   return (
     <div className="flex h-screen">
       {/* Left Section */}
