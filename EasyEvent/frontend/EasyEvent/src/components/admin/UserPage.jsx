@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DashboardLayout from "./DashboardLayout";
+import { toast } from "react-toastify";
 
 const UserPage = () => {
   const [users, setUsers] = useState([]);
@@ -40,27 +41,54 @@ const UserPage = () => {
     }
   };
 
+
+
   const blockUser = async (userId, isBlocked) => {
-    const confirmMessage = isBlocked
-      ? "Are you sure you want to unblock this user?"
-      : "Are you sure you want to block this user?";
-    if (!window.confirm(confirmMessage)) return;
-
-    const token = localStorage.getItem("access_token");
-
+    let reason = null;
+  
+    if (isBlocked) {
+      const confirmUnblock = prompt("Type 'YES' to confirm unblocking this user:");
+      if (confirmUnblock !== "YES") {
+        toast.error("Unblocking failed. You must type 'YES' in all capital letters.");
+        return;
+      }
+    } else {
+      reason = prompt("Please provide a reason for blocking this user:");
+      if (!reason) {
+        toast.error("Blocking reason is required.");
+        return;
+      }
+    }
+  
     try {
-      await axios.put(
+      const response = await axios.put(
         `http://localhost:8000/api/users/block/${userId}`,
-        {},
+        { reason },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
         }
       );
-      fetchUsers(page);
+  
+      // Update the user list dynamically
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user._id === userId
+            ? { ...user, is_blocked: !isBlocked, block_reason: reason }
+            : user
+        )
+      );
+  
+      // Display toast message
+      toast.success(
+        isBlocked
+          ? "User unblocked successfully."
+          : "User blocked successfully."
+      );
     } catch (error) {
-      console.error("Error blocking user:", error);
+      console.error("Error blocking/unblocking user:", error);
+      toast.error("Failed to update user status.");
     }
   };
 

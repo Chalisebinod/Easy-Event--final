@@ -257,37 +257,37 @@ async function getAllVenueOwners(req, res) {
   }
 }
 
-async function blockUser(req, res) {
+const blockUser = async (req, res) => {
   const { userId } = req.params;
+  const { reason } = req.body;
 
   try {
-    const user = await User.findById(userId); // Find the venue owner by ID
+    const user = await User.findById(userId);
 
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+      return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    // Toggle the block status
-    user.is_blocked = !user.is_blocked; // If user is blocked, it will be unblocked, and vice versa.
-    await user.save(); // Save the updated user document
+    // Toggle block status and set block reason
+    user.is_blocked = !user.is_blocked;
+    user.block_reason = user.is_blocked ? reason : null;
+    await user.save();
 
     res.status(200).json({
       success: true,
       message: user.is_blocked
-        ? "User blocked successfully"
-        : "User unblocked successfully",
+        ? "User blocked successfully."
+        : "User unblocked successfully.",
       data: user,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Failed to block/unblock user",
+      message: "Failed to block/unblock user.",
       error: error.message,
     });
   }
-}
+};
 
 async function blockVenue(req, res) {
   const { venueId } = req.params;
@@ -321,31 +321,36 @@ async function blockVenue(req, res) {
   }
 }
 
-async function blockVenueOwner(req, res) {
+const blockVenueOwner = async (req, res) => {
   const { userId } = req.params;
+  const { reason } = req.body;
 
   try {
-    const user = await VenueOwner.findById(userId);
+    const venueOwner = await VenueOwner.findById(userId);
 
-    if (!user) {
+    if (!venueOwner) {
       return res
         .status(404)
         .json({ success: false, message: "Venue owner not found" });
     }
 
-    // Toggle the block status
-    user.is_blocked = !user.is_blocked;
-    await user.save();
+    // Toggle block status and set block reason
+    venueOwner.is_blocked = !venueOwner.is_blocked;
+    venueOwner.block_reason = venueOwner.is_blocked ? reason : null;
+    await venueOwner.save();
 
     // Update all venues belonging to this venue owner
-    await Venue.updateMany({ owner: userId }, { is_blocked: user.is_blocked });
+    await Venue.updateMany(
+      { owner: userId },
+      { is_blocked: venueOwner.is_blocked }
+    );
 
     res.status(200).json({
       success: true,
-      message: user.is_blocked
+      message: venueOwner.is_blocked
         ? "Venue owner blocked successfully and all venues blocked."
         : "Venue owner unblocked successfully and all venues unblocked.",
-      data: user,
+      data: venueOwner,
     });
   } catch (error) {
     res.status(500).json({
@@ -354,7 +359,7 @@ async function blockVenueOwner(req, res) {
       error: error.message,
     });
   }
-}
+};
 
 const getVenueOwner = async (req, res) => {
   const { userId } = req.params; // Get the userId from the request parameters

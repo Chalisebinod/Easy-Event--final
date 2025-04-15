@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 const UserLogin = () => {
@@ -10,6 +9,8 @@ const UserLogin = () => {
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const navigate = useNavigate();
+
+
 
   const handleLogin = async (e) => {
     e.preventDefault();

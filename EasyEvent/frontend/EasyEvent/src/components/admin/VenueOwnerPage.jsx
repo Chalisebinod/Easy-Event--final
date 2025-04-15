@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import DashboardLayout from "./DashboardLayout";
+import { toast } from "react-toastify";
 
 const VenueOwnerPage = () => {
   const [venueOwners, setVenueOwners] = useState([]);
@@ -41,21 +42,54 @@ const VenueOwnerPage = () => {
     }
   };
 
+
+
   const blockVenueOwner = async (venueOwnerId, isBlocked) => {
-    const confirmation = window.confirm(
-      `Are you sure you want to ${isBlocked ? "unblock" : "block"} this venue owner?`
-    );
-    if (!confirmation) return;
-    const token = localStorage.getItem("access_token");
+    let reason = null;
+  
+    if (isBlocked) {
+      const confirmUnblock = prompt("Type 'YES' to confirm unblocking this venue owner:");
+      if (confirmUnblock !== "YES") {
+        toast.error("Unblocking failed. You must type 'YES' in all capital letters.");
+        return;
+      }
+    } else {
+      reason = prompt("Please provide a reason for blocking this venue owner:");
+      if (!reason) {
+        toast.error("Blocking reason is required.");
+        return;
+      }
+    }
+  
     try {
-      await axios.put(
+      const response = await axios.put(
         `http://localhost:8000/api/venueOwner/block/${venueOwnerId}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
+        { reason },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
-      fetchVenueOwners(page, searchTerm, sortBy, blockStatus); // Refresh data
+  
+      // Update the venue owner list dynamically
+      setVenueOwners((prevOwners) =>
+        prevOwners.map((owner) =>
+          owner._id === venueOwnerId
+            ? { ...owner, is_blocked: !isBlocked, block_reason: reason }
+            : owner
+        )
+      );
+  
+      // Display toast message
+      toast.success(
+        isBlocked
+          ? "Venue owner unblocked successfully."
+          : "Venue owner blocked successfully."
+      );
     } catch (error) {
-      console.error("Error updating venue owner status:", error);
+      console.error("Error blocking/unblocking venue owner:", error);
+      toast.error("Failed to update venue owner status.");
     }
   };
 

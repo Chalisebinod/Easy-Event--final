@@ -181,7 +181,7 @@ const login = async (req, res) => {
     // Check if the user is blocked
     if (user.is_blocked) {
       return res.status(403).json({
-        message: "Your account has been deactivated. You did not follow our guidelines. Please contact support for further assistance.",
+        message: `Login failed: ${user.block_reason || "No reason provided."}`,
       });
     }
 
