@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DashboardLayout from "./DashboardLayout";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UserPage = () => {
   const [users, setUsers] = useState([]);
@@ -41,11 +42,9 @@ const UserPage = () => {
     }
   };
 
-
-
   const blockUser = async (userId, isBlocked) => {
     let reason = null;
-  
+
     if (isBlocked) {
       const confirmUnblock = prompt("Type 'YES' to confirm unblocking this user:");
       if (confirmUnblock !== "YES") {
@@ -59,7 +58,7 @@ const UserPage = () => {
         return;
       }
     }
-  
+
     try {
       const response = await axios.put(
         `http://localhost:8000/api/users/block/${userId}`,
@@ -70,7 +69,7 @@ const UserPage = () => {
           },
         }
       );
-  
+
       // Update the user list dynamically
       setUsers((prevUsers) =>
         prevUsers.map((user) =>
@@ -79,7 +78,7 @@ const UserPage = () => {
             : user
         )
       );
-  
+
       // Display toast message
       toast.success(
         isBlocked
@@ -222,6 +221,7 @@ const UserPage = () => {
           </>
         )}
       </div>
+      <ToastContainer />
     </div>
   );
 };

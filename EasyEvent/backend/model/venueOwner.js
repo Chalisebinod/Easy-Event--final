@@ -22,6 +22,7 @@ const venueOwnerSchema = new mongoose.Schema(
     
     reported_count: { type: Number, default: 0 }, // Tracks reports against the owner
     is_blocked: { type: Boolean, default: false }, 
+    block_reason: { type: String, default: null }, 
     last_login: { type: Date, default: null },
 
     // Add fields for document uploads

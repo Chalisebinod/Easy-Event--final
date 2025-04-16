@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
   profile_image: { type: String, default: null },
   role: { type: String, default: "user" },
   is_blocked: { type: Boolean, default: false },
+  block_reason: { type: String, default: null }, 
   resetPasswordOTP: { type: String },
   resetPasswordExpires: { type: Date },
   favorites: [

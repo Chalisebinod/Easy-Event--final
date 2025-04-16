@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import DashboardLayout from "./DashboardLayout";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const VenueOwnerPage = () => {
   const [venueOwners, setVenueOwners] = useState([]);
@@ -42,11 +43,9 @@ const VenueOwnerPage = () => {
     }
   };
 
-
-
   const blockVenueOwner = async (venueOwnerId, isBlocked) => {
     let reason = null;
-  
+
     if (isBlocked) {
       const confirmUnblock = prompt("Type 'YES' to confirm unblocking this venue owner:");
       if (confirmUnblock !== "YES") {
@@ -60,7 +59,7 @@ const VenueOwnerPage = () => {
         return;
       }
     }
-  
+
     try {
       const response = await axios.put(
         `http://localhost:8000/api/venueOwner/block/${venueOwnerId}`,
@@ -71,7 +70,7 @@ const VenueOwnerPage = () => {
           },
         }
       );
-  
+
       // Update the venue owner list dynamically
       setVenueOwners((prevOwners) =>
         prevOwners.map((owner) =>
@@ -80,7 +79,7 @@ const VenueOwnerPage = () => {
             : owner
         )
       );
-  
+
       // Display toast message
       toast.success(
         isBlocked
@@ -176,7 +175,6 @@ const VenueOwnerPage = () => {
                 <tbody className="bg-white divide-y divide-gray-100">
                   {venueOwners.map((venueOwner) => (
                     <tr key={venueOwner._id} className="hover:bg-gray-50">
-                      
                       <td className="px-6 py-4 whitespace-nowrap text-base text-gray-800">
                         {venueOwner.name}
                       </td>
@@ -229,6 +227,7 @@ const VenueOwnerPage = () => {
           </>
         )}
       </div>
+      <ToastContainer />
     </div>
   );
 };
