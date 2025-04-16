@@ -18,6 +18,7 @@ const venueSchema = new mongoose.Schema({
   images: [{ type: String }],
   description: { type: String, required: true },
   is_blocked: { type: Boolean, default: false, required: true },
+block_reason: { type: String, default: null }, 
 
   event_pricing: [
     {

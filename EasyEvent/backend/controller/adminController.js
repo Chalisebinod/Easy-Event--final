@@ -6,6 +6,7 @@ const Kyc = require("../model/KYC");
 const Hall = require("../model/hallSchema");
 const Payment = require("../model/payment");
 const Request = require("../model/request");
+const Notification = require("../model/notifications"); 
 async function getAllUsers(req, res) {
   try {
     const {
@@ -289,8 +290,9 @@ const blockUser = async (req, res) => {
   }
 };
 
-async function blockVenue(req, res) {
+const blockVenue = async (req, res) => {
   const { venueId } = req.params;
+  const { reason } = req.body;
 
   try {
     const venue = await Venue.findById(venueId);
@@ -301,9 +303,20 @@ async function blockVenue(req, res) {
         .json({ success: false, message: "Venue not found" });
     }
 
-    // Toggle block status for the venue
+    // Toggle block status and set block reason
     venue.is_blocked = !venue.is_blocked;
+    venue.block_reason = venue.is_blocked ? reason : null;
     await venue.save();
+
+    // Create a notification for the venue owner
+    const notificationMessage = venue.is_blocked
+      ? `Your venue "${venue.name}" has been blocked. Reason: ${reason}`
+      : `Your venue "${venue.name}" has been unblocked.`;
+    await Notification.create({
+      userId: venue.owner, // Assuming `venue.owner` contains the owner's ID
+      message: notificationMessage,
+      role: "VenueOwner",
+    });
 
     res.status(200).json({
       success: true,
@@ -313,13 +326,14 @@ async function blockVenue(req, res) {
       data: venue,
     });
   } catch (error) {
+    console.error("Error in blockVenue:", error);
     res.status(500).json({
       success: false,
       message: "Failed to block/unblock venue.",
       error: error.message,
     });
   }
-}
+};
 
 const blockVenueOwner = async (req, res) => {
   const { userId } = req.params;
@@ -360,6 +374,41 @@ const blockVenueOwner = async (req, res) => {
     });
   }
 };
+
+const getUnblockedVenues = async (req, res) => {
+  try {
+    const { search = "" } = req.query;
+
+    // Build the query to exclude blocked venues
+    let query = { is_blocked: false };
+
+    if (search) {
+      query = {
+        ...query,
+        $or: [
+          { name: { $regex: search, $options: "i" } },
+          { "location.address": { $regex: search, $options: "i" } },
+          { "location.city": { $regex: search, $options: "i" } },
+        ],
+      };
+    }
+
+    // Fetch unblocked venues
+    const venues = await Venue.find(query);
+
+    res.status(200).json({
+      success: true,
+      venues,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch venues",
+      error: error.message,
+    });
+  }
+};
+
 
 const getVenueOwner = async (req, res) => {
   const { userId } = req.params; // Get the userId from the request parameters
@@ -456,4 +505,5 @@ module.exports = {
   venueForAdmmin,
   blockVenue,
   getDashboardInsights,
+ 
 };

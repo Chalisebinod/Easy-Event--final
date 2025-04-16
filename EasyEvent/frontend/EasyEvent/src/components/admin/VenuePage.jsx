@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DashboardLayout from "./DashboardLayout";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify"; // Import ToastContainer
+import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
 
 const API_URL = "http://localhost:8000/api/admin/venues";
 const API_URL_Block = "http://localhost:8000/api/venue";
@@ -50,28 +51,53 @@ const VenuePage = () => {
 
   // Handle block/unblock action
   const handleBlockVenue = async (venueId, isBlocked) => {
-    const confirmMessage = isBlocked
-      ? "Are you sure you want to unblock this venue?"
-      : "Are you sure you want to block this venue?";
-    if (!window.confirm(confirmMessage)) return;
+    let reason = null;
+
+    if (isBlocked) {
+      const confirmUnblock = prompt("Type 'YES' to confirm unblocking this venue:");
+      if (confirmUnblock !== "YES") {
+        toast.error("Unblocking failed. You must type 'YES' in all capital letters.");
+        return;
+      }
+    } else {
+      reason = prompt("Please provide a reason for blocking this venue:");
+      if (!reason) {
+        toast.error("Blocking reason is required.");
+        return;
+      }
+    }
 
     const token = localStorage.getItem("access_token");
 
     try {
       await axios.put(
         `${API_URL_Block}/block/${venueId}`,
-        {},
+        { reason },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      toast.success(isBlocked ? "Venue unblocked successfully" : "Venue blocked successfully");
-      fetchVenues();
+
+      // Update the venues state dynamically
+      setVenues((prevVenues) =>
+        prevVenues.map((venue) =>
+          venue._id === venueId
+            ? { ...venue, is_blocked: !isBlocked, block_reason: reason }
+            : venue
+        )
+      );
+
+      // Display toast message
+      toast.success(
+        isBlocked
+          ? "Venue unblocked successfully."
+          : "Venue blocked successfully."
+      );
     } catch (error) {
       console.error("Error toggling venue status:", error);
-      toast.error("Error updating venue status");
+      toast.error("Error updating venue status.");
     }
   };
 
@@ -182,6 +208,7 @@ const VenuePage = () => {
           </>
         )}
       </div>
+      <ToastContainer /> 
     </div>
   );
 };

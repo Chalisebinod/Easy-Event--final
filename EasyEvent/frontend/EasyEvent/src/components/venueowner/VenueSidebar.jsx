@@ -90,7 +90,7 @@ const VenueSidebar = ({ children }) => {
         <div className="relative">
           <NotificationsIcon className="w-5 h-5" />
           {notificationCount > 0 && (
-            <span className="absolute -top-2 -right-2 bg-red-500 text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
               {notificationCount}
             </span>
           )}
