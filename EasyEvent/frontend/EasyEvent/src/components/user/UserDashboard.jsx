@@ -31,7 +31,7 @@ const UserDashboard = () => {
         console.error("Error fetching venues:", error);
       }
     };
-
+  
     fetchVenues();
   }, [access_token]);
 

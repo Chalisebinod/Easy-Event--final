@@ -1,5 +1,6 @@
 const express = require("express");
 const { checkAuthentication } = require("../middleware/middleware");
+const { getUnblockedVenues } = require("../controller/adminController");
 const {
   createVenue,
   editVenue,
@@ -23,7 +24,8 @@ router.patch(
     { name: "profile_image", maxCount: 1 },
     { name: "images", maxCount: 5 },
   ]),
-  checkAuthentication,editVenue
+  checkAuthentication,
+  editVenue
 );
 
 // Delete a venue (Only the owner can delete)
@@ -32,10 +34,14 @@ router.get("/venue-profile", checkAuthentication, getVenueProfile);
 
 // Get all venues for the authenticated user (Only accessible to authenticated venue owners)
 router.get("/venues/user", checkAuthentication, getAllVenuesForUser);
+
+// Add this route to fetch unblocked venues
+router.get("/venues/unblocked", getUnblockedVenues);
+
+// Get all venues for public showcase
 router.get("/venues", getAllVenuesForShowcase);
+
+// Get a specific venue by ID
 router.get("/venues/:id", getVenueById);
-
-
-
 
 module.exports = router;

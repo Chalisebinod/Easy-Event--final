@@ -252,6 +252,7 @@ const getAllVenuesForShowcase = async (req, res) => {
       {
         $match: {
           verification_status: "Verified", // Only include verified venues
+          is_blocked: false, // Exclude blocked venues
         },
       },
       {

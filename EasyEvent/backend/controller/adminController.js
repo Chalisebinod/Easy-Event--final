@@ -6,7 +6,7 @@ const Kyc = require("../model/KYC");
 const Hall = require("../model/hallSchema");
 const Payment = require("../model/payment");
 const Request = require("../model/request");
-const Notification = require("../model/notifications"); 
+const Notification = require("../model/notifications");
 async function getAllUsers(req, res) {
   try {
     const {
@@ -266,7 +266,9 @@ const blockUser = async (req, res) => {
     const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(404).json({ success: false, message: "User not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
 
     // Toggle block status and set block reason
@@ -409,7 +411,6 @@ const getUnblockedVenues = async (req, res) => {
   }
 };
 
-
 const getVenueOwner = async (req, res) => {
   const { userId } = req.params; // Get the userId from the request parameters
 
@@ -505,5 +506,5 @@ module.exports = {
   venueForAdmmin,
   blockVenue,
   getDashboardInsights,
- 
+  getUnblockedVenues,
 };
