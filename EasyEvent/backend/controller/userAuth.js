@@ -5,7 +5,7 @@ const VenueOwner = require("../model/venueOwner");
 const Venue = require("../model/venue");
 
 // Secret key for JWT (check environment variable JWT_SECRET, fallback to default if not set)
-const JWT_SECRET = process.env.JWT_SECRET || "default_secret"; // Ensure this is set in the .env file
+const JWT_SECRET = process.env.JWT_SECRET || "default_secret"; 
 
 // Helper function to generate JWT
 const generateToken = (user) => {
@@ -181,7 +181,7 @@ const login = async (req, res) => {
     // Check if the user is blocked
     if (user.is_blocked) {
       return res.status(403).json({
-        message: `Login failed: ${user.block_reason || "No reason provided."}`,
+        message: `Account Blocked: ${user.block_reason || "No reason provided."}`,
       });
     }
 

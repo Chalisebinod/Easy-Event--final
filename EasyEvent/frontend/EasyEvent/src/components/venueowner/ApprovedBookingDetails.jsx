@@ -672,21 +672,30 @@ function ApprovedBookingDetails() {
                           />
                         </Grid>
                         <Grid item xs={12} md={6}>
-                          <TextField
-                            fullWidth
-                            label="Due Date"
-                            type="date"
-                            value={paymentDetails.dueDate}
-                            onChange={(e) =>
-                              setPaymentDetails({
-                                ...paymentDetails,
-                                dueDate: e.target.value,
-                              })
-                            }
-                            InputLabelProps={{ shrink: true }}
-                            helperText="Deadline for the advance payment"
-                          />
-                        </Grid>
+  <TextField
+    fullWidth
+    label="Due Date"
+    type="date"
+    value={paymentDetails.dueDate}
+    onChange={(e) => {
+      const selectedDate = new Date(e.target.value);
+      const bookingDate = new Date(booking.event_details.date);
+
+      // Check if the due date is earlier than the booking date
+      if (selectedDate < bookingDate) {
+        toast.error("Due date cannot be earlier than the booking date.");
+        return;
+      }
+
+      setPaymentDetails({
+        ...paymentDetails,
+        dueDate: e.target.value,
+      });
+    }}
+    InputLabelProps={{ shrink: true }}
+    helperText="Deadline for the advance payment"
+  />
+</Grid>
                         <Grid item xs={12}>
                           <TextField
                             fullWidth

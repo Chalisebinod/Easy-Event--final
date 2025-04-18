@@ -30,7 +30,7 @@ const kycSchema = new mongoose.Schema({
     zip_code: { type: String, required: true },
   },
 
-  verificationStatus: { type: String, default: "Pending" }, // Pending, Verified, Rejected
+  verificationStatus: { type: String, default: "pending" }, // Pending, Verified, Rejected
   rejectMsg: { type: String, default: null },
 });
 

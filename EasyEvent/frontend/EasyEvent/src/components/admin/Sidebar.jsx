@@ -35,7 +35,9 @@ const Sidebar = () => {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `${baseLinkClasses} ${isActive ? activeLinkClasses : inactiveLinkClasses}`
+        `${baseLinkClasses} ${
+          isActive ? activeLinkClasses : inactiveLinkClasses
+        }`
       }
     >
       {icon}
@@ -54,7 +56,13 @@ const Sidebar = () => {
       <nav className="flex flex-col h-[calc(100%-134px)]">
         <ul className="w-full">
           {/* Dashboard */}
-          <li>{renderNavLink("/admin-dashboard", <FaTachometerAlt className="text-lg" />, "Dashboard")}</li>
+          <li>
+            {renderNavLink(
+              "/admin-dashboard",
+              <FaTachometerAlt className="text-lg" />,
+              "Dashboard"
+            )}
+          </li>
 
           {/* KYC Request with Dropdown */}
           <li>
@@ -68,7 +76,9 @@ const Sidebar = () => {
                 <FaBookOpen className="text-lg" />
                 <span className="ml-4 font-medium text-base">KYC Request</span>
               </div>
-              <span>{showKycDropdown ? <FaChevronUp /> : <FaChevronDown />}</span>
+              <span>
+                {showKycDropdown ? <FaChevronUp /> : <FaChevronDown />}
+              </span>
             </button>
 
             {showKycDropdown && (
@@ -103,7 +113,7 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
-                    to={{ pathname: "/kyc-request", search: "?status=pending" }}
+                     to="/kyc-request?status=pending"
                     className={({ isActive }) =>
                       `block py-3 pl-16 pr-6 transition-colors duration-200 ${
                         isActive
@@ -134,16 +144,30 @@ const Sidebar = () => {
           </li>
 
           {/* Users */}
-          <li>{renderNavLink("/all-user", <FaUsers className="text-lg" />, "Users")}</li>
+          <li>
+            {renderNavLink(
+              "/all-user",
+              <FaUsers className="text-lg" />,
+              "Users"
+            )}
+          </li>
 
           {/* Venue Owner */}
           <li>
-            {renderNavLink("/all-venueUser", <FaBuilding className="text-lg" />, "Venue Owners")}
+            {renderNavLink(
+              "/all-venueUser",
+              <FaBuilding className="text-lg" />,
+              "Venue Owners"
+            )}
           </li>
 
           {/* Venues */}
           <li>
-            {renderNavLink("/all-venue", <FaBuilding className="text-lg" />, "Venues")}
+            {renderNavLink(
+              "/all-venue",
+              <FaBuilding className="text-lg" />,
+              "Venues"
+            )}
           </li>
         </ul>
 
@@ -163,7 +187,9 @@ const Sidebar = () => {
       {showLogoutDialog && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-gray-800 p-6 rounded-lg shadow-xl w-96">
-            <h2 className="text-xl font-semibold mb-4 text-white">Confirm Logout</h2>
+            <h2 className="text-xl font-semibold mb-4 text-white">
+              Confirm Logout
+            </h2>
             <p className="text-gray-300">Are you sure you want to log out?</p>
             <div className="mt-6 flex justify-end gap-3">
               <button

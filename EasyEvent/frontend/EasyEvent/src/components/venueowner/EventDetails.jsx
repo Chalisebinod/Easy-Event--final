@@ -75,7 +75,7 @@ function EventDetails() {
 
         if (response.data.booking) {
           setBooking(response.data.booking);
-          console.log("usser", response.data.booking);
+          console.log("user", response.data.booking);
         } else {
           console.error("No booking details found");
           setError("Booking details not found");

@@ -196,51 +196,93 @@ const KYCPage = () => {
   // Handle form submission to send the KYC data
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!isEditable) return;
-
+  
     const { venueName, address, city, state, zip_code } = formValues;
+  
+    // Validation: Ensure all required fields are filled
     if (!venueName || !address || !city || !state || !zip_code) {
       alert("Please fill in all required venue details.");
       return;
     }
-
-    // Validate required documents...
+  
+    // Validation: Ensure address, city, and state contain only letters and spaces
+    const wordRegex = /^[a-zA-Z\s]+$/; // Allows letters and spaces only
+    if (!wordRegex.test(address)) {
+      alert("Address should contain only letters and spaces.");
+      return;
+    }
+    if (!wordRegex.test(city)) {
+      alert("City should contain only letters and spaces.");
+      return;
+    }
+    if (!wordRegex.test(state)) {
+      alert("State should contain only letters and spaces.");
+      return;
+    }
+  
+    // Validation: Ensure zip code is numeric
+    if (isNaN(zip_code)) {
+      alert("Zip Code should be numeric.");
+      return;
+    }
+  
+    // Validation: Ensure required documents are uploaded
     if (!docFiles.profile && !docPreviewUrls.profile) {
       alert("Please upload your profile document.");
       return;
     }
-    // ... (other document validations)
-
-    // Validate venue images by checking if all 3 slots are filled
+    if (!docFiles.citizenshipFront && !docPreviewUrls.citizenshipFront) {
+      alert("Please upload the front side of your citizenship document.");
+      return;
+    }
+    if (!docFiles.citizenshipBack && !docPreviewUrls.citizenshipBack) {
+      alert("Please upload the back side of your citizenship document.");
+      return;
+    }
+    if (!docFiles.pan && !docPreviewUrls.pan) {
+      alert("Please upload your PAN document.");
+      return;
+    }
+    if (!docFiles.map && !docPreviewUrls.map) {
+      alert("Please upload your venue map.");
+      return;
+    }
+    if (!docFiles.signature && !docPreviewUrls.signature) {
+      alert("Please upload your signature.");
+      return;
+    }
+  
+    // Validation: Ensure exactly 3 venue images are uploaded
     const filledImagesCount = venueImagesUrls.filter((url) => !!url).length;
     if (filledImagesCount !== 3) {
       alert("Please upload exactly 3 venue images.");
       return;
     }
-
+  
     setLoading(true);
     const formDataToSend = new FormData();
-
+  
     // Append venue details
     formDataToSend.append("venueName", venueName);
     const venueAddress = { address, city, state, zip_code };
     formDataToSend.append("venueAddress", JSON.stringify(venueAddress));
-
+  
     // Append required document files (only new files will be sent)
     fileFields.forEach((field) => {
       if (docFiles[field]) {
         formDataToSend.append(field, docFiles[field]);
       }
     });
-
+  
     // Append new venue images (if any)
     venueImages.forEach((file) => {
       if (file) {
         formDataToSend.append("venueImages", file);
       }
     });
-
+  
     try {
       const token = localStorage.getItem("access_token");
       const response = await axios.post(
@@ -253,7 +295,7 @@ const KYCPage = () => {
           },
         }
       );
-
+  
       if (response.status === 200) {
         toast.success("KYC submitted successfully. It may take some time for verification.");
         // Redirect to dashboard after a short delay.

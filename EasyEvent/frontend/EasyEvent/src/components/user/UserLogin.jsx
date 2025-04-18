@@ -11,8 +11,6 @@ const UserLogin = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const navigate = useNavigate();
 
-
-
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -50,49 +48,40 @@ const UserLogin = () => {
   };
 
   return (
-    <div className="flex h-screen">
-      {/* Left Section */}
-      <div className="w-1/2 bg-orange-600   flex flex-col justify-center items-center p-10">
-        <h1 className="text-5xl font-bold text-white">
-          Welcome, <span className="text-yellow-300">Back!</span>
-        </h1>
-        <p className="mt-4 text-lg text-white text-center px-6">
-          Seamless Event Planning Starts Here – Find, Book, and Celebrate with Confidence!
-        </p>
-      </div>
+    <div className="flex h-screen justify-center items-center bg-gray-200">
+      <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Welcome Back</h2>
+          <p className="text-gray-600 text-sm">
+            Enter your credentials to access your account
+          </p>
+        </div>
 
-      {/* Right Section */}
-      <div className="w-1/2 bg-white flex flex-col justify-center items-center p-10">
-        <h2 className="text-3xl font-bold text-orange-600  mb-4">Login</h2>
-        <p className="text-gray-600 mb-8">
-          Enter your Credentials to access your account
-        </p>
-
-        <form className="w-3/4" onSubmit={handleLogin}>
+        <form className="w-full" onSubmit={handleLogin}>
           <div className="mb-4">
-            <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
+            <label htmlFor="email" className="block text-gray-700 font-medium mb-2 text-sm">
               Email
             </label>
             <input
               type="email"
               id="email"
-              placeholder="email"
-              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-bg-slate-900"
+              placeholder="Enter your email"
+              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
           <div className="mb-4 relative">
-            <label htmlFor="password" className="block text-gray-700 font-medium mb-2">
+            <label htmlFor="password" className="block text-gray-700 font-medium mb-2 text-sm">
               Password
             </label>
             <div className="relative">
               <input
                 type={passwordVisible ? "text" : "password"}
                 id="password"
-                placeholder="password"
-                className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-bg-slate-900pr-10"
+                placeholder="Enter your password"
+                className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-green-500 pr-10"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -103,44 +92,44 @@ const UserLogin = () => {
                 onClick={() => setPasswordVisible(!passwordVisible)}
               >
                 {passwordVisible ? (
-                  <EyeIcon className="w-6 h-6 text-gray-500" />
+                  <EyeIcon className="w-5 h-5 text-gray-500" />
                 ) : (
-                  <EyeSlashIcon className="w-6 h-6 text-gray-500" />
+                  <EyeSlashIcon className="w-5 h-5 text-gray-500" />
                 )}
               </button>
             </div>
           </div>
-          <div className="flex justify-between items-center mb-6">
-            <Link to="/forgotpassword" className="text-blue-500 hover:underline ml-auto">
+          <div className="flex justify-end items-center mb-6">
+            <Link to="/forgotpassword" className="text-green-600 hover:underline text-sm">
               Forgot password?
             </Link>
           </div>
           <button
             type="submit"
-            className="w-full bg-orange-600 text-white py-2 rounded-lg hover:bg-orange-700 transition duration-200"
+            className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition duration-200 font-medium"
           >
             Login
           </button>
         </form>
 
         <div className="mt-6 text-center">
-          <p className="text-gray-600 text-lg font-medium">
+          <p className="text-gray-600 text-sm mb-4">
             Don't have an account?
           </p>
-          <div className="flex justify-center gap-6 mt-4">
-            <Link
-              to="/user-signup"
-              className="border border-bg-slate-900 text-black py-2 px-6 rounded-lg transition duration-200 hover:bg-orange-600 hover:text-white"
-            >
-              Signup as User
-            </Link>
-            <Link
-              to="/venue-owner-signup"
-              className="border border-bg-slate-900 text-black py-2 px-6 rounded-lg transition duration-200 hover:bg-orange-600 hover:text-white"
-            >
-              Signup as Venue Owner
-            </Link>
-          </div>
+          <div className="flex justify-center gap-4 mt-2">
+  <Link
+    to="/user-signup"
+    className="border border-gray-300 text-gray-700 py-2 px-6 rounded-lg text-sm font-medium transition duration-300 hover:bg-green-600 hover:text-white shadow-sm hover:shadow-md"
+  >
+    Signup as User
+  </Link>
+  <Link
+    to="/venue-owner-signup"
+    className="border border-gray-300 text-gray-700 py-2 px-6 rounded-lg text-sm font-medium transition duration-300 hover:bg-green-600 hover:text-white shadow-sm hover:shadow-md"
+  >
+    Signup as Venue Owner
+  </Link>
+</div>
         </div>
       </div>
       <ToastContainer />

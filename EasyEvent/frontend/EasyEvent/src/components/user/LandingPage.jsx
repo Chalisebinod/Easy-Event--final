@@ -18,7 +18,7 @@ const FeatureCard = ({ icon: Icon, title, description }) => (
   <div className="group bg-white p-6 rounded-xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-2">
     <div className="flex items-center mb-4">
       <Icon
-        className="w-10 h-10 text-orange-600 mr-4 group-hover:rotate-6 transition-transform"
+        className="w-10 h-10 text-green-600 mr-4 group-hover:rotate-6 transition-transform"
         strokeWidth={1.5}
       />
       <h3 className="text-xl font-semibold text-gray-800">{title}</h3>
@@ -41,28 +41,31 @@ const LandingPage = () => {
     <div className="bg-gray-50 min-h-screen antialiased">
       {/* Header with zero horizontal margin */}
       <header className="fixed w-full top-0 z-50 bg-white shadow-sm">
-        <div className="flex items-center justify-between h-16 px-0">
-          {/* Left side - EasyEvents */}
-          <div
-          className="text-3xl pl-9 md:text-4xl font-bold cursor-pointer flex items-center font-[Poppins]"
-          onClick={() => navigate("/")}
-        >
-          <span className="text-orange-600">Easy</span>
-          <span className="text-orange-600">Event</span>
-        </div>
+  <div className="flex items-center justify-between h-16 pl-6 pr-20 pl-20">
+    {/* EasyEvents logo */}
+    <div
+      className="text-2xl md:text-3xl font-bold cursor-pointer flex items-center"
+      onClick={() => navigate("/")}
+    >
+      <span className="text-green-600">Easy</span>
+      <span className="text-green-600">Event</span>
+    </div>
 
-          {/* Right side - Login */}
-          <div className="flex items-center">
-            <button
-              onClick={() => navigate("/login")}
-              className="flex items-center space-x-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors mr-10"
-            >
-              <span>Login</span>
-              <ArrowRightIcon className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      </header>
+    {/* Login Button */}
+    <div className="flex items-center">
+      <button
+        onClick={() => navigate("/login")}
+        className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+      >
+        <span>Login</span>
+        <ArrowRightIcon className="w-4 h-4" />
+      </button>
+    </div>
+  </div>
+</header>
+
+
+
 
       {/* Hero Section */}
       <section
@@ -73,7 +76,7 @@ const LandingPage = () => {
           backgroundPosition: "center",
         }}
       >
-        <div className="absolute inset-0 bg-orange-900 opacity-50"></div>
+        <div className="absolute inset-0 bg-orange-950 opacity-50"></div>
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 flex flex-col justify-center h-full text-center">
           <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
@@ -87,7 +90,7 @@ const LandingPage = () => {
           <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
             <button
               onClick={scrollToVenueOwnerSection}
-              className="px-8 py-3  bg-white text-orange-600 rounded-full font-semibold hover:bg-orange-50 transition-colors shadow-md"
+              className="px-8 py-3  bg-white text-orange-600 rounded-full font-semibold hover:bg-white/20 transition-colors shadow-md"
             >
               List Your Venue
             </button>
@@ -147,13 +150,13 @@ const LandingPage = () => {
           <div className="flex justify-center space-x-4">
             <button
               onClick={() => navigate("/login")}
-              className="px-8 py-3 bg-orange-600 text-white rounded-full hover:bg-orange-700 transition-colors shadow-md"
+              className="px-8 py-3 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors shadow-md"
             >
               Login
             </button>
             <button
               onClick={() => navigate("/venue-owner-signup")}
-              className="px-8 py-3 border-2 border-orange-600 text-orange-600 rounded-full hover:bg-orange-600 hover:text-white transition-colors"
+              className="px-8 py-3 border-2 border-green-600 text-green-600 rounded-full hover:bg-green-600 hover:text-white transition-colors"
             >
               Sign Up
             </button>

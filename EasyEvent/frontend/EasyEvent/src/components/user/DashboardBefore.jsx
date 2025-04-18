@@ -265,35 +265,38 @@ const DashboardBefore = () => {
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 font-sans">
       {/* Header */}
       <header className="fixed w-full top-0 z-50 bg-white shadow-sm">
-        <div className="flex items-center justify-between h-16 px-10">
-          {/* Clickable Logo */}
-          <div
-            className="text-3xl md:text-4xl font-bold cursor-pointer flex items-center font-[Poppins]"
-            onClick={() => navigate("/")}
-          >
-            <span className="text-orange-600">Easy</span>
-            <span className="text-orange-600">Events</span>
-          </div>
-          <div className="flex items-center space-x-4">
-  <button
-    onClick={() => navigate("/login")}
-    className="inline-flex items-center justify-center px-5 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-full text-sm font-medium hover:from-orange-600 hover:to-orange-700 transition duration-300 shadow-md hover:shadow-lg"
-  >
-    Login
-    <ArrowRightIcon className="ml-2 w-4 h-4" />
-  </button>
-  <button
-    onClick={() => navigate("/user-signup")}
-    className="inline-flex items-center justify-center px-5 py-2 bg-white text-orange-600 border border-orange-600 rounded-full text-sm font-medium hover:bg-orange-600 hover:text-white transition duration-300 shadow-md hover:shadow-lg"
-  >
-    Signup
-    <ArrowRightIcon className="ml-2 w-4 h-4" />
-  </button>
-</div>
+  <div className="flex items-center justify-between h-16 px-10">
+    {/* Left side - EasyEvents */}
+    <div
+      className="text-3xl md:text-4xl font-bold cursor-pointer flex items-center font-[Poppins]"
+      onClick={() => navigate("/")}
+    >
+      <span className="text-orange-600">Easy</span>
+      <span className="text-orange-600">Event</span>
+    </div>
 
+    {/* Right side - Login and Signup Buttons */}
+    <div className="flex items-center space-x-4">
+      {/* Login Button */}
+      <button
+        onClick={() => navigate("/login")}
+        className="inline-flex items-center justify-center px-5 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-2xl text-sm font-semibold hover:from-orange-600 hover:to-orange-700 transition duration-300 shadow-md hover:shadow-lg"
+      >
+        Login
+        <ArrowRightIcon className="ml-2 w-4 h-6" />
+      </button>
 
-        </div>
-      </header>
+      {/* Signup Button */}
+      <button
+        onClick={() => navigate("/user-signup")}
+        className="inline-flex items-center justify-center px-5 py-2 bg-white text-orange-600 border border-orange-600 rounded-2xl text-sm font-semibold hover:bg-orange-600 hover:text-white transition duration-300 shadow-md hover:shadow-lg"
+      >
+        Signup
+        <ArrowRightIcon className="ml-2 w-4 h-4" />
+      </button>
+    </div>
+  </div>
+</header>
       
       {/* Main Content */}
       <main className="container mx-auto px-4 py-2 mt-20">

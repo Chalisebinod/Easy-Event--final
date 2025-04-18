@@ -107,25 +107,21 @@ const VenueOwnerSignup = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-200 justify-center items-center">
       <ToastContainer />
-      {/* Left Section */}
-      <div className="w-1/2 bg-orange-600  text-white flex flex-col justify-center items-center p-10 shadow-lg">
-        <h1 className="text-5xl font-bold mb-4 drop-shadow-lg">
-          Welcome, Venue Owners!
-        </h1>
-        <p className="text-lg text-center max-w-md">
-          Join us to elevate your venue's visibility and streamline event
-          management!
-        </p>
-      </div>
-      {/* Right Section */}
-      <div className="w-1/2 bg-white flex flex-col justify-center items-center p-10">
-        <h2 className="text-3xl font-bold text-orange-600 text-bg-slate-900  mb-6">Signup</h2>
-        <form className="w-3/4" onSubmit={handleSubmit}>
+      
+      <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Venue Owner Registration</h2>
+          <p className="text-gray-600 text-sm">
+            Join our platform to showcase and manage your venue
+          </p>
+        </div>
+        
+        <form className="w-full" onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label className="block text-gray-700 font-medium mb-1">
+              <label className="block text-gray-700 font-medium mb-1 text-sm">
                 Full Name
               </label>
               <input
@@ -134,12 +130,12 @@ const VenueOwnerSignup = () => {
                 placeholder="John Doe"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 transition duration-300"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition duration-300"
                 required
               />
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-1">
+              <label className="block text-gray-700 font-medium mb-1 text-sm">
                 Email
               </label>
               <input
@@ -148,44 +144,46 @@ const VenueOwnerSignup = () => {
                 placeholder="email@example.com"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 transition duration-300"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition duration-300"
                 required
               />
             </div>
             <div className="relative">
-              <label className="block text-gray-700 font-medium mb-1">
+              <label className="block text-gray-700 font-medium mb-1 text-sm">
                 Password
               </label>
-              <input
-                type={passwordVisible ? "text" : "password"}
-                name="password"
-                placeholder="••••••••"
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg pr-12 focus:ring-2 focus:ring-orange-500 transition duration-300"
-                required
-              />
-              <button
-                type="button"
-                className="absolute right-3 top-[70%] transform -translate-y-1/2 flex items-center justify-center w-8 h-8"
-                onClick={() => setPasswordVisible(!passwordVisible)}
-              >
-                {passwordVisible ? (
-                  <EyeIcon className="w-5 h-5 text-gray-500" />
-                ) : (
-                  <EyeSlashIcon className="w-5 h-5 text-gray-500" />
-                )}
-              </button>
+              <div className="relative">
+                <input
+                  type={passwordVisible ? "text" : "password"}
+                  name="password"
+                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg pr-10 focus:ring-2 focus:ring-green-500 focus:outline-none transition duration-300"
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                  onClick={() => setPasswordVisible(!passwordVisible)}
+                >
+                  {passwordVisible ? (
+                    <EyeIcon className="w-5 h-5 text-gray-500" />
+                  ) : (
+                    <EyeSlashIcon className="w-5 h-5 text-gray-500" />
+                  )}
+                </button>
+              </div>
 
               {formData.password && !validatePassword(formData.password) && (
-                <p className="text-red-600 text-sm mt-2">
+                <p className="text-red-600 text-xs mt-1">
                   Password must be 8+ characters, include uppercase, lowercase,
                   number, and special character.
                 </p>
               )}
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-1">
+              <label className="block text-gray-700 font-medium mb-1 text-sm">
                 Contact Number
               </label>
               <input
@@ -194,12 +192,12 @@ const VenueOwnerSignup = () => {
                 placeholder="1234567890"
                 value={formData.contact_number}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 transition duration-300"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition duration-300"
                 required
               />
               {!validateContactNumber(formData.contact_number) &&
                 formData.contact_number && (
-                  <p className="text-red-600 text-sm mt-2">
+                  <p className="text-red-600 text-xs mt-1">
                     Contact number must be exactly 10 digits.
                   </p>
                 )}
@@ -208,21 +206,21 @@ const VenueOwnerSignup = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full mt-6 py-3 rounded-lg text-white font-medium transition-all transform hover:scale-105 ${
+            className={`w-full mt-6 py-2 rounded-lg text-white font-medium transition duration-200 ${
               isSubmitting
-                ? "bg-orange-300 cursor-not-allowed"
-                : "bg-orange-600 "
+                ? "bg-green-300 cursor-not-allowed"
+                : "bg-green-600 hover:bg-green-700"
             }`}
           >
-            {isSubmitting ? "Signing up..." : "Signup"}
+            {isSubmitting ? "Signing up..." : "Sign Up"}
           </button>
         </form>
-        <p className="mt-4 text-center text-gray-600 text-sm">
+        <p className="mt-6 text-center text-gray-600 text-sm">
           Already have an account?{" "}
           <Link
             to="/login"
             onClick={handleLoginAlert}
-            className="text-orange-600 font-medium hover:underline"
+            className="text-green-600 font-medium hover:underline"
           >
             Login
           </Link>

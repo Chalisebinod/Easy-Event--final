@@ -79,64 +79,56 @@ const UserSignup = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen justify-center items-center bg-gray-200">
       <ToastContainer />
-      {/* Left Section with Gradient and Pattern Overlay */}
-      <div className="w-1/2 bg-orange-600 flex flex-col justify-center items-center p-10 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('/path/to/pattern.png')] bg-cover"></div>
-        <div className="relative z-10 text-center">
-          <h1 className="text-5xl font-bold text-white drop-shadow-lg">
-            Hello, <span className="text-yellow-300">Welcome!</span>
-          </h1>
-          <p className="mt-4 text-lg text-white">
-            Join Us Today – Simplify Your Event Planning Journey!
+      
+      <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Create Account</h2>
+          <p className="text-gray-600 text-sm">
+            Sign up to start planning your events
           </p>
         </div>
-      </div>
 
-      {/* Right Section */}
-      <div className="w-1/2 bg-white flex flex-col justify-center items-center p-10">
-        <h2 className="text-3xl font-bold text-orange-600 mb-6">User Signup</h2>
-
-        <form className="w-3/4" onSubmit={handleSubmit}>
-          <div className="mb-5">
+        <form className="w-full" onSubmit={handleSubmit}>
+          <div className="mb-4">
             <label
               htmlFor="name"
-              className="block text-gray-700 mb-2 font-medium"
+              className="block text-gray-700 mb-2 font-medium text-sm"
             >
               Name
             </label>
             <input
               type="text"
               id="name"
-              placeholder="Enter your name"
+              placeholder="John doe"
               value={formData.name}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition duration-300 shadow-sm"
+              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300"
               required
             />
           </div>
-          <div className="mb-5">
+          <div className="mb-4">
             <label
               htmlFor="email"
-              className="block text-gray-700 mb-2 font-medium"
+              className="block text-gray-700 mb-2 font-medium text-sm"
             >
               Email Address
             </label>
             <input
               type="email"
               id="email"
-              placeholder="Enter your email"
+              placeholder="john@hmail.com"
               value={formData.email}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition duration-300 shadow-sm"
+              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300"
               required
             />
           </div>
           <div className="mb-5 relative">
             <label
               htmlFor="password"
-              className="block text-gray-700 mb-2 font-medium"
+              className="block text-gray-700 mb-2 font-medium text-sm"
             >
               Password
             </label>
@@ -144,10 +136,10 @@ const UserSignup = () => {
               <input
                 type={passwordVisible ? "text" : "password"}
                 id="password"
-                placeholder="Enter your password"
+                placeholder="••••••••"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg p-3 pr-12 focus:outline-none focus:ring-2 focus:ring-orange-500 transition duration-300 shadow-sm"
+                className="w-full border border-gray-300 rounded-lg p-2 pr-10 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300"
                 required
               />
               <button
@@ -156,14 +148,14 @@ const UserSignup = () => {
                 onClick={() => setPasswordVisible(!passwordVisible)}
               >
                 {passwordVisible ? (
-                  <EyeIcon className="w-6 h-6 text-gray-500" />
+                  <EyeIcon className="w-5 h-5 text-gray-500" />
                 ) : (
-                  <EyeSlashIcon className="w-6 h-6 text-gray-500" />
+                  <EyeSlashIcon className="w-5 h-5 text-gray-500" />
                 )}
               </button>
             </div>
             {formData.password && !validatePassword(formData.password) && (
-              <p className="text-orange-600 text-sm mt-2">
+              <p className="text-red-600 text-xs mt-2">
                 Password must be 8+ characters, include uppercase, lowercase,
                 number, and special character.
               </p>
@@ -173,13 +165,13 @@ const UserSignup = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full py-3 rounded-lg text-white transition duration-300 transform hover:scale-105 shadow-lg ${
+            className={`w-full py-2 rounded-lg text-white font-medium transition duration-300 ${
               isSubmitting
-                ? "bg-orange-300 cursor-not-allowed"
-                : "bg-orange-600 hover:from-orange-600 hover:to-red-600"
+                ? "bg-green-300 cursor-not-allowed"
+                : "bg-green-600 hover:bg-green-700"
             }`}
           >
-            {isSubmitting ? "Signing up..." : "Signup"}
+            {isSubmitting ? "Signing up..." : "Sign Up"}
           </button>
         </form>
 
@@ -189,7 +181,7 @@ const UserSignup = () => {
             Already have an account?{" "}
             <Link
               to="/login"
-              className="text-orange-600 font-medium hover:underline"
+              className="text-green-600 font-medium hover:underline"
             >
               Login
             </Link>

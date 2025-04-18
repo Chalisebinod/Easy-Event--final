@@ -1,4 +1,4 @@
-const Notification = require("../model/notifications"); // Path to your Notification model
+const Notification = require("../model/notifications"); 
 
 // Controller function to fetch notifications for a VenueOwner
 const getVenueOwnerNotifications = async (req, res) => {

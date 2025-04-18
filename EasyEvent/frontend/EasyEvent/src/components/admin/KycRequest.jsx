@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
-
+import { useLocation } from "react-router-dom";
 const KycRequest = () => {
+  const location = useLocation(); 
   const [kycData, setKycData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

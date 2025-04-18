@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const KycProfile = () => {
   const { kycId } = useParams();
+  const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -91,6 +92,11 @@ const KycProfile = () => {
             status: updateStatus, // now update the property that UI displays
             rejectMsg: updateStatus === "rejected" ? updateMessage : null,
           }));
+          
+          // Navigate to admin dashboard after status update
+          setTimeout(() => {
+            navigate("/admin-dashboard");
+          }, 2000); // 2 seconds delay to allow user to see the toast notification
         }
       })
       .catch((err) => {
@@ -300,48 +306,66 @@ const KycProfile = () => {
               </div>
             </div>
 
-            {/* Update Verification Section */}
+            {/* Update Verification Section - Conditionally rendered based on status */}
             <div className="bg-white shadow-lg rounded-lg p-8">
               <h3 className="text-xl font-semibold mb-6">
-                Update Verification Status
+                {profile.status === "pending" ? "Update Verification Status" : "Verification Status"}
               </h3>
-              <form onSubmit={handleUpdate}>
-                <div className="mb-4">
-                  <label className="block text-gray-700 font-medium mb-2">
-                    Status
-                  </label>
-                  <select
-                    value={updateStatus}
-                    onChange={(e) => setUpdateStatus(e.target.value)}
-                    className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                  >
-                    <option value="">Select Status</option>
-                    <option value="approved">Approved</option>
-                    <option value="rejected">Rejected</option>
-                  </select>
-                </div>
-                {updateStatus === "rejected" && (
+              
+              {profile.status === "pending" ? (
+                <form onSubmit={handleUpdate}>
                   <div className="mb-4">
                     <label className="block text-gray-700 font-medium mb-2">
-                      Rejection Message
+                      Status
                     </label>
-                    <textarea
-                      value={updateMessage}
-                      onChange={(e) => setUpdateMessage(e.target.value)}
+                    <select
+                      value={updateStatus}
+                      onChange={(e) => setUpdateStatus(e.target.value)}
                       className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Enter rejection message"
                       required
-                    />
+                    >
+                      <option value="">Select Status</option>
+                      <option value="approved">Approved</option>
+                      <option value="rejected">Rejected</option>
+                    </select>
                   </div>
-                )}
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
-                >
-                  Update Verification
-                </button>
-              </form>
+                  {updateStatus === "rejected" && (
+                    <div className="mb-4">
+                      <label className="block text-gray-700 font-medium mb-2">
+                        Rejection Message
+                      </label>
+                      <textarea
+                        value={updateMessage}
+                        onChange={(e) => setUpdateMessage(e.target.value)}
+                        className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Enter rejection message"
+                        required
+                      />
+                    </div>
+                  )}
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                  >
+                    Update Verification
+                  </button>
+                </form>
+              ) : profile.status === "approved" ? (
+                <div className="p-4 bg-green-50 rounded-lg">
+                  <p className="text-green-700 font-medium text-lg">
+                    Status: <span className="font-bold">Approved</span>
+                  </p>
+                </div>
+              ) : profile.status === "rejected" ? (
+                <div className="p-4 bg-red-50 rounded-lg">
+                  <p className="text-red-700 font-medium text-lg">
+                    Status: <span className="font-bold">Rejected</span>
+                  </p>
+                  <p className="text-red-600 mt-2">
+                    Reason: {profile.rejectMsg}
+                  </p>
+                </div>
+              ) : null}
             </div>
           </>
         )}

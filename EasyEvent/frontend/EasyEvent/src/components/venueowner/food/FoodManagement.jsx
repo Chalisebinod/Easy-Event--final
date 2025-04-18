@@ -190,7 +190,7 @@ const FoodManagement = () => {
   const [dialogActionsClasses] = useState("bg-gray-100 px-8 py-6");
 
   return (
-    <Box className="flex min-h-screen bg-gradient-to-br from-gray-100 to-gray-50">
+    <Box className="flex min-h-screen bg-white">
       {/* Sidebar */}
       <VenueSidebar />
 
