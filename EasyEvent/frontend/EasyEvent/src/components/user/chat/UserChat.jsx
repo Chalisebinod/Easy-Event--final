@@ -245,40 +245,50 @@ const UserChat = () => {
           </div>
           {/* Conversation Items */}
           <div className="flex-1 overflow-y-auto">
-            {conversations.length > 0 ? (
-              conversations.map((conv) => {
-                const isActive =
-                  selectedConversation &&
-                  selectedConversation.participants &&
-                  selectedConversation.participants.partner._id === conv.partnerId;
-                return (
-                  <button
-                    key={conv.partnerId}
-                    onClick={() => handleUserClick(conv)}
-                    className={`w-full text-left px-6 py-4 border-b flex items-center space-x-4 hover:bg-gray-50 focus:outline-none transition-colors ${
-                      isActive ? "bg-green-50" : ""
-                    }`}
-                  >
-                    <img
-                      src={getProfileImageUrl(conv.profile_image)}
-                      alt={conv.name}
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                    <div className="flex-1">
-                      <div className="text-sm font-semibold text-gray-800">
-                        {conv.name}
-                      </div>
-                      {conv.lastMessage && (
-                        <div className="text-xs text-gray-500 truncate">
-                          {conv.lastMessage}
+            {conversations
+              .filter((conv) =>
+                conv.name.toLowerCase().includes(searchQuery.toLowerCase())
+              ).length > 0 ? (
+              conversations
+                .filter((conv) =>
+                  conv.name.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map((conv) => {
+                  const isActive =
+                    selectedConversation &&
+                    selectedConversation.participants &&
+                    selectedConversation.participants.partner._id ===
+                      conv.partnerId;
+                  return (
+                    <button
+                      key={conv.partnerId}
+                      onClick={() => handleUserClick(conv)}
+                      className={`w-full text-left px-6 py-4 border-b flex items-center space-x-4 hover:bg-gray-50 focus:outline-none transition-colors ${
+                        isActive ? "bg-green-50" : ""
+                      }`}
+                    >
+                      <img
+                        src={getProfileImageUrl(conv.profile_image)}
+                        alt={conv.name}
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
+                      <div className="flex-1">
+                        <div className="text-sm font-semibold text-gray-800">
+                          {conv.name}
                         </div>
-                      )}
-                    </div>
-                  </button>
-                );
-              })
+                        {conv.lastMessage && (
+                          <div className="text-xs text-gray-500 truncate">
+                            {conv.lastMessage}
+                          </div>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })
             ) : (
-              <p className="text-gray-500 p-6">No conversations found.</p>
+              <p className="text-gray-500 p-6">
+                Person with this name not found.
+              </p>
             )}
           </div>
         </div>

@@ -285,12 +285,20 @@ const HallCard = ({ hall, onEdit, onDelete, onToggleAvailability }) => {
             <Grid item>
               <Box sx={{ display: "flex" }}>
                 <Tooltip title="Edit Hall">
-                  <IconButton size="small" color="primary" onClick={() => onEdit(hall)}>
+                  <IconButton
+                    size="small"
+                    color="primary"
+                    onClick={() => onEdit(hall)}
+                  >
                     <Edit fontSize="small" />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Delete Hall">
-                  <IconButton size="small" color="error" onClick={() => onDelete(hall)}>
+                  <IconButton
+                    size="small"
+                    color="error"
+                    onClick={() => onDelete(hall)}
+                  >
                     <Delete fontSize="small" />
                   </IconButton>
                 </Tooltip>
@@ -313,7 +321,10 @@ const HallCard = ({ hall, onEdit, onDelete, onToggleAvailability }) => {
         </CardFooter>
       </StyledCard>
 
-      <Dialog open={toggleDialogOpen} onClose={() => setToggleDialogOpen(false)}>
+      <Dialog
+        open={toggleDialogOpen}
+        onClose={() => setToggleDialogOpen(false)}
+      >
         <DialogTitle>
           {pendingAvailability ? "Activate Hall" : "Deactivate Hall"}
         </DialogTitle>
@@ -390,9 +401,12 @@ const Hall = () => {
     const fetchVenue = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("http://localhost:8000/api/venueOwner/profile", {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
+        const res = await axios.get(
+          "http://localhost:8000/api/venueOwner/profile",
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }
+        );
         if (res.data.venue) {
           setVenue(res.data.venue);
           localStorage.setItem("venueID", res.data.venue._id);
@@ -412,9 +426,12 @@ const Hall = () => {
     if (!venueId) return;
     const fetchHalls = async () => {
       try {
-        const res = await axios.get(`http://localhost:8000/api/halls/${venueId}`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
+        const res = await axios.get(
+          `http://localhost:8000/api/halls/${venueId}`,
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }
+        );
         setHalls(res.data.halls);
       } catch (err) {
         toast.error(err.response?.data?.message || err.message);
@@ -462,18 +479,24 @@ const Hall = () => {
       formData.append("isAvailable", newHall.isAvailable);
       formData.append("venue", venueId);
       if (newHall.includedFood && newHall.includedFood.length > 0) {
-        newHall.includedFood.forEach((foodId) => formData.append("includedFood", foodId));
+        newHall.includedFood.forEach((foodId) =>
+          formData.append("includedFood", foodId)
+        );
       }
       newHall.features.forEach((feat) => formData.append("features", feat));
       if (newHall.images.length > 0) {
         newHall.images.forEach((image) => formData.append("images", image));
       }
-      const response = await axios.post("http://localhost:8000/api/halls", formData, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:8000/api/halls",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       setHalls([...halls, response.data.hall]);
       toast.success("Hall added successfully!");
       setIsModalOpen(false);
@@ -511,7 +534,9 @@ const Hall = () => {
           },
         }
       );
-      setHalls(halls.map((hall) => (hall._id === hallId ? response.data.hall : hall)));
+      setHalls(
+        halls.map((hall) => (hall._id === hallId ? response.data.hall : hall))
+      );
       toast.success("Hall updated successfully!");
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to update hall.");
@@ -578,14 +603,24 @@ const Hall = () => {
         <Container maxWidth="xl">
           <HeaderBox>
             <Box>
-              <Typography variant="h4" sx={{ fontWeight: "bold", color: "#fff" }}>
+              <Typography
+                variant="h4"
+                sx={{ fontWeight: "bold", color: "#fff" }}
+              >
                 Hall Management
               </Typography>
-              <Typography variant="subtitle1" sx={{ color: "orange", fontSize: "1.5rem" }}>
+              <Typography
+                variant="subtitle1"
+                sx={{ color: "orange", fontSize: "1.5rem" }}
+              >
                 {venue?.name || "Your Venue"}
               </Typography>
             </Box>
-            <Fab variant="extended" color="primary" onClick={() => setIsModalOpen(true)}>
+            <Fab
+              variant="extended"
+              color="primary"
+              onClick={() => setIsModalOpen(true)}
+            >
               <MeetingRoom sx={{ mr: 1 }} />
               Add New Hall
             </Fab>
@@ -594,7 +629,12 @@ const Hall = () => {
           {loading ? (
             <LinearProgress color="secondary" />
           ) : error ? (
-            <Box p={2} bgcolor="error.light" color="error.contrastText" borderRadius={1}>
+            <Box
+              p={2}
+              bgcolor="error.light"
+              color="error.contrastText"
+              borderRadius={1}
+            >
               {error}
             </Box>
           ) : !venue ? (
@@ -650,7 +690,9 @@ const Hall = () => {
                   fullWidth
                   variant="outlined"
                   value={newHall.name}
-                  onChange={(e) => setNewHall({ ...newHall, name: e.target.value })}
+                  onChange={(e) =>
+                    setNewHall({ ...newHall, name: e.target.value })
+                  }
                   sx={{ mb: 2 }}
                 />
                 <Grid container spacing={2}>
@@ -661,10 +703,14 @@ const Hall = () => {
                       fullWidth
                       variant="outlined"
                       InputProps={{
-                        endAdornment: <InputAdornment position="end">people</InputAdornment>,
+                        endAdornment: (
+                          <InputAdornment position="end">people</InputAdornment>
+                        ),
                       }}
                       value={newHall.capacity}
-                      onChange={(e) => setNewHall({ ...newHall, capacity: e.target.value })}
+                      onChange={(e) =>
+                        setNewHall({ ...newHall, capacity: e.target.value })
+                      }
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -674,25 +720,40 @@ const Hall = () => {
                       fullWidth
                       variant="outlined"
                       InputProps={{
-                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                        startAdornment: (
+                          <InputAdornment position="start">$</InputAdornment>
+                        ),
                       }}
                       value={newHall.basePricePerPlate}
                       onChange={(e) =>
-                        setNewHall({ ...newHall, basePricePerPlate: e.target.value })
+                        setNewHall({
+                          ...newHall,
+                          basePricePerPlate: e.target.value,
+                        })
                       }
                     />
                   </Grid>
                 </Grid>
 
                 <Box sx={{ mt: 2, mb: 2 }}>
-                  <Typography variant="subtitle2" sx={{ color: "text.secondary", mb: 1 }}>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{ color: "text.secondary", mb: 1 }}
+                  >
                     Select Included Foods:
                   </Typography>
-                  <FoodPicker onSelectionChange={(selected) => setNewHall({ ...newHall, includedFood: selected })} />
+                  <FoodPicker
+                    onSelectionChange={(selected) =>
+                      setNewHall({ ...newHall, includedFood: selected })
+                    }
+                  />
                 </Box>
 
                 <FormControl component="fieldset" sx={{ mt: 3 }}>
-                  <Typography variant="subtitle2" sx={{ color: "text.secondary", mb: 1 }}>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{ color: "text.secondary", mb: 1 }}
+                  >
                     Features
                   </Typography>
                   <FormGroup row>
@@ -727,7 +788,10 @@ const Hall = () => {
                       onChange={(e) => setCustomFeature(e.target.value)}
                       sx={{ mr: 1 }}
                     />
-                    <Button variant="contained" onClick={handleAddCustomFeature}>
+                    <Button
+                      variant="contained"
+                      onClick={handleAddCustomFeature}
+                    >
                       Add
                     </Button>
                   </Box>
@@ -740,7 +804,9 @@ const Hall = () => {
                         onDelete={() =>
                           setNewHall({
                             ...newHall,
-                            features: newHall.features.filter((f) => f !== feature),
+                            features: newHall.features.filter(
+                              (f) => f !== feature
+                            ),
                           })
                         }
                         sx={{ mt: 1, mr: 1 }}
@@ -781,12 +847,22 @@ const Hall = () => {
                           <img
                             src={URL.createObjectURL(image)}
                             alt={`upload-${index}`}
-                            style={{ width: 80, height: 80, borderRadius: 8, objectFit: "cover" }}
+                            style={{
+                              width: 80,
+                              height: 80,
+                              borderRadius: 8,
+                              objectFit: "cover",
+                            }}
                           />
                           <IconButton
                             size="small"
                             color="error"
-                            sx={{ position: "absolute", top: 0, right: 0, background: "rgba(255,255,255,0.7)" }}
+                            sx={{
+                              position: "absolute",
+                              top: 0,
+                              right: 0,
+                              background: "rgba(255,255,255,0.7)",
+                            }}
                             onClick={() => removeImage(index)}
                           >
                             <Close fontSize="small" />
@@ -795,7 +871,10 @@ const Hall = () => {
                       ))}
                     </Box>
                   )}
-                  <Typography variant="caption" sx={{ display: "block", mt: 1, color: "grey.500" }}>
+                  <Typography
+                    variant="caption"
+                    sx={{ display: "block", mt: 1, color: "grey.500" }}
+                  >
                     {5 - newHall.images.length} images remaining
                   </Typography>
                 </Box>
@@ -803,17 +882,32 @@ const Hall = () => {
             </Grid>
           </DialogContent>
           <DialogActions sx={{ p: 2 }}>
-            <Button onClick={() => setIsModalOpen(false)} variant="outlined" color="inherit">
+            <Button
+              onClick={() => setIsModalOpen(false)}
+              variant="outlined"
+              color="inherit"
+            >
               Cancel
             </Button>
-            <Button onClick={handleAddHall} variant="contained" color="primary" startIcon={<Check />}>
+            <Button
+              onClick={handleAddHall}
+              variant="contained"
+              color="primary"
+              startIcon={<Check />}
+            >
               Create Hall
             </Button>
           </DialogActions>
         </Dialog>
 
         {/* Edit Hall Dialog */}
-        <Dialog open={editModalOpen} onClose={() => setEditModalOpen(false)} fullWidth maxWidth="md" scroll="paper">
+        <Dialog
+          open={editModalOpen}
+          onClose={() => setEditModalOpen(false)}
+          fullWidth
+          maxWidth="md"
+          scroll="paper"
+        >
           <DialogTitle
             sx={{
               display: "flex",
@@ -836,7 +930,9 @@ const Hall = () => {
                   fullWidth
                   variant="outlined"
                   value={editHall.name}
-                  onChange={(e) => setEditHall({ ...editHall, name: e.target.value })}
+                  onChange={(e) =>
+                    setEditHall({ ...editHall, name: e.target.value })
+                  }
                   sx={{ mb: 2 }}
                 />
                 <Grid container spacing={2}>
@@ -846,9 +942,15 @@ const Hall = () => {
                       type="number"
                       fullWidth
                       variant="outlined"
-                      InputProps={{ endAdornment: <InputAdornment position="end">people</InputAdornment> }}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">people</InputAdornment>
+                        ),
+                      }}
                       value={editHall.capacity}
-                      onChange={(e) => setEditHall({ ...editHall, capacity: e.target.value })}
+                      onChange={(e) =>
+                        setEditHall({ ...editHall, capacity: e.target.value })
+                      }
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -857,46 +959,64 @@ const Hall = () => {
                       type="number"
                       fullWidth
                       variant="outlined"
-                      InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">$</InputAdornment>
+                        ),
+                      }}
                       value={editHall.basePricePerPlate}
-                      onChange={(e) => setEditHall({ ...editHall, basePricePerPlate: e.target.value })}
+                      onChange={(e) =>
+                        setEditHall({
+                          ...editHall,
+                          basePricePerPlate: e.target.value,
+                        })
+                      }
                     />
                   </Grid>
                 </Grid>
 
                 <FormControl component="fieldset" sx={{ mt: 3 }}>
-                  <Typography variant="subtitle2" sx={{ color: "text.secondary", mb: 1 }}>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{ color: "text.secondary", mb: 1 }}
+                  >
                     Features
                   </Typography>
                   <FormGroup row>
-                    {["AC", "Projector", "Stage", "Catering", "Parking"].map((feature) => (
-                      <FormControlLabel
-                        key={feature}
-                        control={
-                          <Checkbox
-                            checked={editHall.features.includes(feature)}
-                            onChange={(e) => {
-                              const feats = [...editHall.features];
-                              if (e.target.checked) feats.push(feature);
-                              else {
-                                const idx = feats.indexOf(feature);
-                                feats.splice(idx, 1);
-                              }
-                              setEditHall({ ...editHall, features: feats });
-                            }}
-                            color="primary"
-                          />
-                        }
-                        label={feature}
-                      />
-                    ))}
+                    {["AC", "Projector", "Stage", "Catering", "Parking"].map(
+                      (feature) => (
+                        <FormControlLabel
+                          key={feature}
+                          control={
+                            <Checkbox
+                              checked={editHall.features.includes(feature)}
+                              onChange={(e) => {
+                                const feats = [...editHall.features];
+                                if (e.target.checked) feats.push(feature);
+                                else {
+                                  const idx = feats.indexOf(feature);
+                                  feats.splice(idx, 1);
+                                }
+                                setEditHall({ ...editHall, features: feats });
+                              }}
+                              color="primary"
+                            />
+                          }
+                          label={feature}
+                        />
+                      )
+                    )}
                   </FormGroup>
                 </FormControl>
               </Grid>
             </Grid>
           </DialogContent>
           <DialogActions sx={{ p: 2 }}>
-            <Button onClick={() => setEditModalOpen(false)} variant="outlined" color="inherit">
+            <Button
+              onClick={() => setEditModalOpen(false)}
+              variant="outlined"
+              color="inherit"
+            >
               Cancel
             </Button>
             <Button
@@ -914,7 +1034,10 @@ const Hall = () => {
         </Dialog>
 
         {/* Delete Confirmation Dialog */}
-        <Dialog open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)}>
+        <Dialog
+          open={deleteModalOpen}
+          onClose={() => setDeleteModalOpen(false)}
+        >
           <DialogTitle>Confirm Delete</DialogTitle>
           <DialogContent>
             <Typography>
@@ -922,7 +1045,11 @@ const Hall = () => {
             </Typography>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setDeleteModalOpen(false)} variant="outlined" color="inherit">
+            <Button
+              onClick={() => setDeleteModalOpen(false)}
+              variant="outlined"
+              color="inherit"
+            >
               Cancel
             </Button>
             <Button

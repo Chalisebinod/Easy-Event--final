@@ -7,7 +7,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-slate-900 py-4 text-white shadow-xl sticky top-0 z-50 border-b border-slate-700 mb-px">
+    <header className="bg-slate-800 py-4 text-white shadow-xl sticky top-0 z-50 border-b border-slate-700 mb-px">
       <div className="container mx-auto px-4 flex items-center justify-between">
         {/* Logo */}
         <div

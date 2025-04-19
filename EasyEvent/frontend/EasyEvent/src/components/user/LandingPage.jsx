@@ -47,15 +47,15 @@ const LandingPage = () => {
       className="text-2xl md:text-3xl font-bold cursor-pointer flex items-center"
       onClick={() => navigate("/")}
     >
-      <span className="text-green-600">Easy</span>
-      <span className="text-green-600">Event</span>
+      <span className="text-orange-600">Easy</span>
+      <span className="text-orange-600">Event</span>
     </div>
 
     {/* Login Button */}
     <div className="flex items-center">
       <button
         onClick={() => navigate("/login")}
-        className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+        className="flex items-center space-x-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
       >
         <span>Login</span>
         <ArrowRightIcon className="w-4 h-4" />

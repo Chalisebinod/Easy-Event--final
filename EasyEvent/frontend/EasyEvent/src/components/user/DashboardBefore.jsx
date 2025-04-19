@@ -268,7 +268,7 @@ const DashboardBefore = () => {
   <div className="flex items-center justify-between h-16 px-10">
     {/* Left side - EasyEvents */}
     <div
-      className="text-3xl md:text-4xl font-bold cursor-pointer flex items-center font-[Poppins]"
+      className="text-2xl md:text-3xl font-bold cursor-pointer flex items-center"
       onClick={() => navigate("/")}
     >
       <span className="text-orange-600">Easy</span>

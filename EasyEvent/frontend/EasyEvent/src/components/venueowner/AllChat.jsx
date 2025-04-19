@@ -273,11 +273,14 @@ const AllChat = () => {
               />
             </div>
           </div>
-          {/* Conversation Items */}
+
+          {/* Filtered Conversation Items */}
           <div className="flex-1 overflow-y-auto">
-            {conversations.length > 0 ? (
-              conversations.map((conv) => {
-                // We'll highlight the selected conversation
+            {conversations
+              .filter((conv) =>
+                conv.name.toLowerCase().includes(searchQuery.toLowerCase())
+              )
+              .map((conv) => {
                 const isActive =
                   selectedConversation &&
                   selectedConversation.participants &&
@@ -308,9 +311,13 @@ const AllChat = () => {
                     </div>
                   </button>
                 );
-              })
-            ) : (
-              <p className="text-gray-500 p-4">No conversations found.</p>
+              })}
+            {conversations.filter((conv) =>
+              conv.name.toLowerCase().includes(searchQuery.toLowerCase())
+            ).length === 0 && (
+              <p className="text-gray-500 p-4">
+                Person with this name not found.
+              </p>
             )}
           </div>
         </div>
@@ -332,8 +339,6 @@ const AllChat = () => {
                   {selectedConversation.name}
                 </h3>
               </div>
-              
-              
 
               {/* Messages List */}
               <div className="flex-1 overflow-y-auto p-4 bg-white space-y-4">
@@ -343,7 +348,9 @@ const AllChat = () => {
                     <div
                       key={msg._id}
                       className={`flex flex-col text-sm ${
-                        msg.senderLabel === "You" ? "items-end" : "items-start"
+                        msg.senderLabel === "You"
+                          ? "items-end"
+                          : "items-start"
                       }`}
                     >
                       {/* Sender Label */}
