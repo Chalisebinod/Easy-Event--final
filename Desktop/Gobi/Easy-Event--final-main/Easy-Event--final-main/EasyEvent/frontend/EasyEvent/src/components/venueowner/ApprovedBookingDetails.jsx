@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import {
@@ -72,7 +73,7 @@ function ApprovedBookingDetails() {
   const [booking, setBooking] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [dueDateError, setDueDateError] = useState("");
   // STEP MANAGEMENT
   const [activeStep, setActiveStep] = useState(0);
 
@@ -545,7 +546,7 @@ function ApprovedBookingDetails() {
                             {booking.selected_foods.map((food) => (
                               <Grid item xs={12} sm={6} md={4} key={food._id}>
                                 <Typography>
-                                  {food.name} - ₹{food.price}
+                                  {food.name} - Rs.{food.price}
                                 </Typography>
                               </Grid>
                             ))}
@@ -565,7 +566,7 @@ function ApprovedBookingDetails() {
                             {booking.additional_services.map((service, index) => (
                               <Grid item xs={12} sm={6} md={4} key={index}>
                                 <Typography>
-                                  {service.name} - ₹{service.price || 0}
+                                  {service.name} - Rs.{service.price || 0}
                                 </Typography>
                                 {service.description && (
                                   <Typography variant="body2" color="text.secondary">
@@ -683,8 +684,10 @@ function ApprovedBookingDetails() {
 
       // Check if the due date is earlier than the booking date
       if (selectedDate < bookingDate) {
-        toast.error("Due date cannot be earlier than the booking date.");
+        setDueDateError("Due date cannot be earlier than the booking date.");
         return;
+      } else {
+        setDueDateError(""); // Clear error if valid
       }
 
       setPaymentDetails({
@@ -693,7 +696,8 @@ function ApprovedBookingDetails() {
       });
     }}
     InputLabelProps={{ shrink: true }}
-    helperText="Deadline for the advance payment"
+    error={!!dueDateError}
+    helperText={dueDateError || "Deadline for the advance payment"}
   />
 </Grid>
                         <Grid item xs={12}>
@@ -790,13 +794,18 @@ function ApprovedBookingDetails() {
                     )}
                   </Box>
                   <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button
-                      variant="contained"
-                      onClick={handleSignatureUpload}
-                      disabled={!ownerSignature || submittingSignature}
-                    >
-                      {submittingSignature ? 'Submitting...' : 'Upload & Send to User'}
-                    </Button>
+                  <Button
+  variant="contained"
+  onClick={handleSignatureUpload}
+  disabled={!ownerSignature || submittingSignature}
+  startIcon={
+    submittingSignature && (
+      <CircularProgress size={20} color="inherit" />
+    )
+  }
+>
+  {submittingSignature ? "Submitting..." : "Upload & Send to User"}
+</Button>
                   </Box>
                 </Paper>
               </Grid>

@@ -48,7 +48,7 @@ const UserLogin = () => {
   };
 
   return (
-    <div className="flex h-screen justify-center items-center bg-white">
+    <div className="flex h-screen justify-center items-center bg-gray-200">
       <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Welcome Back</h2>

@@ -116,9 +116,7 @@ const KYCPage = () => {
                 : "",
               pan: kycData.pan ? getImageUrl(kycData.pan) : "",
               map: kycData.map ? getImageUrl(kycData.map) : "",
-              signature: kycData.signature
-                ? getImageUrl(kycData.signature)
-                : "",
+              signature: kycData.signature ? getImageUrl(kycData.signature) : "",
             });
             if (kycData.venueImages && Array.isArray(kycData.venueImages)) {
               setVenueImagesUrls(
@@ -179,9 +177,7 @@ const KYCPage = () => {
     const allowedTypes = ["image/jpeg", "image/png"];
     const maxSize = 5 * 1024 * 1024;
     if (!allowedTypes.includes(file.type) || file.size > maxSize) {
-      alert(
-        "Invalid file! Only JPG and PNG under 5MB are allowed for venue images."
-      );
+      alert("Invalid file! Only JPG and PNG under 5MB are allowed for venue images.");
       return;
     }
     const url = URL.createObjectURL(file);
@@ -200,17 +196,17 @@ const KYCPage = () => {
   // Handle form submission to send the KYC data
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!isEditable) return;
-
+  
     const { venueName, address, city, state, zip_code } = formValues;
-
+  
     // Validation: Ensure all required fields are filled
     if (!venueName || !address || !city || !state || !zip_code) {
       alert("Please fill in all required venue details.");
       return;
     }
-
+  
     // Validation: Ensure address, city, and state contain only letters and spaces
     const wordRegex = /^[a-zA-Z\s]+$/; // Allows letters and spaces only
     if (!wordRegex.test(address)) {
@@ -225,13 +221,13 @@ const KYCPage = () => {
       alert("State should contain only letters and spaces.");
       return;
     }
-
+  
     // Validation: Ensure zip code is numeric
     if (isNaN(zip_code)) {
       alert("Zip Code should be numeric.");
       return;
     }
-
+  
     // Validation: Ensure required documents are uploaded
     if (!docFiles.profile && !docPreviewUrls.profile) {
       alert("Please upload your profile document.");
@@ -257,36 +253,36 @@ const KYCPage = () => {
       alert("Please upload your signature.");
       return;
     }
-
+  
     // Validation: Ensure exactly 3 venue images are uploaded
     const filledImagesCount = venueImagesUrls.filter((url) => !!url).length;
     if (filledImagesCount !== 3) {
       alert("Please upload exactly 3 venue images.");
       return;
     }
-
+  
     setLoading(true);
     const formDataToSend = new FormData();
-
+  
     // Append venue details
     formDataToSend.append("venueName", venueName);
     const venueAddress = { address, city, state, zip_code };
     formDataToSend.append("venueAddress", JSON.stringify(venueAddress));
-
+  
     // Append required document files (only new files will be sent)
     fileFields.forEach((field) => {
       if (docFiles[field]) {
         formDataToSend.append(field, docFiles[field]);
       }
     });
-
+  
     // Append new venue images (if any)
     venueImages.forEach((file) => {
       if (file) {
         formDataToSend.append("venueImages", file);
       }
     });
-
+  
     try {
       const token = localStorage.getItem("access_token");
       const response = await axios.post(
@@ -299,11 +295,9 @@ const KYCPage = () => {
           },
         }
       );
-
+  
       if (response.status === 200) {
-        toast.success(
-          "KYC submitted successfully. It may take some time for verification."
-        );
+        toast.success("KYC submitted successfully. It may take some time for verification.");
         // Redirect to dashboard after a short delay.
         setTimeout(() => {
           navigate("/venue-owner-dashboard");
@@ -333,8 +327,7 @@ const KYCPage = () => {
               <div className="mb-4 p-4 border rounded-md text-center">
                 {existingKyc.status === "pending" && (
                   <p className="text-blue-600">
-                    Your KYC has been submitted for review. You cannot edit your
-                    details until a decision is made.
+                    Your KYC has been submitted for review. You cannot edit your details until a decision is made.
                   </p>
                 )}
                 {existingKyc.status === "approved" && (
@@ -360,16 +353,14 @@ const KYCPage = () => {
                 </h3>
                 <div className="grid grid-cols-1 gap-4">
                   <div>
-                    <label
-                      htmlFor="venueName"
-                      className="block text-gray-700 font-medium"
-                    >
+                    <label htmlFor="venueName" className="block text-gray-700 font-medium">
                       Venue Name <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
                       id="venueName"
                       name="venueName"
+                    
                       value={formValues.venueName}
                       onChange={handleInputChange}
                       disabled={!isEditable}
@@ -378,10 +369,7 @@ const KYCPage = () => {
                     />
                   </div>
                   <div>
-                    <label
-                      htmlFor="address"
-                      className="block text-gray-700 font-medium"
-                    >
+                    <label htmlFor="address" className="block text-gray-700 font-medium">
                       Address <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -397,10 +385,7 @@ const KYCPage = () => {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <label
-                        htmlFor="city"
-                        className="block text-gray-700 font-medium"
-                      >
+                      <label htmlFor="city" className="block text-gray-700 font-medium">
                         City <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -415,10 +400,7 @@ const KYCPage = () => {
                       />
                     </div>
                     <div>
-                      <label
-                        htmlFor="state"
-                        className="block text-gray-700 font-medium"
-                      >
+                      <label htmlFor="state" className="block text-gray-700 font-medium">
                         State <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -433,10 +415,7 @@ const KYCPage = () => {
                       />
                     </div>
                     <div>
-                      <label
-                        htmlFor="zip_code"
-                        className="block text-gray-700 font-medium"
-                      >
+                      <label htmlFor="zip_code" className="block text-gray-700 font-medium">
                         Zip Code <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -461,10 +440,7 @@ const KYCPage = () => {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {fileFields.map((field) => (
-                    <div
-                      key={field}
-                      className="flex flex-col items-center border p-4 rounded-md"
-                    >
+                    <div key={field} className="flex flex-col items-center border p-4 rounded-md">
                       <label className="mb-2 text-gray-700 font-medium capitalize">
                         {field.replace(/([A-Z])/g, " $1")}
                       </label>
@@ -483,9 +459,7 @@ const KYCPage = () => {
                         <>
                           <button
                             type="button"
-                            onClick={() =>
-                              fileInputRefs.current[field]?.click()
-                            }
+                            onClick={() => fileInputRefs.current[field]?.click()}
                             className="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600 transition"
                           >
                             Upload
@@ -511,10 +485,7 @@ const KYCPage = () => {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {[0, 1, 2].map((index) => (
-                    <div
-                      key={index}
-                      className="border p-4 rounded-md flex flex-col items-center"
-                    >
+                    <div key={index} className="border p-4 rounded-md flex flex-col items-center">
                       {venueImagesUrls[index] ? (
                         <img
                           src={venueImagesUrls[index]}
@@ -530,18 +501,12 @@ const KYCPage = () => {
                             type="file"
                             accept="image/*"
                             className="hidden"
-                            ref={(el) =>
-                              (fileInputRefs.current[`venueImage${index}`] = el)
-                            }
+                            ref={(el) => (fileInputRefs.current[`venueImage${index}`] = el)}
                             onChange={(e) => handleVenueImageChange(index, e)}
                           />
                           <button
                             type="button"
-                            onClick={() =>
-                              fileInputRefs.current[
-                                `venueImage${index}`
-                              ]?.click()
-                            }
+                            onClick={() => fileInputRefs.current[`venueImage${index}`]?.click()}
                             className="mt-2 bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600 transition"
                           >
                             Upload Image {index + 1}

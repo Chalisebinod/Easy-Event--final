@@ -170,6 +170,12 @@ const VenueOwnerProfile = () => {
     }));
   };
 
+  const validateContactNumber = (number) => {
+    const nepaliPhoneRegex = /^[9][6-9]\d{8}$/;
+    return nepaliPhoneRegex.test(number);
+  };
+  
+
   // Save changes
   const handleSaveChanges = async (e) => {
     e.preventDefault();
@@ -283,7 +289,7 @@ const VenueOwnerProfile = () => {
                 <img
                   src={getProfileImageUrl(profile.profile_image)}
                   alt="Profile"
-                  className="w-24 h-24 rounded-full object-cover border-4 border-orange-500"
+                  className="w-24 h-24 rounded-full object-cover border border-gray-400"
                 />
                 <div>
                   <h2 className="text-2xl font-bold text-gray-800">
@@ -459,15 +465,21 @@ const VenueOwnerProfile = () => {
                 />
               </div>
               <div>
-                <label className="block text-gray-700">Phone Number</label>
-                <input
-                  type="text"
-                  name="contact_number"
-                  value={updatedProfile.contact_number}
-                  onChange={handleInputChange}
-                  className="w-full border p-2 rounded"
-                />
-              </div>
+  <label className="block text-gray-700">Phone Number</label>
+  <input
+    type="text"
+    name="contact_number"
+    value={updatedProfile.contact_number}
+    onChange={handleInputChange}
+    className="w-full border p-2 rounded"
+  />
+  {updatedProfile.contact_number && !validateContactNumber(updatedProfile.contact_number) && (
+    <p className="text-red-600 text-xs mt-1">
+      Contact must be 10 digits and start with 98–97
+    </p>
+  )}
+</div>
+
               <div>
                 <label className="block text-gray-700">Short Bio</label>
                 <textarea

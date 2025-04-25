@@ -1,12 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  FaUserEdit,
-  FaSignOutAlt,
-  FaCamera,
-  FaCalendarAlt,
-  FaClock,
-  FaUser,
-} from "react-icons/fa";
+import { FaUserEdit, FaSignOutAlt, FaCamera, FaCalendarAlt, FaClock, FaUser } from "react-icons/fa";
 import Navbar from "./Navbar";
 import BottomNavbar from "./BottomNavbar";
 import axios from "axios";
@@ -24,8 +17,7 @@ const getProfileImageUrl = (imagePath) => {
 
 // Validation function for Nepali phone numbers
 const validateContactNumber = (number) => {
-  // Regex for exactly 10-digit Nepali numbers starting 96–99
-  const nepaliPhoneRegex = /^[9][6-9]\d{8}$/;
+  const nepaliPhoneRegex = /^(\+977)?[9][6-9]\d{8}$/; // Regex for Nepali phone numbers
   return nepaliPhoneRegex.test(number);
 };
 
@@ -156,9 +148,7 @@ const Profile = () => {
         {loading ? (
           <div className="flex flex-col items-center justify-center h-64">
             <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-            <p className="mt-4 text-gray-600 font-medium">
-              Loading your profile...
-            </p>
+            <p className="mt-4 text-gray-600 font-medium">Loading your profile...</p>
           </div>
         ) : profile ? (
           <div className="bg-white rounded-xl shadow-xl p-8 relative transition-all duration-300 hover:shadow-2xl border border-gray-100">
@@ -185,12 +175,7 @@ const Profile = () => {
                 </p>
                 {profile.contact_number && (
                   <p className="mb-2 text-gray-600 font-medium flex items-center justify-center md:justify-start">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 mr-2 text-blue-600"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
                       <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                     </svg>
                     {profile.contact_number}
@@ -198,17 +183,8 @@ const Profile = () => {
                 )}
                 {profile.location && (
                   <p className="mb-4 text-gray-600 font-medium flex items-center justify-center md:justify-start">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 mr-2 text-blue-600"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                        clipRule="evenodd"
-                      />
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                     </svg>
                     {profile.location}
                   </p>
@@ -245,13 +221,13 @@ const Profile = () => {
               <div className="space-y-3">
                 <div className="flex items-center bg-white p-3 rounded-lg border border-gray-100">
                   <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
-                    <FaClock className="text-blue-600" />
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                    </svg>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Status</p>
-                    <p className="font-medium text-gray-800">
-                      {profile.status || "Not Provided"}
-                    </p>
+                    <p className="font-medium text-gray-800">{profile.status || "Not Provided"}</p>
                   </div>
                 </div>
                 {/* <div className="flex items-center bg-white p-3 rounded-lg border border-gray-100">
@@ -269,9 +245,7 @@ const Profile = () => {
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Account Created</p>
-                    <p className="font-medium text-gray-800">
-                      {formatDate(profile.date_created)}
-                    </p>
+                    <p className="font-medium text-gray-800">{formatDate(profile.date_created)}</p>
                   </div>
                 </div>
               </div>
@@ -279,23 +253,12 @@ const Profile = () => {
           </div>
         ) : (
           <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-12 w-12 mx-auto text-gray-400 mb-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <p className="text-gray-600 text-lg">Unable to load profile data</p>
-            <button
-              onClick={() => window.location.reload()}
+            <button 
+              onClick={() => window.location.reload()} 
               className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
             >
               Retry
@@ -308,23 +271,18 @@ const Profile = () => {
           <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
             <div className="bg-white w-full max-w-md rounded-xl shadow-2xl overflow-hidden">
               <div className="bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-4">
-                <h2 className="text-xl font-bold text-white">
-                  Edit Your Profile
-                </h2>
+                <h2 className="text-xl font-bold text-white">Edit Your Profile</h2>
               </div>
               <form onSubmit={handleSaveChanges} className="p-6">
                 <div className="flex justify-center mb-6">
                   <div
                     className="relative cursor-pointer group"
-                    onClick={() =>
-                      fileInputRef.current && fileInputRef.current.click()
-                    }
+                    onClick={() => fileInputRef.current && fileInputRef.current.click()}
                   >
                     <div className="rounded-full overflow-hidden border-4 border-gray-200 w-32 h-32 transition-all duration-300 group-hover:border-blue-400">
                       <img
                         src={
-                          updatedProfile.profile_image &&
-                          updatedProfile.profile_image instanceof File
+                          updatedProfile.profile_image && updatedProfile.profile_image instanceof File
                             ? URL.createObjectURL(updatedProfile.profile_image)
                             : profile && profile.profile_image
                             ? getProfileImageUrl(profile.profile_image)
@@ -338,25 +296,14 @@ const Profile = () => {
                       <FaCamera className="text-white" />
                     </div>
                     <div className="absolute inset-0 bg-black bg-opacity-20 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                      <span className="text-white font-medium">
-                        Change Photo
-                      </span>
+                      <span className="text-white font-medium">Change Photo</span>
                     </div>
                   </div>
                 </div>
                 <div className="space-y-4">
-                  <input
-                    type="file"
-                    name="profile_image"
-                    onChange={handleImageChange}
-                    ref={fileInputRef}
-                    className="hidden"
-                    accept="image/*"
-                  />
+                  <input type="file" name="profile_image" onChange={handleImageChange} ref={fileInputRef} className="hidden" accept="image/*" />
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Full Name
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                     <input
                       type="text"
                       name="name"
@@ -367,9 +314,7 @@ const Profile = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Email Address
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
                     <input
                       type="email"
                       name="email"
@@ -380,38 +325,22 @@ const Profile = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Phone Number
-                    </label>
-                    <input
-                      type="text"
-                      name="contact_number"
-                      value={updatedProfile.contact_number}
-                      onChange={handleInputChange}
-                      maxLength={10}
-                      minLength={10}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                      placeholder="Enter your 10-digit phone number"
-                    />
-                    {updatedProfile.contact_number && (
-                      <>
-                        {updatedProfile.contact_number.length !== 10 && (
-                          <p className="text-red-600 text-xs mt-1">
-                            Contact number must be exactly 10 digits.
-                          </p>
-                        )}
-                        {updatedProfile.contact_number.length === 10 &&
-                          !validateContactNumber(
-                            updatedProfile.contact_number
-                          ) && (
-                            <p className="text-red-600 text-xs mt-1">
-                              Invalid Nepali phone number (must start with
-                              98–97).
-                            </p>
-                          )}
-                      </>
-                    )}
-                  </div>
+  <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+  <input
+    type="text"
+    name="contact_number"
+    value={updatedProfile.contact_number}
+    onChange={handleInputChange}
+    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+    placeholder="Enter your phone number"
+  />
+  {!validateContactNumber(updatedProfile.contact_number) &&
+    updatedProfile.contact_number && (
+      <p className="text-red-600 text-xs mt-1">
+        Contact number must be a valid Nepali phone number (e.g., +97798XXXXXXXX or 98XXXXXXXX).
+      </p>
+    )}
+</div>
                 </div>
                 <div className="mt-6 flex space-x-3">
                   <button
@@ -445,12 +374,8 @@ const Profile = () => {
               </div>
               <div className="p-6">
                 <div className="mb-6">
-                  <p className="text-gray-700 text-lg">
-                    Are you sure you want to log out of your account?
-                  </p>
-                  <p className="text-gray-500 mt-2">
-                    You will need to sign in again to access your profile.
-                  </p>
+                  <p className="text-gray-700 text-lg">Are you sure you want to log out of your account?</p>
+                  <p className="text-gray-500 mt-2">You will need to sign in again to access your profile.</p>
                 </div>
                 <div className="flex space-x-3">
                   <button

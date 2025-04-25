@@ -15,6 +15,12 @@ const UserSignup = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
+  // Validate email domains: allow .com, .edu.np, .org, .net, .np
+  const validateEmail = (email) => {
+    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.(com|edu\.np|org|net|np)$/;
+    return emailRegex.test(email);
+  };
+
   // Validate password criteria: at least 8 characters, an uppercase letter, a lowercase letter, a number, and a special character.
   const validatePassword = (pwd) => {
     const strengthChecks = {
@@ -42,6 +48,12 @@ const UserSignup = () => {
 
     if (!formData.name || !formData.email || !formData.password) {
       toast.error("Please fill in all fields");
+      return;
+    }
+
+    // Validate email
+    if (!validateEmail(formData.email)) {
+      toast.error("Invalid email domain. Allowed: .com, .edu.np, .org, .net, .np");
       return;
     }
 
@@ -124,6 +136,11 @@ const UserSignup = () => {
               className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-orange-500 transition duration-300"
               required
             />
+            {formData.email && !validateEmail(formData.email) && (
+              <p className="text-red-600 text-xs mt-1">
+                Please enter a valid email (e.g., user@gmail.com or user@domain.edu.np).
+              </p>
+            )}
           </div>
           <div className="mb-5 relative">
             <label
@@ -178,7 +195,7 @@ const UserSignup = () => {
         {/* Login Link */}
         <div className="mt-6 text-center">
           <p className="text-gray-600 text-sm">
-            Already have an account?{" "}
+            Already have an account? {" "}
             <Link
               to="/login"
               className="text-orange-600 font-medium hover:underline"

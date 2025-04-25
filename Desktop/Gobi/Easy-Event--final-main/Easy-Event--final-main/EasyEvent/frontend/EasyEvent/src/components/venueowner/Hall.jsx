@@ -537,7 +537,7 @@ const Hall = () => {
       setHalls(
         halls.map((hall) => (hall._id === hallId ? response.data.hall : hall))
       );
-      toast.success("Hall updated successfully!");
+      // toast.success("Hall updated successfully!");
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to update hall.");
     }
