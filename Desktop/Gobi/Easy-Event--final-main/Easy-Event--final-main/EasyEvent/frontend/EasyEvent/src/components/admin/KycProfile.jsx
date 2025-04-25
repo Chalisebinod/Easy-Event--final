@@ -129,7 +129,7 @@ const KycProfile = () => {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="flex-grow ml-64 p-8 bg-gray-100 min-h-screen">
+      <div className="flex-grow ml-64 p-8 bg-white min-h-screen">
         <ToastContainer />
         {loading ? (
           <p className="text-gray-700">Loading profile...</p>

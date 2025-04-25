@@ -53,7 +53,7 @@ const KycRequest = () => {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="flex-grow ml-64 p-8 bg-gray-100 min-h-screen">
+      <div className="flex-grow ml-64 p-8 bg-white min-h-screen">
         <h2 className="text-2xl font-bold mb-6">KYC Requests</h2>
         {loading && <p className="text-gray-700">Loading...</p>}
         {error && <p className="text-red-600">{error}</p>}
